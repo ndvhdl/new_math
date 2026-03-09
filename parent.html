@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🔐 דף הורה</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0f1923; --card: rgba(255,255,255,0.05); --border: rgba(255,255,255,0.1); --yellow: #ffd600; --green: #00c853; --red: #ff1744; --blue: #2196f3; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Heebo', sans-serif; background: var(--bg); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px 12px 40px; color: white; }
+.wrap { width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 16px; }
+
+.topbar { display: flex; align-items: center; justify-content: space-between; }
+.topbar h1 { font-family: ‘Fredoka One’, cursive; color: var(–yellow); font-size: 1.4rem; }
+.back-link { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.85rem; transition: color 0.15s; }
+.back-link:hover { color: white; }
+
+/* Login */
+#login-screen { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 60px; }
+.login-card { width: 100%; max-width: 340px; background: var(–card); border: 1px solid var(–border); border-radius: 24px; padding: 30px 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; backdrop-filter: blur(10px); }
+.login-card h2 { font-family: ‘Fredoka One’, cursive; font-size: 1.3rem; }
+.login-card p { color: rgba(255,255,255,0.45); font-size: 0.85rem; text-align: center; }
+.pwd-input { width: 100%; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 12px; color: white; font-size: 1rem; text-align: center; outline: none; letter-spacing: 4px; transition: border-color 0.2s; }
+.pwd-input:focus { border-color: var(–yellow); }
+.login-btn { width: 100%; padding: 13px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(–yellow), #ff9800); color: #1a1a1a; font-family: ‘Fredoka One’, cursive; font-size: 1.1rem; cursor: pointer; transition: transform 0.15s; }
+.login-btn:hover { transform: scale(1.02); }
+.pwd-error { color: var(–red); font-size: 0.85rem; display: none; }
+
+/* Dashboard */
+#dashboard { display: none; flex-direction: column; gap: 16px; }
+
+/* Player tabs */
+.player-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.ptab { padding: 8px 16px; border-radius: 50px; border: 2px solid var(–border); background: var(–card); color: rgba(255,255,255,0.5); font-family: ‘Fredoka One’, cursive; cursor: pointer; transition: all 0.15s; font-size: 0.9rem; }
+.ptab:hover { border-color: rgba(255,255,255,0.3); color: white; }
+.ptab.active { border-color: var(–yellow); background: rgba(255,214,0,0.12); color: var(–yellow); }
+
+/* Overview cards */
+.overview-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.ov-card { background: var(–card); border: 1px solid var(–border); border-radius: 16px; padding: 14px 16px; }
+.ov-card .ov-n { font-family: ‘Fredoka One’, cursive; font-size: 1.8rem; }
+.ov-card .ov-l { color: rgba(255,255,255,0.45); font-size: 0.75rem; margin-top: 2px; }
+.ov-card.green .ov-n { color: var(–green); }
+.ov-card.yellow .ov-n { color: var(–yellow); }
+.ov-card.red .ov-n { color: #ff8a65; }
+.ov-card.blue .ov-n { color: var(–blue); }
+
+/* Section */
+.section { background: var(–card); border: 1px solid var(–border); border-radius: 18px; padding: 16px; }
+.section h3 { font-family: ‘Fredoka One’, cursive; color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 12px; letter-spacing: 1px; }
+
+/* Accuracy table per multiplication table */
+.table-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.tg-cell { border-radius: 10px; padding: 8px 4px; text-align: center; font-family: ‘Fredoka One’, cursive; font-size: 0.85rem; }
+.tg-cell .tg-n { font-size: 1.1rem; }
+.tg-cell .tg-pct { font-size: 0.7rem; opacity: 0.7; margin-top: 2px; }
+
+/* Sessions list */
+.session-list { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+.session-item { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 12px; }
+.session-date { color: rgba(255,255,255,0.35); font-size: 0.72rem; min-width: 70px; }
+.session-mode { font-size: 0.8rem; color: rgba(255,255,255,0.5); min-width: 55px; }
+.session-score { font-family: ‘Fredoka One’, cursive; color: var(–yellow); margin-right: auto; }
+.session-acc { font-size: 0.8rem; padding: 3px 8px; border-radius: 20px; }
+.acc-good { background: rgba(0,200,83,0.15); color: var(–green); }
+.acc-mid  { background: rgba(255,152,0,0.15); color: #ff9800; }
+.acc-low  { background: rgba(255,23,68,0.15); color: var(–red); }
+
+/* Mistake patterns */
+.mistake-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.mistake-chip { background: rgba(255,23,68,0.1); border: 1px solid rgba(255,23,68,0.25); border-radius: 50px; padding: 5px 12px; font-size: 0.82rem; color: #ff8a65; display: flex; align-items: center; gap: 6px; }
+.mistake-chip .mc { font-family: ‘Fredoka One’, cursive; font-size: 0.95rem; color: var(–red); }
+
+/* Family leaderboard */
+.leaderboard { display: flex; flex-direction: column; gap: 8px; }
+.lb-row { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); border-radius: 12px; padding: 10px 14px; }
+.lb-rank { font-family: ‘Fredoka One’, cursive; color: rgba(255,255,255,0.3); width: 24px; text-align: center; font-size: 1.1rem; }
+.lb-rank.gold { color: #ffd600; }
+.lb-rank.silver { color: #b0bec5; }
+.lb-rank.bronze { color: #ff8a65; }
+.lb-avatar { font-size: 1.5rem; }
+.lb-name { font-family: ‘Fredoka One’, cursive; color: white; flex: 1; }
+.lb-score { font-family: ‘Fredoka One’, cursive; color: var(–yellow); }
+
+.empty-msg { color: rgba(255,255,255,0.25); font-size: 0.85rem; text-align: center; padding: 16px; }
+
+/* Settings */
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.settings-row:last-child { border-bottom: none; }
+.settings-row label { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+.settings-row input { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 6px 10px; color: white; font-size: 0.9rem; outline: none; width: 140px; text-align: center; }
+.del-btn { background: rgba(255,23,68,0.12); border: 1px solid rgba(255,23,68,0.25); border-radius: 8px; padding: 6px 12px; color: var(–red); font-size: 0.8rem; cursor: pointer; transition: background 0.15s; }
+.del-btn:hover { background: rgba(255,23,68,0.25); }
+.save-btn { width: 100%; padding: 12px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(–green), #00796b); color: white; font-family: ‘Fredoka One’, cursive; font-size: 1rem; cursor: pointer; margin-top: 8px; transition: transform 0.15s; }
+.save-btn:hover { transform: scale(1.02); }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>🔐 דף הורה</h1>
+    <a class="back-link" href="index.html">← חזרה</a>
+  </div>
+
+  <!-- Login -->
+
+  <div id="login-screen">
+    <div class="login-card">
+      <div style="font-size:3rem">🔐</div>
+      <h2>כניסת הורה</h2>
+      <p>הזן סיסמה כדי לצפות בסטטיסטיקה של הילדים<br><span style="color:rgba(255,200,0,0.5)">ברירת המחדל: 1234</span></p>
+      <input class="pwd-input" id="pwd-input" type="password" placeholder="••••" maxlength="20" autocomplete="off">
+      <div class="pwd-error" id="pwd-error">❌ סיסמה שגויה</div>
+      <button class="login-btn" onclick="tryLogin()">כניסה</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+
+  <div id="dashboard">
+
+```
+<div class="section">
+  <h3>🏆 לוח תחרות משפחתי</h3>
+  <div class="leaderboard" id="leaderboard"></div>
+</div>
+
+<h3 style="font-family:'Fredoka One',cursive; color:rgba(255,255,255,0.6); font-size:0.9rem; letter-spacing:1px;">📋 פרטי שחקן</h3>
+<div class="player-tabs" id="player-tabs"></div>
+
+<div class="overview-grid">
+  <div class="ov-card green"><div class="ov-n" id="ov-correct">0</div><div class="ov-l">תשובות נכונות</div></div>
+  <div class="ov-card yellow"><div class="ov-n" id="ov-score">0</div><div class="ov-l">ניקוד כולל</div></div>
+  <div class="ov-card red"><div class="ov-n" id="ov-wrong">0</div><div class="ov-l">טעויות</div></div>
+  <div class="ov-card blue"><div class="ov-n" id="ov-streak">0</div><div class="ov-l">רצף שיא</div></div>
+</div>
+
+<div class="section">
+  <h3>📐 דיוק לפי לוח כפל</h3>
+  <div class="table-grid" id="table-accuracy"></div>
+</div>
+
+<div class="section">
+  <h3>❌ טעויות נפוצות</h3>
+  <div class="mistake-list" id="mistake-list"></div>
+</div>
+
+<div class="section">
+  <h3>🕑 היסטוריית משחקים</h3>
+  <div class="session-list" id="session-list"></div>
+</div>
+
+<div class="section">
+  <h3>⚙️ הגדרות</h3>
+  <div class="settings-row">
+    <label>סיסמת הורה</label>
+    <input id="new-pwd" type="password" placeholder="סיסמה חדשה" maxlength="20">
+  </div>
+  <div class="settings-row">
+    <label>מחק נתוני שחקן</label>
+    <button class="del-btn" onclick="deleteCurrentPlayer()">מחק</button>
+  </div>
+  <button class="save-btn" onclick="saveSettings()">💾 שמור הגדרות</button>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+const DEFAULT_PWD = '1234';
+const PWD_KEY = 'mathapp_parentpwd';
+
+function getPassword() { return localStorage.getItem(PWD_KEY) || DEFAULT_PWD; }
+function getPlayers() { try { return JSON.parse(localStorage.getItem('mathapp_players') || '{}'); } catch { return {}; } }
+function savePlayers(p) { localStorage.setItem('mathapp_players', JSON.stringify(p)); }
+
+let currentPlayerName = null;
+
+// ── Login ──
+document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+function tryLogin() {
+  const val = document.getElementById('pwd-input').value;
+  if (val === getPassword()) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'flex';
+    buildDashboard();
+  } else {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+
+// ── Dashboard ──
+function buildDashboard() {
+  buildLeaderboard();
+  const players = getPlayers();
+  const names = Object.keys(players);
+  if (!names.length) return;
+  buildPlayerTabs(names);
+  selectPlayer(names[0]);
+}
+
+function buildLeaderboard() {
+  const players = getPlayers();
+  const sorted = Object.entries(players).sort((a,b) => b[1].totalScore - a[1].totalScore);
+  const lb = document.getElementById('leaderboard');
+  lb.innerHTML = '';
+  if (!sorted.length) { lb.innerHTML = '<div class="empty-msg">אין שחקנים עדיין</div>'; return; }
+  sorted.forEach(([name, d], i) => {
+    const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i+1);
+    lb.innerHTML += `
+      <div class="lb-row">
+        <div class="lb-rank ${rankClass}">${rankIcon}</div>
+        <div class="lb-avatar">${d.avatar || '⭐'}</div>
+        <div class="lb-name">${name}</div>
+        <div class="lb-score">${d.totalScore} נק׳</div>
+        <div style="color:rgba(255,255,255,0.35);font-size:0.75rem">${d.games || 0} משחקים</div>
+      </div>`;
+  });
+}
+
+function buildPlayerTabs(names) {
+  const tabs = document.getElementById('player-tabs');
+  tabs.innerHTML = '';
+  const players = getPlayers();
+  names.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'ptab';
+    btn.textContent = `${players[name].avatar || '⭐'} ${name}`;
+    btn.onclick = () => selectPlayer(name);
+    btn.id = `tab-${name}`;
+    tabs.appendChild(btn);
+  });
+}
+
+function selectPlayer(name) {
+  currentPlayerName = name;
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(`tab-${name}`);
+  if (tab) tab.classList.add('active');
+
+  const players = getPlayers();
+  const d = players[name] || {};
+
+  // Overview
+  document.getElementById('ov-correct').textContent = d.correct || 0;
+  document.getElementById('ov-score').textContent = d.totalScore || 0;
+  document.getElementById('ov-wrong').textContent = d.wrong || 0;
+  document.getElementById('ov-streak').textContent = d.bestStreak || 0;
+
+  // Table accuracy
+  buildTableAccuracy(d);
+
+  // Mistakes
+  buildMistakes(d);
+
+  // Sessions
+  buildSessions(d);
+}
+
+function buildTableAccuracy(d) {
+  const acc = d.tableStats || {};
+  const grid = document.getElementById('table-accuracy');
+  grid.innerHTML = '';
+  for (let t = 2; t <= 10; t++) {
+    const s = acc[t] || { correct: 0, wrong: 0 };
+    const total = s.correct + s.wrong;
+    const pct = total ? Math.round(s.correct / total * 100) : null;
+    const color = pct === null ? 'rgba(255,255,255,0.06)'
+                : pct >= 80 ? 'rgba(0,200,83,0.15)'
+                : pct >= 50 ? 'rgba(255,152,0,0.15)'
+                : 'rgba(255,23,68,0.15)';
+    const textColor = pct === null ? 'rgba(255,255,255,0.25)'
+                    : pct >= 80 ? '#00c853'
+                    : pct >= 50 ? '#ff9800'
+                    : '#ff1744';
+    grid.innerHTML += `
+      <div class="tg-cell" style="background:${color}; color:${textColor}">
+        <div class="tg-n">×${t}</div>
+        <div class="tg-pct">${pct !== null ? pct + '%' : '—'}</div>
+      </div>`;
+  }
+  // mixed
+  const ms = acc['mixed'] || { correct: 0, wrong: 0 };
+  const mp = (ms.correct + ms.wrong) ? Math.round(ms.correct / (ms.correct + ms.wrong) * 100) : null;
+  grid.innerHTML += `
+    <div class="tg-cell" style="background:rgba(255,214,0,0.1); color:var(--yellow)">
+      <div class="tg-n">🎲</div>
+      <div class="tg-pct">${mp !== null ? mp + '%' : '—'}</div>
+    </div>`;
+}
+
+function buildMistakes(d) {
+  const mistakes = d.mistakeMap || {};
+  const sorted = Object.entries(mistakes).sort((a,b) => b[1] - a[1]).slice(0, 10);
+  const el = document.getElementById('mistake-list');
+  el.innerHTML = '';
+  if (!sorted.length) { el.innerHTML = '<div class="empty-msg">אין טעויות עדיין 🎉</div>'; return; }
+  sorted.forEach(([q, count]) => {
+    el.innerHTML += `<div class="mistake-chip"><span class="mc">×${count}</span>${q}</div>`;
+  });
+}
+
+function buildSessions(d) {
+  const sessions = (d.sessions || []).slice().reverse().slice(0, 20);
+  const el = document.getElementById('session-list');
+  el.innerHTML = '';
+  if (!sessions.length) { el.innerHTML = '<div class="empty-msg">אין משחקים עדיין</div>'; return; }
+  const modeLabel = { practice: '📚 אימון', lives: '❤️ חיים', levels: '🏆 שלבים' };
+  sessions.forEach(s => {
+    const total = s.correct + s.wrong;
+    const pct = total ? Math.round(s.correct / total * 100) : 0;
+    const accClass = pct >= 80 ? 'acc-good' : pct >= 50 ? 'acc-mid' : 'acc-low';
+    const date = new Date(s.ts).toLocaleDateString('he-IL', { day:'numeric', month:'numeric', hour:'2-digit', minute:'2-digit' });
+    el.innerHTML += `
+      <div class="session-item">
+        <div class="session-date">${date}</div>
+        <div class="session-mode">${modeLabel[s.mode] || s.mode}</div>
+        <div class="session-score">${s.score} נק׳</div>
+        <div class="session-acc ${accClass}">${pct}% נכון</div>
+      </div>`;
+  });
+}
+
+// ── Settings ──
+function saveSettings() {
+  const newPwd = document.getElementById('new-pwd').value.trim();
+  if (newPwd) { localStorage.setItem(PWD_KEY, newPwd); }
+  alert('✅ הגדרות נשמרו!');
+}
+
+function deleteCurrentPlayer() {
+  if (!currentPlayerName) return;
+  if (!confirm(`למחוק את כל הנתונים של ${currentPlayerName}?`)) return;
+  const p = getPlayers();
+  delete p[currentPlayerName];
+  savePlayers(p);
+  buildDashboard();
+}
+</script>
+
+</body>
+</html>
