@@ -236,7 +236,17 @@ color: #1a1a1a; cursor: pointer; transition: all 0.12s;
   </div>
 
 </div>
-<script src="mathapp-shared.js"></script>
+<script>
+// ── Shared utilities ──────────────────────────────
+const AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
+function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch{return{}}}
+function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
+function getPlayerName(){return localStorage.getItem('mathapp_current')||''}
+function getPlayerData(name){const p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p)}if(!Array.isArray(p[name].sessions))p[name].sessions=[];if(typeof p[name].tableStats!=='object'||Array.isArray(p[name].tableStats))p[name].tableStats={};if(typeof p[name].mistakeMap!=='object'||Array.isArray(p[name].mistakeMap))p[name].mistakeMap={};return p[name]}
+function saveSession(data){const name=getPlayerName();if(!name)return;const p=getPlayers();const d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);if((data.bestStreak||0)>(d.bestStreak||0))d.bestStreak=data.bestStreak;const k=data.topic||'general';if(!d.tableStats[k])d.tableStats[k]={correct:0,wrong:0};d.tableStats[k].correct+=(data.correct||0);d.tableStats[k].wrong+=(data.wrong||0);d.sessions.push({ts:Date.now(),...data});if(d.sessions.length>200)d.sessions=d.sessions.slice(-200);p[name]=d;savePlayers(p)}
+function recordMistake(q,topic){const name=getPlayerName();if(!name)return;const p=getPlayers();const d=getPlayerData(name);const k=`[${topic||'?'}] ${q}`;d.mistakeMap[k]=(d.mistakeMap[k]||0)+1;p[name]=d;savePlayers(p)}
+function initGameHeader(){const name=getPlayerName();if(!name)return;const d=getPlayerData(name);const lbl=document.getElementById('player-label');const scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0}
+</script>
 <script>
 const TOTAL_Q = 10;
 let selectedDiff = 1, selectedOp = 'add';
