@@ -8,19 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg1: #0f2027; --bg2: #203a43; --bg3: #2c5364;
-  --yellow: #ffd600; --orange: #ff9800; --green: #00c853;
-  --card-bg: rgba(255,255,255,0.07);
-  --border: rgba(255,255,255,0.12);
+--bg1: #0f2027; --bg2: #203a43; --bg3: #2c5364;
+--yellow: #ffd600; --orange: #ff9800; --green: #00c853;
+--card-bg: rgba(255,255,255,0.07);
+--border: rgba(255,255,255,0.12);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Heebo', sans-serif;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-  display: flex; flex-direction: column; align-items: center;
-  padding: 20px 12px 40px;
-  position: relative; overflow-x: hidden;
+font-family: 'Heebo', sans-serif;
+min-height: 100vh;
+background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+display: flex; flex-direction: column; align-items: center;
+padding: 20px 12px 40px;
+position: relative; overflow-x: hidden;
 }
 
 /* Stars background */
@@ -42,7 +42,7 @@ pointer-events: none; z-index: 0;
 
 /* ── Name screen ── */
 #name-screen { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; }
-#main-screen  { width: 100%; display: none;  flex-direction: column; align-items: center; gap: 18px; }
+#main-screen { width: 100%; display: none; flex-direction: column; align-items: center; gap: 18px; }
 
 .logo { font-family: ‘Fredoka One’, cursive; font-size: clamp(2rem, 8vw, 3rem); color: var(–yellow); text-shadow: 0 4px 20px rgba(255,214,0,0.4); text-align: center; line-height: 1.2; }
 .logo span { color: white; }
@@ -224,103 +224,103 @@ margin-top: 4px; transition: color 0.15s;
 <body>
 <div class="wrap">
 
-  <!-- ══ NAME SCREEN ══ -->
+<!-- ══ NAME SCREEN ══ -->
 
-  <div id="name-screen">
-    <div style="margin-top: 20px"></div>
-    <div class="logo">🧮 <span>חשבון</span> מהנה</div>
-    <div class="subtitle">בחר את השם שלך כדי להתחיל</div>
+<div id="name-screen">
+<div style="margin-top: 20px"></div>
+<div class="logo">🧮 <span>חשבון</span> מהנה</div>
+<div class="subtitle">בחר את השם שלך כדי להתחיל</div>
 
 ```
 <div class="name-card">
-  <h2>👋 מי משחק?</h2>
-  <div class="players-row" id="saved-players">
-    <!-- filled by JS -->
-  </div>
-  <div class="divider" id="or-divider">או הוסף שם חדש</div>
-  <input class="name-input" id="name-input" type="text" placeholder="כתוב את השם שלך..." maxlength="20" autocomplete="off">
-  <button class="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
+<h2>👋 מי משחק?</h2>
+<div class="players-row" id="saved-players">
+<!-- filled by JS -->
+</div>
+<div class="divider" id="or-divider">או הוסף שם חדש</div>
+<input class="name-input" id="name-input" type="text" placeholder="כתוב את השם שלך..." maxlength="20" autocomplete="off">
+<button class="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
 </div>
 ```
 
-  </div>
+</div>
 
-  <!-- ══ MAIN SCREEN ══ -->
+<!-- ══ MAIN SCREEN ══ -->
 
-  <div id="main-screen">
-    <div class="welcome-bar">
-      <button class="switch-btn" onclick="switchPlayer()">החלף</button>
-      <div>
-        <div class="welcome-name" id="welcome-name">שלום!</div>
-        <div class="welcome-score">ניקוד כולל: <strong id="welcome-score">0</strong></div>
-      </div>
-      <div style="font-size:2rem" id="welcome-avatar">⭐</div>
-    </div>
+<div id="main-screen">
+<div class="welcome-bar">
+<button class="switch-btn" onclick="switchPlayer()">החלף</button>
+<div>
+<div class="welcome-name" id="welcome-name">שלום!</div>
+<div class="welcome-score">ניקוד כולל: <strong id="welcome-score">0</strong></div>
+</div>
+<div style="font-size:2rem" id="welcome-avatar">⭐</div>
+</div>
 
 ```
 <div class="section-label">📚 תרגילים</div>
 
 <div class="exercise-grid">
-  <a class="exercise-card card-green" href="addition.html">
-    <div class="card-icon">➕</div>
-    <div class="card-info">
-      <div class="card-title">חיבור וחיסור</div>
-      <div class="card-desc">כיתה א׳ — עד 10, 20, 100</div>
-    </div>
-    <div class="card-badge">שחק!</div>
-  </a>
+<a class="exercise-card card-green" href="addition.html">
+<div class="card-icon">➕</div>
+<div class="card-info">
+<div class="card-title">חיבור וחיסור</div>
+<div class="card-desc">כיתה א׳ — עד 10, 20, 100</div>
+</div>
+<div class="card-badge">שחק!</div>
+</a>
 
-  <a class="exercise-card card-yellow" href="times-tables.html" id="mult-card">
-    <div class="card-icon">⚽</div>
-    <div class="card-info">
-      <div class="card-title">לוח הכפל</div>
-      <div class="card-desc">כיתה ב׳-ג׳ — אימון ושלבים</div>
-    </div>
-    <div class="card-badge" id="mult-badge">שחק!</div>
-  </a>
+<a class="exercise-card card-yellow" href="times-tables.html" id="mult-card">
+<div class="card-icon">⚽</div>
+<div class="card-info">
+<div class="card-title">לוח הכפל</div>
+<div class="card-desc">כיתה ב׳-ג׳ — אימון ושלבים</div>
+</div>
+<div class="card-badge" id="mult-badge">שחק!</div>
+</a>
 
-  <a class="exercise-card card-purple" href="division.html">
-    <div class="card-icon">➗</div>
-    <div class="card-info">
-      <div class="card-title">חילוק</div>
-      <div class="card-desc">כיתה ג׳ — חלוקה עם ויזואל</div>
-    </div>
-    <div class="card-badge">שחק!</div>
-  </a>
+<a class="exercise-card card-purple" href="division.html">
+<div class="card-icon">➗</div>
+<div class="card-info">
+<div class="card-title">חילוק</div>
+<div class="card-desc">כיתה ג׳ — חלוקה עם ויזואל</div>
+</div>
+<div class="card-badge">שחק!</div>
+</a>
 
-  <a class="exercise-card card-orange" href="percentages.html">
-    <div class="card-icon">%</div>
-    <div class="card-info">
-      <div class="card-title">אחוזים</div>
-      <div class="card-desc">כיתה ה׳-ו׳ — חישובי אחוזים</div>
-    </div>
-    <div class="card-badge">שחק!</div>
-  </a>
+<a class="exercise-card card-orange" href="percentages.html">
+<div class="card-icon">%</div>
+<div class="card-info">
+<div class="card-title">אחוזים</div>
+<div class="card-desc">כיתה ה׳-ו׳ — חישובי אחוזים</div>
+</div>
+<div class="card-badge">שחק!</div>
+</a>
 
-  <a class="exercise-card card-teal" href="sudoku.html">
-    <div class="card-icon">🧩</div>
-    <div class="card-info">
-      <div class="card-title">סודוקו</div>
-      <div class="card-desc">4×4, 6×6, 9×9 — קל עד קשה</div>
-    </div>
-    <div class="card-badge">שחק!</div>
-  </a>
+<a class="exercise-card card-teal" href="sudoku.html">
+<div class="card-icon">🧩</div>
+<div class="card-info">
+<div class="card-title">סודוקו</div>
+<div class="card-desc">4×4, 6×6, 9×9 — קל עד קשה</div>
+</div>
+<div class="card-badge">שחק!</div>
+</a>
 </div>
 
 <div class="stats-mini" id="stats-mini">
-  <h3>📊 הסטטיסטיקה שלי</h3>
-  <div class="stats-row">
-    <div class="mini-stat"><div class="n" id="st-games">0</div><div class="l">משחקים</div></div>
-    <div class="mini-stat"><div class="n" id="st-correct">0</div><div class="l">נכון</div></div>
-    <div class="mini-stat"><div class="n" id="st-streak">0</div><div class="l">רצף שיא</div></div>
-    <div class="mini-stat"><div class="n" id="st-score">0</div><div class="l">ניקוד</div></div>
-  </div>
+<h3>📊 הסטטיסטיקה שלי</h3>
+<div class="stats-row">
+<div class="mini-stat"><div class="n" id="st-games">0</div><div class="l">משחקים</div></div>
+<div class="mini-stat"><div class="n" id="st-correct">0</div><div class="l">נכון</div></div>
+<div class="mini-stat"><div class="n" id="st-streak">0</div><div class="l">רצף שיא</div></div>
+<div class="mini-stat"><div class="n" id="st-score">0</div><div class="l">ניקוד</div></div>
+</div>
 </div>
 
 <a class="parent-link" href="parent.html">🔐 דף הורה</a>
 ```
 
-  </div>
+</div>
 
 </div>
 <script>
@@ -392,6 +392,11 @@ document.getElementById(‘main-screen’).style.display = ‘none’;
 document.getElementById(‘name-input’).value = ‘’;
 buildNameScreen();
 }
+
+// Enter key support
+document.getElementById(‘name-input’).addEventListener(‘keydown’, function(e) {
+if (e.key === ‘Enter’) enterApp();
+});
 
 // Init
 buildNameScreen();
