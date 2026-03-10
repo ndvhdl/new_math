@@ -156,7 +156,7 @@ function recordMistake(q,topic){var name=getPlayerName();if(!name)return;var p=g
 function initGameHeader(){var name=getPlayerName();if(!name)return;var d=getPlayerData(name);var lbl=document.getElementById('player-label');var scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0;}
 
 var TOTAL_Q=10,DIFF_CONFIG={1:[10,12],2:[20,10],3:[100,15],4:[1000,20]};
-var selectedDiff=1,selectedOp=‘add’;
+var selectedDiff=1,selectedOp='add';
 var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
 var currentAns,currentQuestion,timerInterval,timeLeft,totalScore=0;
 
