@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- v2.1 -->
 <title>⚽ אלוף הכפל</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -121,7 +122,7 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
     </div>
     <div class="question-card" id="question-card">
       <div class="question-text" id="question-text"></div>
-      <input class="answer-input" id="answer-input" type="number" min="0" max="999" placeholder="?" autocomplete="off">
+      <input class="answer-input" id="answer-input" type="number" min="0" max="999" placeholder="?" autocomplete="off" inputmode="numeric">
       <div class="feedback" id="feedback"></div>
       <button class="submit-btn" id="submit-btn">✔ אישור</button>
     </div>
@@ -162,6 +163,7 @@ var currentQ,currentAns;
 var timerInterval,timeLeft;
 var level,levelCorrect;
 var practiceCount;
+var gameOver=false;
 var LEVELS_PER_STAGE=5,TOTAL_QUESTIONS_PRACTICE=15;
 
 // ── Build menu ────────────────────────────────────
@@ -191,7 +193,7 @@ document.getElementById('answer-input').addEventListener('keydown',function(e){i
 
 function startGame(){
   lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;
-  level=1;levelCorrect=0;practiceCount=0;
+  level=1;levelCorrect=0;practiceCount=0;gameOver=false;
   clearInterval(timerInterval);
   showScreen('screen-game');
   updateHUD();nextQuestion();
@@ -225,6 +227,7 @@ function generateQuestion(){
 }
 
 function nextQuestion(){
+  if(gameOver)return;
   var q=generateQuestion();currentQ=q;
   currentAns=q.isReverse?q.b:q.product;
   if(q.isReverse){
@@ -291,6 +294,8 @@ function handleWrong(timeout){
 function showFeedback(msg,good){var el=document.getElementById('feedback');el.textContent=msg;el.className='feedback '+(good?'correct':'wrong');}
 
 function endGame(win){
+  if(gameOver)return;
+  gameOver=true;
   clearInterval(timerInterval);
   var tKey=selectedTable==='mixed'?'מעורב':'×'+selectedTable;
   saveSession({game:'times-tables',mode:selectedMode,topic:tKey,score:sessionScore,correct:correct,wrong:wrong,bestStreak:sessionMaxStreak});
