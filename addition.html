@@ -156,4 +156,116 @@ function selectOp(btn){document.querySelectorAll('.op-btn').forEach(b=>b.classLi
 function showScreen(id){["screen-menu","screen-game","screen-result"].forEach(s=>document.getElementById(s).style.display="none");document.getElementById(id).style.display="flex";}
 function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
 
-function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore
+function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;showScreen('screen-game');updateHUD();nextQuestion();}
+
+function nextQuestion(){
+    if(questionNum>=TOTAL_Q){endGame();return;}
+    var q = generateQuestion(); currentQuestion = q; currentAns = q.ans;
+    var maxN = DIFF_CONFIG[selectedDiff][0];
+    
+    if(selectedDiff <= 2){document.getElementById('nl-wrap').style.display='block';buildNumberLine(maxN, q.a);}
+    else {document.getElementById('nl-wrap').style.display='none';}
+    
+    var opSym = q.op === 'add' ? '<span class="op-plus">+</span>' : '<span class="op-minus">−</span>';
+    document.getElementById('question-text').innerHTML = `${q.a} ${opSym} ${q.b} = <span class="q-mark">?</span>`;
+    
+    var choices = generateChoices(q.ans, maxN);
+    var grid = document.getElementById('choices-grid'); grid.innerHTML = '';
+    choices.forEach(c => {
+        var btn = document.createElement('button'); btn.className = 'choice-btn'; btn.textContent = c;
+        btn.onclick = () => checkAnswer(c, btn); grid.appendChild(btn);
+    });
+    document.getElementById('feedback').textContent = '';
+    startTimer(DIFF_CONFIG[selectedDiff][1]);
+}
+
+function generateQuestion(){
+    var maxN=DIFF_CONFIG[selectedDiff][0];
+    var op=selectedOp==='mix'?(Math.random()<0.5?'add':'sub'):selectedOp;
+    var a,b,ans;
+    if(op==='add'){a=Math.floor(Math.random()*(maxN-1))+1;b=Math.floor(Math.random()*(maxN-a))+1;ans=a+b;}
+    else{a=Math.floor(Math.random()*(maxN-1))+2;b=Math.floor(Math.random()*(a-1))+1;ans=a-b;}
+    return{a:a,b:b,op:op,ans:ans};
+}
+
+function generateChoices(ans,maxN){
+    var choices=[ans];
+    while(choices.length<4){
+        var w=ans+Math.floor(Math.random()*11)-5;
+        if(w>=0 && !choices.includes(w))choices.push(w);
+    }
+    return choices.sort(()=>Math.random()-0.5);
+}
+
+function startTimer(total){
+    clearInterval(timerInterval);timeLeft=total;
+    var bar=document.getElementById('timer-bar');
+    timerInterval=setInterval(()=>{
+        timeLeft-=0.1;var pct=(timeLeft/total)*100;
+        bar.style.width=pct+'%';
+        document.getElementById('timer-num').textContent=Math.ceil(timeLeft);
+        if(pct<20) bar.style.background='var(--red)';
+        else if(pct<40) bar.style.background='#ff9800';
+        else bar.style.background='var(--green)';
+        if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}
+    },100);
+}
+
+function checkAnswer(val,btn){
+    clearInterval(timerInterval);
+    if(val===currentAns){btn.classList.add('correct');handleCorrect();}
+    else{btn.classList.add('wrong');handleWrong(false);}
+}
+
+function handleCorrect(){
+    streak++;correct++;questionNum++;sessionScore+=10;
+    document.getElementById('feedback').textContent='✅ נכון!';
+    document.getElementById('feedback').className='feedback correct';
+    floatEmoji('✅');updateHUD();
+    setTimeout(nextQuestion,1000);
+}
+
+function handleWrong(isTimeout){
+    streak=0;wrong++;questionNum++;lives--;
+    document.getElementById('feedback').textContent=isTimeout?'⏰ נגמר הזמן!':'❌ טעות...';
+    document.getElementById('feedback').className='feedback wrong';
+    floatEmoji('❌');updateHUD();
+    if(lives<=0) setTimeout(endGame,1000);
+    else setTimeout(nextQuestion,1000);
+}
+
+function updateHUD(){
+    var ld=document.getElementById('lives-display');ld.innerHTML='';
+    for(var i=0;i<3;i++) ld.innerHTML+=i<lives?'❤️':'🖤';
+    document.getElementById('streak-badge').textContent=streak>=3?'🔥 '+streak+' ברצף!':'🔥 '+streak+' ברצף';
+    document.getElementById('progress-bar').style.width=(questionNum/TOTAL_Q*100)+'%';
+    document.getElementById('progress-label').textContent=questionNum+' / '+TOTAL_Q;
+}
+
+function endGame(){
+    showScreen('screen-result');
+    document.getElementById('stat-correct').textContent=correct;
+    document.getElementById('stat-wrong').textContent=wrong;
+    document.getElementById('stat-score').textContent=sessionScore;
+    saveSession({score:sessionScore,correct:correct,wrong:wrong});
+}
+
+function buildNumberLine(max,highlight){
+    var nl=document.getElementById('number-line');nl.innerHTML='';
+    for(var i=0;i<=max;i++){
+        if(i>0){var line=document.createElement('div');line.className='nl-line';nl.appendChild(line);}
+        var num=document.createElement('div');num.className='nl-num'+(i===highlight?' highlight':'');
+        num.textContent=i;nl.appendChild(num);
+    }
+}
+
+function floatEmoji(emoji){
+    var el=document.createElement('div');el.className='float-emoji';el.textContent=emoji;
+    el.style.left='50%';el.style.top='50%';document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1000);
+}
+
+initGameHeader();
+</script>
+</body>
+</html>
