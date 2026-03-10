@@ -91,15 +91,15 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#4a148c,#6
     <div class="div-grid" id="div-grid"></div>
     <div class="section-title" style="margin-top:6px">🎮 מצב משחק</div>
     <div class="mode-row">
-      <div class="mode-btn selected" data-mode="practice"><span class="mi">📚</span>אימון<span style="font-size:0.65rem;opacity:0.6">ללא לחץ</span></div>
-      <div class="mode-btn" data-mode="lives"><span class="mi">❤️</span>3 חיים<span style="font-size:0.65rem;opacity:0.6">3 טעויות</span></div>
-      <div class="mode-btn" data-mode="speed"><span class="mi">⚡</span>מהירות<span style="font-size:0.65rem;opacity:0.6">60 שניות</span></div>
+      <div class="mode-btn selected" data-mode="practice" onclick="selectMode(this)"><span class="mi">📚</span>אימון<span style="font-size:0.65rem;opacity:0.6">ללא לחץ</span></div>
+      <div class="mode-btn" data-mode="lives" onclick="selectMode(this)"><span class="mi">❤️</span>3 חיים<span style="font-size:0.65rem;opacity:0.6">3 טעויות</span></div>
+      <div class="mode-btn" data-mode="speed" onclick="selectMode(this)"><span class="mi">⚡</span>מהירות<span style="font-size:0.65rem;opacity:0.6">60 שניות</span></div>
     </div>
-    <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
+    <button class="start-btn" id="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
   </div>
 
   <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
-    <button class="back-btn" id="back-btn">← חזרה</button>
+    <button class="back-btn" id="back-btn" onclick="goMenu()">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
       <div class="timer-wrap">
@@ -133,8 +133,8 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#4a148c,#6
         <div class="stat-box"><div class="stat-num" id="stat-score">0</div><div class="stat-label">ניקוד</div></div>
       </div>
       <div class="btn-row">
-        <button class="btn-back" id="res-menu">🏠 תפריט</button>
-        <button class="btn-again" id="res-again">🔄 שוב!</button>
+        <button class="btn-back" id="res-menu" onclick="goMenu()">🏠 תפריט</button>
+        <button class="btn-again" id="res-again" onclick="startGame()">🔄 שוב!</button>
       </div>
     </div>
   </div>
@@ -154,16 +154,12 @@ var selectedDivisor=‘mixed’,selectedMode=‘practice’;
 var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
 var currentAns,currentQ,timerInterval,timeLeft,totalScore=0;
 
-(function(){var grid=document.getElementById(‘div-grid’);for(var i=2;i<=10;i++){var b=document.createElement(‘button’);b.className=‘div-btn’;b.textContent=‘÷’+i;b.dataset.val=i;(function(btn){btn.addEventListener(‘click’,function(){selectDiv(btn);});})(b);grid.appendChild(b);}var m=document.createElement(‘button’);m.className=‘div-btn mixed selected’;m.textContent=‘🎲 מעורב’;m.dataset.val=‘mixed’;m.addEventListener(‘click’,function(){selectDiv(m);});grid.appendChild(m);})();
+(function(){var grid=document.getElementById(‘div-grid’);for(var i=2;i<=10;i++){var b=document.createElement(‘button’);b.className=‘div-btn’;b.textContent=‘÷’+i;b.dataset.val=i;b.setAttribute(‘onclick’,‘selectDiv(this)’);grid.appendChild(b);}var m=document.createElement(‘button’);m.className=‘div-btn mixed selected’;m.textContent=‘🎲 מעורב’;m.dataset.val=‘mixed’;m.setAttribute(‘onclick’,‘selectDiv(this)’);grid.appendChild(m);})();
 
 function selectDiv(btn){document.querySelectorAll(’.div-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedDivisor=btn.dataset.val===‘mixed’?‘mixed’:parseInt(btn.dataset.val);}
-document.querySelectorAll(’.mode-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.mode-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedMode=btn.dataset.mode;});});
-function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
+
+function selectMode(btn){function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
 function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
-document.getElementById(‘back-btn’).addEventListener(‘click’,goMenu);
-document.getElementById(‘res-menu’).addEventListener(‘click’,goMenu);
-document.getElementById(‘res-again’).addEventListener(‘click’,startGame);
-document.getElementById(‘start-btn’).addEventListener(‘click’,startGame);
 
 function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;clearInterval(timerInterval);showScreen(‘screen-game’);if(selectedMode===‘speed’){timeLeft=SPEED_SECS;startSpeedTimer();}updateHUD();nextQuestion();}
 
@@ -190,5 +186,5 @@ function floatEmoji(emoji){var el=document.createElement(‘div’);el.className
 initGameHeader();
 </script>
 
-</body>
+<div style="position:fixed;bottom:4px;right:4px;color:rgba(255,255,255,0.2);font-size:9px;pointer-events:none;">v4</div></body>
 </html>
