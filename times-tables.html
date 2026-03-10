@@ -98,15 +98,15 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
     <div class="table-grid" id="table-grid"></div>
     <div class="section-title" style="margin-top:8px">🎮 בחר מצב משחק</div>
     <div class="mode-row">
-      <div class="mode-btn selected" data-mode="practice" id="mode-practice"><span class="mode-icon">📚</span>אימון<span style="font-size:0.65rem;opacity:0.7">ללא לחץ</span></div>
-      <div class="mode-btn" data-mode="lives" id="mode-lives"><span class="mode-icon">❤️</span>3 חיים<span style="font-size:0.65rem;opacity:0.7">3 טעויות ומפסיד</span></div>
-      <div class="mode-btn" data-mode="levels" id="mode-levels"><span class="mode-icon">🏆</span>שלבים<span style="font-size:0.65rem;opacity:0.7">עלה ברמות</span></div>
+      <div class="mode-btn selected" data-mode="practice" id="mode-practice" onclick="selectMode(this)"><span class="mode-icon">📚</span>אימון<span style="font-size:0.65rem;opacity:0.7">ללא לחץ</span></div>
+      <div class="mode-btn" data-mode="lives" id="mode-lives" onclick="selectMode(this)"><span class="mode-icon">❤️</span>3 חיים<span style="font-size:0.65rem;opacity:0.7">3 טעויות ומפסיד</span></div>
+      <div class="mode-btn" data-mode="levels" id="mode-levels" onclick="selectMode(this)"><span class="mode-icon">🏆</span>שלבים<span style="font-size:0.65rem;opacity:0.7">עלה ברמות</span></div>
     </div>
-    <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
+    <button class="start-btn" id="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
   </div>
 
   <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:12px;">
-    <button class="back-btn" id="back-btn">← חזרה</button>
+    <button class="back-btn" id="back-btn" onclick="goMenu()">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
       <div class="timer-wrap" id="timer-wrap" style="display:none">
@@ -124,7 +124,7 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
       <div class="question-text" id="question-text"></div>
       <input class="answer-input" id="answer-input" type="number" min="0" max="999" placeholder="?" autocomplete="off" inputmode="numeric">
       <div class="feedback" id="feedback"></div>
-      <button class="submit-btn" id="submit-btn">✔ אישור</button>
+      <button class="submit-btn" id="submit-btn" onclick="submitAnswer()">✔ אישור</button>
     </div>
   </div>
 
@@ -171,7 +171,7 @@ var LEVELS_PER_STAGE=5,TOTAL_QUESTIONS_PRACTICE=15;
   var grid=document.getElementById('table-grid');
   for(var i=2;i<=10;i++){
     var b=document.createElement('button');b.className='table-btn';b.textContent='×'+i;b.dataset.val=i;
-    (function(btn){btn.addEventListener('click',function(){selectTable(btn);});})(b);
+    (function(btn){btn.setAttribute('onclick','selectTable(this)');})(b);
     grid.appendChild(b);
   }
   var m=document.createElement('button');m.className='table-btn mixed selected';m.textContent='🎲 מעורב';m.dataset.val='mixed';
@@ -180,15 +180,15 @@ var LEVELS_PER_STAGE=5,TOTAL_QUESTIONS_PRACTICE=15;
 })();
 
 function selectTable(btn){document.querySelectorAll('.table-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedTable=btn.dataset.val==='mixed'?'mixed':parseInt(btn.dataset.val);}
-document.querySelectorAll('.mode-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedMode=btn.dataset.mode;});});
 
+function selectMode(btn){document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedMode=btn.dataset.mode;}
 function showScreen(id){var ids=["screen-menu","screen-game","screen-result"];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display="none";});var el=document.getElementById(id);if(el)el.style.display="flex";});document.getElementById(id).classList.add('active');}
 function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
-document.getElementById('back-btn').addEventListener('click',goMenu);
-document.getElementById('res-menu').addEventListener('click',goMenu);
-document.getElementById('res-again').addEventListener('click',startGame);
-document.getElementById('start-btn').addEventListener('click',startGame);
-document.getElementById('submit-btn').addEventListener('click',submitAnswer);
+
+
+
+
+
 document.getElementById('answer-input').addEventListener('keydown',function(e){if(e.key==='Enter')submitAnswer();});
 
 function startGame(){
