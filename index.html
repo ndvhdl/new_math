@@ -12,8 +12,6 @@
 body{font-family:'Heebo',sans-serif;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));display:flex;flex-direction:column;align-items:center;padding:20px 12px 40px;position:relative;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,0.4) 0%,transparent 100%),radial-gradient(1px 1px at 70% 15%,rgba(255,255,255,0.3) 0%,transparent 100%),radial-gradient(2px 2px at 55% 40%,rgba(255,214,0,0.3) 0%,transparent 100%);pointer-events:none;z-index:0;}
 .wrap{position:relative;z-index:1;width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;gap:20px;}
-.screen{width:100%;display:none;flex-direction:column;align-items:center;gap:18px;}
-.screen.active{display:flex;}
 .logo{font-family:'Fredoka One',cursive;font-size:clamp(2rem,8vw,3rem);color:var(--yellow);text-shadow:0 4px 20px rgba(255,214,0,0.4);text-align:center;line-height:1.2;margin-top:20px;}
 .logo span{color:white;}
 .subtitle{color:rgba(255,255,255,0.55);font-size:0.95rem;text-align:center;}
@@ -26,15 +24,12 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .name-input{width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);border-radius:14px;padding:14px 16px;color:white;font-family:'Fredoka One',cursive;font-size:1.2rem;text-align:center;outline:none;transition:border-color 0.2s;}
 .name-input::placeholder{color:rgba(255,255,255,0.3);}
 .name-input:focus{border-color:var(--yellow);}
-.go-btn{width:100%;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),var(--orange));color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.4);transition:all 0.15s;}
-.go-btn:hover{transform:scale(1.02);}
-.go-btn:active{transform:scale(0.97);}
+.go-btn{width:100%;padding:15px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),var(--orange));color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.4);}
 .welcome-bar{width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(10px);}
 .welcome-name{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.2rem;}
 .welcome-score{color:rgba(255,255,255,0.7);font-size:0.85rem;}
 .welcome-score strong{color:white;}
 .switch-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:5px 12px;color:rgba(255,255,255,0.6);font-size:0.8rem;cursor:pointer;}
-.switch-btn:hover{background:rgba(255,255,255,0.2);color:white;}
 .section-label{font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.5);font-size:0.85rem;letter-spacing:2px;align-self:flex-start;}
 .exercise-grid{display:flex;flex-direction:column;gap:12px;width:100%;}
 .exercise-card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px 20px;display:flex;align-items:center;gap:16px;backdrop-filter:blur(10px);transition:all 0.2s;text-decoration:none;}
@@ -44,11 +39,6 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .card-title{font-family:'Fredoka One',cursive;color:white;font-size:1.2rem;}
 .card-desc{color:rgba(255,255,255,0.5);font-size:0.8rem;margin-top:3px;}
 .card-badge{background:rgba(255,214,0,0.15);border:1px solid rgba(255,214,0,0.3);border-radius:20px;padding:4px 10px;color:var(--yellow);font-size:0.75rem;font-weight:bold;white-space:nowrap;}
-.card-green:hover{border-color:rgba(0,200,83,0.5);box-shadow:0 8px 30px rgba(0,200,83,0.15);}
-.card-yellow:hover{border-color:rgba(255,214,0,0.5);box-shadow:0 8px 30px rgba(255,214,0,0.15);}
-.card-purple:hover{border-color:rgba(156,39,176,0.5);box-shadow:0 8px 30px rgba(156,39,176,0.15);}
-.card-orange:hover{border-color:rgba(255,152,0,0.5);box-shadow:0 8px 30px rgba(255,152,0,0.15);}
-.card-teal:hover{border-color:rgba(0,188,212,0.5);box-shadow:0 8px 30px rgba(0,188,212,0.15);}
 .stats-mini{width:100%;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:14px 18px;backdrop-filter:blur(10px);}
 .stats-mini h3{font-family:'Fredoka One',cursive;color:rgba(255,255,255,0.7);font-size:0.95rem;margin-bottom:10px;}
 .stats-row{display:flex;gap:8px;}
@@ -56,12 +46,14 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .mini-stat .n{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.3rem;}
 .mini-stat .l{color:rgba(255,255,255,0.4);font-size:0.65rem;margin-top:2px;}
 .parent-link{color:rgba(255,255,255,0.25);font-size:0.75rem;text-decoration:none;margin-top:4px;}
-.parent-link:hover{color:rgba(255,255,255,0.5);}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="screen active" id="screen-name">
+
+  <!-- מסך הכנסת שם -->
+
+  <div id="screen-name" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;">
     <div class="logo">🧮 <span>חשבון</span> מהנה</div>
     <div class="subtitle">לימוד חשבון בצורה מהנה</div>
     <div class="name-card">
@@ -69,12 +61,15 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
       <div class="players-row" id="saved-players"></div>
       <div class="divider" id="or-divider" style="display:none">או הוסף שם חדש</div>
       <input class="name-input" id="name-input" type="text" placeholder="כתוב את השם שלך..." maxlength="20" autocomplete="off">
-      <button id="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
+      <button class="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
     </div>
   </div>
-  <div class="screen" id="screen-main">
+
+  <!-- מסך ראשי -->
+
+  <div id="screen-main" style="width:100%;display:none;flex-direction:column;align-items:center;gap:18px;">
     <div class="welcome-bar">
-      <button id="switch-btn" onclick="document.getElementById(\'name-input\').value=\'\';buildSaved();showScreen(\'screen-name\')">החלף</button>
+      <button class="switch-btn" onclick="goSwitch()">החלף</button>
       <div>
         <div class="welcome-name" id="welcome-name">שלום!</div>
         <div class="welcome-score">ניקוד כולל: <strong id="welcome-score">0</strong></div>
@@ -83,11 +78,11 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
     </div>
     <div class="section-label">📚 תרגילים</div>
     <div class="exercise-grid">
-      <a class="exercise-card card-green" href="addition.html"><div class="card-icon">➕</div><div class="card-info"><div class="card-title">חיבור וחיסור</div><div class="card-desc">כיתה א׳ — עד 10, 20, 100</div></div><div class="card-badge">שחק!</div></a>
-      <a class="exercise-card card-yellow" href="times-tables.html"><div class="card-icon">⚽</div><div class="card-info"><div class="card-title">לוח הכפל</div><div class="card-desc">כיתה ב׳-ג׳ — אימון ושלבים</div></div><div class="card-badge" id="mult-badge">שחק!</div></a>
-      <a class="exercise-card card-purple" href="division.html"><div class="card-icon">➗</div><div class="card-info"><div class="card-title">חילוק</div><div class="card-desc">כיתה ג׳ — חלוקה עם ויזואל</div></div><div class="card-badge">שחק!</div></a>
-      <a class="exercise-card card-orange" href="percentages.html"><div class="card-icon">%</div><div class="card-info"><div class="card-title">אחוזים</div><div class="card-desc">כיתה ה׳-ו׳ — חישובי אחוזים</div></div><div class="card-badge">שחק!</div></a>
-      <a class="exercise-card card-teal" href="sudoku.html"><div class="card-icon">🧩</div><div class="card-info"><div class="card-title">סודוקו</div><div class="card-desc">4×4, 6×6, 9×9 — קל עד קשה</div></div><div class="card-badge">שחק!</div></a>
+      <a class="exercise-card" href="addition.html"><div class="card-icon">➕</div><div class="card-info"><div class="card-title">חיבור וחיסור</div><div class="card-desc">כיתה א׳ — עד 10, 20, 100</div></div><div class="card-badge">שחק!</div></a>
+      <a class="exercise-card" href="times-tables.html"><div class="card-icon">⚽</div><div class="card-info"><div class="card-title">לוח הכפל</div><div class="card-desc">כיתה ב׳-ג׳ — אימון ושלבים</div></div><div class="card-badge">שחק!</div></a>
+      <a class="exercise-card" href="division.html"><div class="card-icon">➗</div><div class="card-info"><div class="card-title">חילוק</div><div class="card-desc">כיתה ג׳ — חלוקה עם ויזואל</div></div><div class="card-badge">שחק!</div></a>
+      <a class="exercise-card" href="percentages.html"><div class="card-icon">%</div><div class="card-info"><div class="card-title">אחוזים</div><div class="card-desc">כיתה ה׳-ו׳ — חישובי אחוזים</div></div><div class="card-badge">שחק!</div></a>
+      <a class="exercise-card" href="sudoku.html"><div class="card-icon">🧩</div><div class="card-info"><div class="card-title">סודוקו</div><div class="card-desc">4×4, 6×6, 9×9 — קל עד קשה</div></div><div class="card-badge">שחק!</div></a>
     </div>
     <div class="stats-mini">
       <h3>📊 הסטטיסטיקה שלי</h3>
@@ -100,51 +95,87 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
     </div>
     <a class="parent-link" href="parent.html">🔐 דף הורה</a>
   </div>
+
 </div>
 <script>
-const AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
-function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch{return{}}}
-function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
-function getCurrent(){return localStorage.getItem('mathapp_current')||''}
-function setCurrent(n){localStorage.setItem('mathapp_current',n)}
-function getOrCreate(name){const p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0};savePlayers(p);}return p[name];}
-function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
-function buildSaved(){
-  var players=getPlayers(),names=Object.keys(players);
-  var row=document.getElementById('saved-players'),div=document.getElementById('or-divider');
-  row.innerHTML='';
-  if(!names.length){div.style.display='none';return;}
-  div.style.display='block';
-  names.forEach(function(name){
-    var chip=document.createElement('button');chip.className='player-chip';
-    chip.innerHTML='<span>'+players[name].avatar+'</span>'+name;
-    chip.setAttribute('onclick',"document.getElementById('name-input').value='"+name+"';enterApp()");
-    row.appendChild(chip);
-  });
+var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
+
+function getPlayers(){try{return JSON.parse(localStorage.getItem(‘mathapp_players’)||’{}’)}catch(e){return{}}}
+function savePlayers(p){localStorage.setItem(‘mathapp_players’,JSON.stringify(p))}
+function getCurrent(){return localStorage.getItem(‘mathapp_current’)||’’}
+function setCurrent(n){localStorage.setItem(‘mathapp_current’,n)}
+
+function getOrCreate(name){
+var p=getPlayers();
+if(!p[name]){
+p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};
+savePlayers(p);
 }
-function enterApp(){
-  var name=document.getElementById('name-input').value.trim()||'שחקן';
-  setCurrent(name);getOrCreate(name);showMain(name);
-}
-function showMain(name){
-  var d=getOrCreate(name);
-  document.getElementById('welcome-name').textContent='שלום, '+name+'!';
-  document.getElementById('welcome-avatar').textContent=d.avatar;
-  document.getElementById('welcome-score').textContent=d.totalScore||0;
-  document.getElementById('st-games').textContent=d.games||0;
-  document.getElementById('st-correct').textContent=d.correct||0;
-  document.getElementById('st-streak').textContent=d.bestStreak||0;
-  document.getElementById('st-score').textContent=d.totalScore||0;
-  document.getElementById('mult-badge').textContent=d.games>0?d.games+' משחקים':'שחק!';
-  showScreen('screen-main');
+return p[name];
 }
 
-document.getElementById(‘name-input’).addEventListener(‘keydown’,function(e){if(e.key===‘Enter’)enterApp();});
+function showName(){
+document.getElementById(‘screen-name’).style.display=‘flex’;
+document.getElementById(‘screen-main’).style.display=‘none’;
+}
+function showMain(name){
+var d=getOrCreate(name);
+document.getElementById(‘welcome-name’).textContent=‘שלום, ‘+name+’!’;
+document.getElementById(‘welcome-avatar’).textContent=d.avatar;
+document.getElementById(‘welcome-score’).textContent=d.totalScore||0;
+document.getElementById(‘st-games’).textContent=d.games||0;
+document.getElementById(‘st-correct’).textContent=d.correct||0;
+document.getElementById(‘st-streak’).textContent=d.bestStreak||0;
+document.getElementById(‘st-score’).textContent=d.totalScore||0;
+document.getElementById(‘screen-name’).style.display=‘none’;
+document.getElementById(‘screen-main’).style.display=‘flex’;
+}
+
+function enterApp(){
+var name=document.getElementById(‘name-input’).value.trim();
+if(!name)name=‘שחקן’;
+setCurrent(name);
+getOrCreate(name);
+showMain(name);
+}
+
+function goSwitch(){
+document.getElementById(‘name-input’).value=’’;
+buildSaved();
+showName();
+}
+
+function buildSaved(){
+var players=getPlayers();
+var names=Object.keys(players);
+var row=document.getElementById(‘saved-players’);
+var div=document.getElementById(‘or-divider’);
+row.innerHTML=’’;
+if(!names.length){div.style.display=‘none’;return;}
+div.style.display=‘block’;
+names.forEach(function(name){
+var chip=document.createElement(‘button’);
+chip.className=‘player-chip’;
+chip.innerHTML=’<span>’+players[name].avatar+’</span>’+name;
+chip.onclick=function(){
+document.getElementById(‘name-input’).value=name;
+enterApp();
+};
+row.appendChild(chip);
+});
+}
+
+document.getElementById(‘name-input’).addEventListener(‘keydown’,function(e){
+if(e.key===‘Enter’)enterApp();
+});
 
 buildSaved();
 var cur=getCurrent();
-if(cur&&getPlayers()[cur])showMain(cur);
-else showScreen(‘screen-name’);
+if(cur && getPlayers()[cur]){
+showMain(cur);
+} else {
+showName();
+}
 </script>
 
 </body>
