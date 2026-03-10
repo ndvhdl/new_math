@@ -69,12 +69,12 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
       <div class="players-row" id="saved-players"></div>
       <div class="divider" id="or-divider" style="display:none">או הוסף שם חדש</div>
       <input class="name-input" id="name-input" type="text" placeholder="כתוב את השם שלך..." maxlength="20" autocomplete="off">
-      <button class="go-btn" id="go-btn">🚀 בואו נתחיל!</button>
+      <button id="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
     </div>
   </div>
   <div class="screen" id="screen-main">
     <div class="welcome-bar">
-      <button class="switch-btn" id="switch-btn">החלף</button>
+      <button id="switch-btn" onclick="document.getElementById(\'name-input\').value=\'\';buildSaved();showScreen(\'screen-name\')">החלף</button>
       <div>
         <div class="welcome-name" id="welcome-name">שלום!</div>
         <div class="welcome-score">ניקוד כולל: <strong id="welcome-score">0</strong></div>
@@ -118,7 +118,7 @@ function buildSaved(){
   names.forEach(function(name){
     var chip=document.createElement('button');chip.className='player-chip';
     chip.innerHTML='<span>'+players[name].avatar+'</span>'+name;
-    chip.addEventListener('click',function(){document.getElementById('name-input').value=name;enterApp();});
+    chip.setAttribute('onclick',"document.getElementById('name-input').value='"+name+"';enterApp()");
     row.appendChild(chip);
   });
 }
@@ -138,13 +138,14 @@ function showMain(name){
   document.getElementById('mult-badge').textContent=d.games>0?d.games+' משחקים':'שחק!';
   showScreen('screen-main');
 }
-document.getElementById('go-btn').addEventListener('click',enterApp);
-document.getElementById('name-input').addEventListener('keydown',function(e){if(e.key==='Enter')enterApp();});
-document.getElementById('switch-btn').addEventListener('click',function(){document.getElementById('name-input').value='';buildSaved();showScreen('screen-name');});
+
+document.getElementById(‘name-input’).addEventListener(‘keydown’,function(e){if(e.key===‘Enter’)enterApp();});
+
 buildSaved();
 var cur=getCurrent();
 if(cur&&getPlayers()[cur])showMain(cur);
-else showScreen('screen-name');
+else showScreen(‘screen-name’);
 </script>
+
 </body>
 </html>
