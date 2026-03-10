@@ -141,7 +141,7 @@ or.style.display='block';
 names.forEach(function(name){
 var b=document.createElement('button');
 b.className='chip';
-b.textContent=(p[name].avatar||‘⭐’)+’ ’+name;
+b.textContent=(p[name].avatar||'⭐')+' '+name;
 b.addEventListener('touchend',function(e){e.preventDefault();document.getElementById('inp').value=name;enterApp();});
 b.addEventListener('click',function(){document.getElementById('inp').value=name;enterApp();});
 el.appendChild(b);
@@ -149,18 +149,18 @@ el.appendChild(b);
 }
 
 // כפתור ראשי - touchend + click לתמיכה מקסימלית ב-iOS
-var btn=document.getElementById(‘gobtn’);
-btn.addEventListener(‘touchend’,function(e){e.preventDefault();enterApp();});
-btn.addEventListener(‘click’,function(){enterApp();});
+var btn=document.getElementById('gobtn');
+btn.addEventListener('touchend',function(e){e.preventDefault();enterApp();});
+btn.addEventListener('click',function(){enterApp();});
 
 // כפתור החלף
-var sw=document.getElementById(‘swbtn’);
-sw.addEventListener(‘touchend’,function(e){e.preventDefault();doSwitch();});
-sw.addEventListener(‘click’,function(){doSwitch();});
+var sw=document.getElementById('swbtn');
+sw.addEventListener('touchend',function(e){e.preventDefault();doSwitch();});
+sw.addEventListener('click',function(){doSwitch();});
 
 // Enter מהמקלדת
-document.getElementById(‘inp’).addEventListener(‘keydown’,function(e){
-if(e.key===‘Enter’){e.preventDefault();enterApp();}
+document.getElementById('inp').addEventListener('keydown',function(e){
+if(e.key==='Enter'){e.preventDefault();enterApp();}
 });
 
 buildChips();
