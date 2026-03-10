@@ -93,7 +93,7 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
   </div>
   <div id="status"></div>
 
-  <div class="screen active" id="screen-menu">
+  <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;">
     <div class="section-title">🔢 בחר לוח כפל</div>
     <div class="table-grid" id="table-grid"></div>
     <div class="section-title" style="margin-top:8px">🎮 בחר מצב משחק</div>
@@ -105,7 +105,7 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
     <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
   </div>
 
-  <div class="screen" id="screen-game">
+  <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:12px;">
     <button class="back-btn" id="back-btn">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
@@ -128,7 +128,7 @@ body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,
     </div>
   </div>
 
-  <div class="screen" id="screen-result">
+  <div id="screen-result" style="width:100%;display:none;flex-direction:column;align-items:center;gap:12px;">
     <div class="result-card">
       <div class="result-emoji" id="result-emoji">🏆</div>
       <div class="result-title" id="result-title">כל הכבוד!</div>
@@ -182,7 +182,7 @@ var LEVELS_PER_STAGE=5,TOTAL_QUESTIONS_PRACTICE=15;
 function selectTable(btn){document.querySelectorAll('.table-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedTable=btn.dataset.val==='mixed'?'mixed':parseInt(btn.dataset.val);}
 document.querySelectorAll('.mode-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedMode=btn.dataset.mode;});});
 
-function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function showScreen(id){var ids=["screen-menu","screen-game","screen-result"];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display="none";});var el=document.getElementById(id);if(el)el.style.display="flex";});document.getElementById(id).classList.add('active');}
 function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
 document.getElementById('back-btn').addEventListener('click',goMenu);
 document.getElementById('res-menu').addEventListener('click',goMenu);
