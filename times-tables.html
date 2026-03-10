@@ -4,372 +4,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>אלוף הכפל ⚽</title>
+<title>⚽ אלוף הכפל</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --green: #00c853;
-  --dark-green: #007a2f;
-  --yellow: #ffd600;
-  --red: #ff1744;
-  --blue: #1565c0;
-  --light: #f0f7f0;
-  --white: #ffffff;
-  --shadow: 0 4px 20px rgba(0,0,0,0.18);
-}
-
-- { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-font-family: ‘Heebo’, sans-serif;
-background: var(–dark-green);
-min-height: 100vh;
-display: flex;
-flex-direction: column;
-align-items: center;
-overflow-x: hidden;
-position: relative;
-}
-
-/* ── Football pitch background ── */
-body::before {
-content: ‘’;
-position: fixed; inset: 0;
-background:
-repeating-linear-gradient(90deg, rgba(0,150,50,0.15) 0px, rgba(0,150,50,0.15) 60px, transparent 60px, transparent 120px),
-linear-gradient(180deg, #1b5e20 0%, #2e7d32 40%, #1b5e20 100%);
-z-index: 0;
-}
-body::after {
-content: ‘’;
-position: fixed;
-top: 50%; left: 50%;
-transform: translate(-50%, -50%);
-width: min(90vw, 340px); height: min(90vw, 340px);
-border: 4px solid rgba(255,255,255,0.08);
-border-radius: 50%;
-z-index: 0;
-pointer-events: none;
-}
-
-.wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; padding: 12px; display: flex; flex-direction: column; align-items: center; }
-
-/* ── Header ── */
-.header {
-width: 100%;
-background: rgba(0,0,0,0.45);
-border-radius: 16px;
-padding: 10px 16px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 12px;
-backdrop-filter: blur(6px);
-border: 1px solid rgba(255,255,255,0.1);
-}
-.title { font-family: ‘Fredoka One’, cursive; color: var(–yellow); font-size: 1.5rem; letter-spacing: 1px; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
-.score-box { display: flex; flex-direction: column; align-items: center; }
-.score-label { color: rgba(255,255,255,0.6); font-size: 0.65rem; }
-.score-val { font-family: ‘Fredoka One’, cursive; color: var(–white); font-size: 1.4rem; }
-
-/* ── Screen: menu ── */
-.screen { width: 100%; display: none; flex-direction: column; align-items: center; gap: 10px; }
-.screen.active { display: flex; }
-
-.section-title {
-font-family: ‘Fredoka One’, cursive;
-color: var(–yellow);
-font-size: 1.1rem;
-text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-align-self: flex-start;
-margin-bottom: 2px;
-}
-
-/* Table selector */
-.table-grid {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 8px;
-width: 100%;
-}
-.table-btn {
-aspect-ratio: 1;
-border-radius: 12px;
-border: 3px solid rgba(255,255,255,0.2);
-background: rgba(255,255,255,0.12);
-color: white;
-font-family: ‘Fredoka One’, cursive;
-font-size: 1.2rem;
-cursor: pointer;
-transition: all 0.15s;
-backdrop-filter: blur(4px);
-position: relative;
-}
-.table-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.07); }
-.table-btn.selected { background: var(–yellow); color: #1a1a1a; border-color: var(–yellow); box-shadow: 0 0 14px rgba(255,214,0,0.6); }
-.table-btn.mixed { background: linear-gradient(135deg,#ff6b35,#ffd600); color: #1a1a1a; border-color: transparent; font-size: 0.85rem; grid-column: span 2; aspect-ratio: auto; padding: 8px 4px; }
-
-/* Mode buttons */
-.mode-row { display: flex; gap: 10px; width: 100%; }
-.mode-btn {
-flex: 1;
-padding: 14px 8px;
-border-radius: 14px;
-border: 3px solid rgba(255,255,255,0.15);
-background: rgba(0,0,0,0.35);
-color: white;
-font-family: ‘Fredoka One’, cursive;
-font-size: 1rem;
-cursor: pointer;
-transition: all 0.15s;
-display: flex; flex-direction: column; align-items: center; gap: 4px;
-backdrop-filter: blur(4px);
-}
-.mode-btn .mode-icon { font-size: 1.8rem; }
-.mode-btn:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
-.mode-btn.selected { border-color: var(–yellow); background: rgba(255,214,0,0.15); }
-
-.start-btn {
-width: 100%;
-padding: 16px;
-border-radius: 50px;
-border: none;
-background: linear-gradient(135deg, var(–yellow), #ff9800);
-color: #1a1a1a;
-font-family: ‘Fredoka One’, cursive;
-font-size: 1.3rem;
-cursor: pointer;
-box-shadow: 0 6px 20px rgba(255,152,0,0.5);
-transition: all 0.15s;
-letter-spacing: 1px;
-}
-.start-btn:hover { transform: scale(1.03); box-shadow: 0 8px 28px rgba(255,152,0,0.6); }
-.start-btn:active { transform: scale(0.97); }
-
-/* ── Screen: game ── */
-.hud {
-width: 100%;
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 10px;
-}
-
-.lives { display: flex; gap: 4px; font-size: 1.5rem; min-width: 80px; }
-
-.timer-wrap {
-display: flex; flex-direction: column; align-items: center;
-}
-.timer-bar-bg {
-width: 120px; height: 10px;
-background: rgba(255,255,255,0.15);
-border-radius: 10px;
-overflow: hidden;
-}
-.timer-bar {
-height: 100%;
-border-radius: 10px;
-background: var(–green);
-transition: width 0.1s linear, background 0.3s;
-}
-.timer-num {
-font-family: ‘Fredoka One’, cursive;
-color: white;
-font-size: 0.9rem;
-margin-top: 2px;
-}
-
-.streak-badge {
-background: rgba(255,214,0,0.15);
-border: 2px solid var(–yellow);
-border-radius: 20px;
-padding: 4px 10px;
-color: var(–yellow);
-font-family: ‘Fredoka One’, cursive;
-font-size: 0.85rem;
-min-width: 70px;
-text-align: center;
-}
-
-/* Level badge */
-.level-badge {
-background: rgba(0,0,0,0.4);
-border: 2px solid rgba(255,255,255,0.2);
-border-radius: 20px;
-padding: 4px 12px;
-color: white;
-font-family: ‘Fredoka One’, cursive;
-font-size: 0.9rem;
-margin-bottom: 8px;
-}
-
-/* Question card */
-.question-card {
-width: 100%;
-background: rgba(255,255,255,0.97);
-border-radius: 24px;
-padding: 24px 16px 20px;
-box-shadow: var(–shadow), 0 0 0 4px rgba(255,214,0,0.2);
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 16px;
-transition: transform 0.15s;
-}
-.question-card.shake {
-animation: shake 0.4s ease;
-}
-.question-card.pop {
-animation: pop 0.3s ease;
-}
-@keyframes shake {
-0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 60%{transform:translateX(10px)} 80%{transform:translateX(-6px)}
-}
-@keyframes pop {
-0%{transform:scale(1)} 50%{transform:scale(1.06)} 100%{transform:scale(1)}
-}
-
-.question-text {
-font-family: ‘Fredoka One’, cursive;
-font-size: clamp(2.4rem, 10vw, 3.2rem);
-color: #1a1a1a;
-letter-spacing: 2px;
-text-align: center;
-}
-.question-text .q-mark { color: var(–blue); }
-
-/* Answer input */
-.answer-input {
-font-family: ‘Fredoka One’, cursive;
-font-size: 2rem;
-width: 120px;
-text-align: center;
-border: 4px solid #ddd;
-border-radius: 16px;
-padding: 8px;
-color: var(–blue);
-outline: none;
-background: #f8f8f8;
-transition: border-color 0.2s;
--moz-appearance: textfield;
-}
-.answer-input:focus { border-color: var(–blue); background: white; }
-.answer-input::-webkit-inner-spin-button,
-.answer-input::-webkit-outer-spin-button { -webkit-appearance: none; }
-
-.submit-btn {
-width: 100%;
-padding: 14px;
-border-radius: 50px;
-border: none;
-background: linear-gradient(135deg, #00c853, #00796b);
-color: white;
-font-family: ‘Fredoka One’, cursive;
-font-size: 1.2rem;
-cursor: pointer;
-box-shadow: 0 4px 14px rgba(0,200,83,0.4);
-transition: all 0.12s;
-}
-.submit-btn:hover { transform: scale(1.02); }
-.submit-btn:active { transform: scale(0.96); }
-
-/* Feedback overlay on card */
-.feedback {
-font-family: ‘Fredoka One’, cursive;
-font-size: 1.1rem;
-min-height: 1.4em;
-text-align: center;
-}
-.feedback.correct { color: var(–dark-green); }
-.feedback.wrong { color: var(–red); }
-
-/* Level progress (for levels mode) */
-.level-progress {
-width: 100%;
-display: flex;
-flex-direction: column;
-align-items: flex-end;
-gap: 4px;
-}
-.lp-label { color: rgba(255,255,255,0.7); font-size: 0.75rem; }
-.lp-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
-.lp-bar { height: 100%; background: linear-gradient(90deg, var(–yellow), #ff9800); border-radius: 8px; transition: width 0.4s ease; }
-
-/* ── Screen: result ── */
-.result-card {
-width: 100%;
-background: rgba(255,255,255,0.97);
-border-radius: 24px;
-padding: 30px 20px;
-box-shadow: var(–shadow);
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 14px;
-text-align: center;
-}
-.result-emoji { font-size: 4rem; animation: bounce 0.6s ease; }
-@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
-.result-title { font-family: ‘Fredoka One’, cursive; font-size: 1.8rem; color: #1a1a1a; }
-.result-stats { display: flex; gap: 20px; }
-.stat-box { display: flex; flex-direction: column; align-items: center; background: #f0f7f0; border-radius: 12px; padding: 10px 16px; }
-.stat-num { font-family: ‘Fredoka One’, cursive; font-size: 1.8rem; color: var(–dark-green); }
-.stat-label { font-size: 0.75rem; color: #555; }
-
-.btn-row { display: flex; gap: 10px; width: 100%; }
-.btn-secondary {
-flex: 1; padding: 12px; border-radius: 50px;
-border: 3px solid rgba(255,255,255,0.3);
-background: rgba(255,255,255,0.12);
-color: white; font-family: ‘Fredoka One’, cursive; font-size: 1rem;
-cursor: pointer; transition: all 0.15s;
-}
-.btn-secondary:hover { background: rgba(255,255,255,0.22); }
-.btn-primary {
-flex: 1.5; padding: 12px; border-radius: 50px;
-border: none;
-background: linear-gradient(135deg, var(–yellow), #ff9800);
-color: #1a1a1a; font-family: ‘Fredoka One’, cursive; font-size: 1rem;
-cursor: pointer; box-shadow: 0 4px 14px rgba(255,152,0,0.4);
-transition: all 0.15s;
-}
-.btn-primary:hover { transform: scale(1.03); }
-
-/* ── Floating emojis ── */
-.float-emoji {
-position: fixed;
-font-size: 2rem;
-pointer-events: none;
-z-index: 999;
-animation: floatUp 1s ease forwards;
-}
-@keyframes floatUp {
-0% { opacity: 1; transform: translateY(0) scale(1); }
-100% { opacity: 0; transform: translateY(-120px) scale(1.4); }
-}
-
-/* Back btn */
-.back-btn {
-align-self: flex-start;
-background: rgba(255,255,255,0.12);
-border: 2px solid rgba(255,255,255,0.2);
-color: white; border-radius: 50px;
-padding: 6px 14px;
-font-family: ‘Fredoka One’, cursive;
-font-size: 0.85rem;
-cursor: pointer;
-margin-bottom: 4px;
-transition: background 0.15s;
-}
-.back-btn:hover { background: rgba(255,255,255,0.22); }
+:root{--green:#00c853;--dark-green:#007a2f;--yellow:#ffd600;--red:#ff1744;--blue:#1565c0;--white:#fff;--shadow:0 4px 20px rgba(0,0,0,0.18);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Heebo',sans-serif;background:var(--dark-green);min-height:100vh;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;position:relative;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(90deg,rgba(0,150,50,0.15) 0px,rgba(0,150,50,0.15) 60px,transparent 60px,transparent 120px),linear-gradient(180deg,#1b5e20 0%,#2e7d32 40%,#1b5e20 100%);z-index:0;}
+body::after{content:'';position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(90vw,340px);height:min(90vw,340px);border:4px solid rgba(255,255,255,0.08);border-radius:50%;z-index:0;pointer-events:none;}
+.wrap{position:relative;z-index:1;width:100%;max-width:420px;padding:12px;display:flex;flex-direction:column;align-items:center;}
+.header{width:100%;background:rgba(0,0,0,0.45);border-radius:16px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);}
+.title{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.5rem;letter-spacing:1px;text-shadow:0 2px 8px rgba(0,0,0,0.5);}
+.score-box{display:flex;flex-direction:column;align-items:center;}
+.score-label{color:rgba(255,255,255,0.6);font-size:0.65rem;}
+.score-val{font-family:'Fredoka One',cursive;color:var(--white);font-size:1.4rem;}
+.screen{width:100%;display:none;flex-direction:column;align-items:center;gap:10px;}
+.screen.active{display:flex;}
+.section-title{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.1rem;text-shadow:0 2px 6px rgba(0,0,0,0.5);align-self:flex-start;margin-bottom:2px;}
+.table-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;}
+.table-btn{aspect-ratio:1;border-radius:12px;border:3px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.12);color:white;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;transition:all 0.15s;backdrop-filter:blur(4px);}
+.table-btn:hover{background:rgba(255,255,255,0.25);transform:scale(1.07);}
+.table-btn.selected{background:var(--yellow);color:#1a1a1a;border-color:var(--yellow);box-shadow:0 0 14px rgba(255,214,0,0.6);}
+.table-btn.mixed{background:linear-gradient(135deg,#ff6b35,#ffd600);color:#1a1a1a;border-color:transparent;font-size:0.85rem;grid-column:span 2;aspect-ratio:auto;padding:8px 4px;}
+.mode-row{display:flex;gap:10px;width:100%;}
+.mode-btn{flex:1;padding:14px 8px;border-radius:14px;border:3px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.35);color:white;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:4px;backdrop-filter:blur(4px);}
+.mode-btn .mode-icon{font-size:1.8rem;}
+.mode-btn:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px);}
+.mode-btn.selected{border-color:var(--yellow);background:rgba(255,214,0,0.15);}
+.start-btn{width:100%;padding:16px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.5);transition:all 0.15s;letter-spacing:1px;}
+.start-btn:hover{transform:scale(1.03);}
+.hud{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.lives{display:flex;gap:4px;font-size:1.5rem;min-width:80px;}
+.timer-wrap{display:flex;flex-direction:column;align-items:center;}
+.timer-bar-bg{width:120px;height:10px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;}
+.timer-bar{height:100%;border-radius:10px;background:var(--green);transition:width 0.1s linear,background 0.3s;}
+.timer-num{font-family:'Fredoka One',cursive;color:white;font-size:0.9rem;margin-top:2px;}
+.streak-badge{background:rgba(255,214,0,0.15);border:2px solid var(--yellow);border-radius:20px;padding:4px 10px;color:var(--yellow);font-family:'Fredoka One',cursive;font-size:0.85rem;min-width:70px;text-align:center;}
+.level-badge{background:rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.2);border-radius:20px;padding:4px 12px;color:white;font-family:'Fredoka One',cursive;font-size:0.9rem;margin-bottom:8px;}
+.level-progress{width:100%;display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.lp-label{color:rgba(255,255,255,0.7);font-size:0.75rem;}
+.lp-bar-bg{width:100%;height:8px;background:rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;}
+.lp-bar{height:100%;background:linear-gradient(90deg,var(--yellow),#ff9800);border-radius:8px;transition:width 0.4s ease;}
+.question-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:24px 16px 20px;box-shadow:var(--shadow),0 0 0 4px rgba(255,214,0,0.2);display:flex;flex-direction:column;align-items:center;gap:16px;transition:transform 0.15s;}
+.question-card.shake{animation:shake 0.4s ease;}
+.question-card.pop{animation:pop 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}60%{transform:translateX(10px)}80%{transform:translateX(-6px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+.question-text{font-family:'Fredoka One',cursive;font-size:clamp(2.4rem,10vw,3.2rem);color:#1a1a1a;letter-spacing:2px;text-align:center;}
+.question-text .q-mark{color:var(--blue);}
+.answer-input{font-family:'Fredoka One',cursive;font-size:2rem;width:120px;text-align:center;border:4px solid #ddd;border-radius:16px;padding:8px;color:var(--blue);outline:none;background:#f8f8f8;transition:border-color 0.2s;-moz-appearance:textfield;}
+.answer-input:focus{border-color:var(--blue);background:white;}
+.answer-input::-webkit-inner-spin-button,.answer-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.submit-btn{width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#00c853,#00796b);color:white;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 14px rgba(0,200,83,0.4);transition:all 0.12s;}
+.submit-btn:hover{transform:scale(1.02);}
+.feedback{font-family:'Fredoka One',cursive;font-size:1.1rem;min-height:1.4em;text-align:center;}
+.feedback.correct{color:var(--dark-green);}
+.feedback.wrong{color:var(--red);}
+.result-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:30px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;}
+.result-emoji{font-size:4rem;animation:bounce 0.6s ease;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.result-title{font-family:'Fredoka One',cursive;font-size:1.8rem;color:#1a1a1a;}
+.result-stats{display:flex;gap:20px;}
+.stat-box{display:flex;flex-direction:column;align-items:center;background:#f0f7f0;border-radius:12px;padding:10px 16px;}
+.stat-num{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--dark-green);}
+.stat-label{font-size:0.75rem;color:#555;}
+.btn-row{display:flex;gap:10px;width:100%;}
+.btn-secondary{flex:1;padding:12px;border-radius:50px;border:3px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.12);color:white;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:all 0.15s;}
+.btn-secondary:hover{background:rgba(255,255,255,0.22);}
+.btn-primary{flex:1.5;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(255,152,0,0.4);transition:all 0.15s;}
+.btn-primary:hover{transform:scale(1.03);}
+.float-emoji{position:fixed;font-size:2rem;pointer-events:none;z-index:999;animation:floatUp 1s ease forwards;}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(1.4)}}
+.back-btn{align-self:flex-start;background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);color:white;border-radius:50px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;margin-bottom:4px;transition:background 0.15s;}
+.back-btn:hover{background:rgba(255,255,255,0.22);}
+#status{min-height:1.4em;margin:8px 0;font-weight:bold;font-size:1rem;color:white;text-align:center;}
 </style>
-
 </head>
 <body>
 <div class="wrap">
-
-  <!-- HEADER -->
-
   <div class="header">
     <a href="index.html" style="color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem;font-family:'Fredoka One',cursive;">← בית</a>
     <div class="title">⚽ אלוף הכפל</div>
@@ -378,457 +90,228 @@ transition: background 0.15s;
       <div class="score-val" id="total-score">0</div>
     </div>
   </div>
-
-  <!-- ══════════ MENU SCREEN ══════════ -->
+  <div id="status"></div>
 
   <div class="screen active" id="screen-menu">
-
-```
-<div class="section-title">🔢 בחר לוח כפל</div>
-<div class="table-grid" id="table-grid">
-  <!-- filled by JS -->
-</div>
-
-<div class="section-title" style="margin-top:8px">🎮 בחר מצב משחק</div>
-<div class="mode-row">
-  <div class="mode-btn selected" data-mode="practice" onclick="selectMode(this)">
-    <span class="mode-icon">📚</span>
-    אימון חופשי
-    <span style="font-size:0.65rem;opacity:0.7">ללא לחץ</span>
+    <div class="section-title">🔢 בחר לוח כפל</div>
+    <div class="table-grid" id="table-grid"></div>
+    <div class="section-title" style="margin-top:8px">🎮 בחר מצב משחק</div>
+    <div class="mode-row">
+      <div class="mode-btn selected" data-mode="practice" id="mode-practice"><span class="mode-icon">📚</span>אימון<span style="font-size:0.65rem;opacity:0.7">ללא לחץ</span></div>
+      <div class="mode-btn" data-mode="lives" id="mode-lives"><span class="mode-icon">❤️</span>3 חיים<span style="font-size:0.65rem;opacity:0.7">3 טעויות ומפסיד</span></div>
+      <div class="mode-btn" data-mode="levels" id="mode-levels"><span class="mode-icon">🏆</span>שלבים<span style="font-size:0.65rem;opacity:0.7">עלה ברמות</span></div>
+    </div>
+    <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
   </div>
-  <div class="mode-btn" data-mode="lives" onclick="selectMode(this)">
-    <span class="mode-icon">❤️</span>
-    3 חיים
-    <span style="font-size:0.65rem;opacity:0.7">3 טעויות ומפסיד</span>
-  </div>
-  <div class="mode-btn" data-mode="levels" onclick="selectMode(this)">
-    <span class="mode-icon">🏆</span>
-    שלבים
-    <span style="font-size:0.65rem;opacity:0.7">עלה ברמות</span>
-  </div>
-</div>
-
-<button class="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
-```
-
-  </div>
-
-  <!-- ══════════ GAME SCREEN ══════════ -->
 
   <div class="screen" id="screen-game">
-    <button class="back-btn" onclick="goMenu()">← חזרה</button>
-
-```
-<div class="hud">
-  <div class="lives" id="lives-display"></div>
-  <div class="timer-wrap" id="timer-wrap" style="display:none">
-    <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
-    <div class="timer-num" id="timer-num">10</div>
-  </div>
-  <div class="streak-badge" id="streak-badge">🔥 0 ברצף</div>
-</div>
-
-<div class="level-badge" id="level-badge" style="display:none">שלב 1</div>
-<div class="level-progress" id="level-progress" style="display:none">
-  <div class="lp-label" id="lp-label">0 / 5 נכון</div>
-  <div class="lp-bar-bg"><div class="lp-bar" id="lp-bar" style="width:0%"></div></div>
-</div>
-
-<div class="question-card" id="question-card">
-  <div class="question-text" id="question-text"></div>
-  <input class="answer-input" id="answer-input" type="number" min="0" max="999" placeholder="?" autocomplete="off">
-  <div class="feedback" id="feedback"></div>
-  <button class="submit-btn" onclick="submitAnswer()">✔ אישור</button>
-</div>
-```
-
-  </div>
-
-  <!-- ══════════ RESULT SCREEN ══════════ -->
-
-  <div class="screen" id="screen-result">
-    <div class="result-card" id="result-card">
-      <div class="result-emoji" id="result-emoji">🏆</div>
-      <div class="result-title" id="result-title">כל הכבוד!</div>
-      <div class="result-stats">
-        <div class="stat-box">
-          <div class="stat-num" id="stat-correct">0</div>
-          <div class="stat-label">נכון</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-wrong">0</div>
-          <div class="stat-label">טעויות</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-num" id="stat-score">0</div>
-          <div class="stat-label">ניקוד</div>
-        </div>
+    <button class="back-btn" id="back-btn">← חזרה</button>
+    <div class="hud">
+      <div class="lives" id="lives-display"></div>
+      <div class="timer-wrap" id="timer-wrap" style="display:none">
+        <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
+        <div class="timer-num" id="timer-num">10</div>
       </div>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="goMenu()">🏠 תפריט</button>
-        <button class="btn-primary" onclick="restartGame()">🔄 שוב!</button>
-      </div>
+      <div class="streak-badge" id="streak-badge">🔥 0 ברצף</div>
+    </div>
+    <div class="level-badge" id="level-badge" style="display:none">שלב 1</div>
+    <div class="level-progress" id="level-progress" style="display:none">
+      <div class="lp-label" id="lp-label">0 / 5 נכון</div>
+      <div class="lp-bar-bg"><div class="lp-bar" id="lp-bar" style="width:0%"></div></div>
+    </div>
+    <div class="question-card" id="question-card">
+      <div class="question-text" id="question-text"></div>
+      <input class="answer-input" id="answer-input" type="number" min="0" max="999" placeholder="?" autocomplete="off">
+      <div class="feedback" id="feedback"></div>
+      <button class="submit-btn" id="submit-btn">✔ אישור</button>
     </div>
   </div>
 
-</div><!-- /wrap -->
+  <div class="screen" id="screen-result">
+    <div class="result-card">
+      <div class="result-emoji" id="result-emoji">🏆</div>
+      <div class="result-title" id="result-title">כל הכבוד!</div>
+      <div class="result-stats">
+        <div class="stat-box"><div class="stat-num" id="stat-correct">0</div><div class="stat-label">נכון</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-wrong">0</div><div class="stat-label">טעויות</div></div>
+        <div class="stat-box"><div class="stat-num" id="stat-score">0</div><div class="stat-label">ניקוד</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" id="res-menu">🏠 תפריט</button>
+        <button class="btn-primary" id="res-again">🔄 שוב!</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-// ── State ────────────────────────────────────────────────────────────────────
-let selectedTable = 'mixed';
-let selectedMode  = 'practice';
-let totalScore    = 0;
-let sessionMaxStreak = 0;
+// ── Shared ───────────────────────────────────────
+var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
+function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch{return{}}}
+function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
+function getPlayerName(){return localStorage.getItem('mathapp_current')||''}
+function getPlayerData(name){var p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p);}if(!Array.isArray(p[name].sessions))p[name].sessions=[];if(!p[name].tableStats||typeof p[name].tableStats!=='object')p[name].tableStats={};if(!p[name].mistakeMap||typeof p[name].mistakeMap!=='object')p[name].mistakeMap={};return p[name];}
+function saveSession(data){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);if((data.bestStreak||0)>(d.bestStreak||0))d.bestStreak=data.bestStreak;var k=data.topic||'general';if(!d.tableStats[k])d.tableStats[k]={correct:0,wrong:0};d.tableStats[k].correct+=(data.correct||0);d.tableStats[k].wrong+=(data.wrong||0);d.sessions.push(Object.assign({ts:Date.now()},data));if(d.sessions.length>200)d.sessions=d.sessions.slice(-200);p[name]=d;savePlayers(p);}
+function recordMistake(q,topic){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);var k='['+(topic||'?')+'] '+q;d.mistakeMap[k]=(d.mistakeMap[k]||0)+1;p[name]=d;savePlayers(p);}
+function initGameHeader(){var name=getPlayerName();if(!name)return;var d=getPlayerData(name);var lbl=document.getElementById('player-label');var scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0;}
 
-// game session
-let lives, streak, correct, wrong, sessionScore;
-let currentQ, currentAns;
-let timerInterval, timeLeft;
-let level, levelCorrect;
+// ── State ─────────────────────────────────────────
+var selectedTable='mixed',selectedMode='practice',totalScore=0,sessionMaxStreak=0;
+var lives,streak,correct,wrong,sessionScore;
+var currentQ,currentAns;
+var timerInterval,timeLeft;
+var level,levelCorrect;
+var practiceCount;
+var LEVELS_PER_STAGE=5,TOTAL_QUESTIONS_PRACTICE=15;
 
-const LEVELS_PER_STAGE = 5;
-const TOTAL_QUESTIONS_PRACTICE = 15;
-let practiceCount;
-
-// ── Player / Stats ───────────────────────────────────────────────────────────
-function getPlayers() { try { return JSON.parse(localStorage.getItem('mathapp_players') || '{}'); } catch { return {}; } }
-function savePlayers(p) { localStorage.setItem('mathapp_players', JSON.stringify(p)); }
-function getPlayerName() { return localStorage.getItem('mathapp_current') || ''; }
-
-function getPlayerData(name) {
-  const p = getPlayers();
-  if (!p[name]) p[name] = { avatar:'⭐', totalScore:0, games:0, correct:0, wrong:0, bestStreak:0, sessions:[], tableStats:{}, mistakeMap:{} };
-  ['tableStats','mistakeMap','sessions'].forEach(k => { if (!p[name][k]) p[name][k] = Array.isArray([]) ? [] : {}; });
-  if (!Array.isArray(p[name].sessions)) p[name].sessions = [];
-  if (typeof p[name].tableStats !== 'object') p[name].tableStats = {};
-  if (typeof p[name].mistakeMap !== 'object') p[name].mistakeMap = {};
-  return p[name];
-}
-
-function initPlayerDisplay() {
-  const name = getPlayerName();
-  if (name) {
-    const d = getPlayerData(name);
-    totalScore = d.totalScore || 0;
-    document.getElementById('total-score').textContent = totalScore;
-    document.getElementById('player-label').textContent = name;
-  }
-}
-
-function saveSessionStats() {
-  const name = getPlayerName();
-  if (!name) return;
-  const p = getPlayers();
-  const d = getPlayerData(name);
-  d.totalScore = (d.totalScore || 0) + sessionScore;
-  d.games = (d.games || 0) + 1;
-  d.correct = (d.correct || 0) + correct;
-  d.wrong = (d.wrong || 0) + wrong;
-  if (sessionMaxStreak > (d.bestStreak || 0)) d.bestStreak = sessionMaxStreak;
-  const tKey = selectedTable === 'mixed' ? 'mixed' : String(selectedTable);
-  if (!d.tableStats[tKey]) d.tableStats[tKey] = { correct:0, wrong:0 };
-  d.tableStats[tKey].correct += correct;
-  d.tableStats[tKey].wrong += wrong;
-  d.sessions.push({ ts: Date.now(), mode: selectedMode, table: tKey, score: sessionScore, correct, wrong, bestStreakInGame: sessionMaxStreak });
-  if (d.sessions.length > 100) d.sessions = d.sessions.slice(-100);
-  p[name] = d; savePlayers(p);
-}
-
-function recordMistake(q) {
-  const name = getPlayerName();
-  if (!name) return;
-  const p = getPlayers();
-  const d = getPlayerData(name);
-  const key = q.isReverse ? `${q.product}=${q.a}×?` : `${q.a}×${q.b}`;
-  d.mistakeMap[key] = (d.mistakeMap[key] || 0) + 1;
-  p[name] = d; savePlayers(p);
-}
-
-// ── Init menu ────────────────────────────────────────────────────────────────
-(function buildTableGrid() {
-  const grid = document.getElementById('table-grid');
-  for (let i = 2; i <= 10; i++) {
-    const b = document.createElement('button');
-    b.className = 'table-btn';
-    b.textContent = '×' + i;
-    b.dataset.val = i;
-    b.onclick = () => selectTable(b);
+// ── Build menu ────────────────────────────────────
+(function(){
+  var grid=document.getElementById('table-grid');
+  for(var i=2;i<=10;i++){
+    var b=document.createElement('button');b.className='table-btn';b.textContent='×'+i;b.dataset.val=i;
+    (function(btn){btn.addEventListener('click',function(){selectTable(btn);});})(b);
     grid.appendChild(b);
   }
-  const m = document.createElement('button');
-  m.className = 'table-btn mixed selected';
-  m.textContent = '🎲 מעורב';
-  m.dataset.val = 'mixed';
-  m.onclick = () => selectTable(m);
+  var m=document.createElement('button');m.className='table-btn mixed selected';m.textContent='🎲 מעורב';m.dataset.val='mixed';
+  m.addEventListener('click',function(){selectTable(m);});
   grid.appendChild(m);
 })();
 
-function selectTable(btn) {
-  document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedTable = btn.dataset.val === 'mixed' ? 'mixed' : parseInt(btn.dataset.val);
-}
+function selectTable(btn){document.querySelectorAll('.table-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedTable=btn.dataset.val==='mixed'?'mixed':parseInt(btn.dataset.val);}
+document.querySelectorAll('.mode-btn').forEach(function(btn){btn.addEventListener('click',function(){document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('selected');});btn.classList.add('selected');selectedMode=btn.dataset.mode;});});
 
-function selectMode(btn) {
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedMode = btn.dataset.mode;
-}
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
+document.getElementById('back-btn').addEventListener('click',goMenu);
+document.getElementById('res-menu').addEventListener('click',goMenu);
+document.getElementById('res-again').addEventListener('click',startGame);
+document.getElementById('start-btn').addEventListener('click',startGame);
+document.getElementById('submit-btn').addEventListener('click',submitAnswer);
+document.getElementById('answer-input').addEventListener('keydown',function(e){if(e.key==='Enter')submitAnswer();});
 
-// ── Screens ──────────────────────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-function goMenu() {
-  clearInterval(timerInterval);
-  showScreen('screen-menu');
-}
-
-// ── Game Start ───────────────────────────────────────────────────────────────
-function startGame() {
-  lives = 3; streak = 0; correct = 0; wrong = 0; sessionScore = 0; sessionMaxStreak = 0;
-  level = 1; levelCorrect = 0; practiceCount = 0;
+function startGame(){
+  lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;
+  level=1;levelCorrect=0;practiceCount=0;
   clearInterval(timerInterval);
   showScreen('screen-game');
-  updateHUD();
-  nextQuestion();
-}
-function restartGame() { startGame(); }
-
-// ── HUD ──────────────────────────────────────────────────────────────────────
-function updateHUD() {
-  // lives
-  const ld = document.getElementById('lives-display');
-  if (selectedMode === 'lives') {
-    ld.innerHTML = '';
-    for (let i = 0; i < 3; i++) {
-      ld.innerHTML += i < lives ? '❤️' : '🖤';
-    }
-  } else if (selectedMode === 'levels') {
-    ld.innerHTML = `⭐ ${sessionScore}`;
-  } else {
-    ld.innerHTML = `✅ ${correct}`;
-  }
-
-  // streak
-  document.getElementById('streak-badge').textContent =
-    streak >= 3 ? `🔥 ${streak} ברצף!` : `🔥 ${streak} ברצף`;
-
-  // level stuff
-  const lb = document.getElementById('level-badge');
-  const lp = document.getElementById('level-progress');
-  const lpLabel = document.getElementById('lp-label');
-  const lpBar = document.getElementById('lp-bar');
-  if (selectedMode === 'levels') {
-    lb.style.display = 'block';
-    lp.style.display = 'flex';
-    lb.textContent = `שלב ${level}`;
-    lpLabel.textContent = `${levelCorrect} / ${LEVELS_PER_STAGE} נכון`;
-    lpBar.style.width = (levelCorrect / LEVELS_PER_STAGE * 100) + '%';
-  } else {
-    lb.style.display = 'none';
-    lp.style.display = 'none';
-  }
+  updateHUD();nextQuestion();
 }
 
-// ── Question ─────────────────────────────────────────────────────────────────
-function generateQuestion() {
-  let a, b;
-  if (selectedTable === 'mixed') {
-    a = Math.floor(Math.random() * 9) + 2;
-  } else {
-    a = selectedTable;
-  }
-  // in levels mode make it harder as level increases
-  if (selectedMode === 'levels') {
-    const maxB = Math.min(2 + level, 10);
-    b = Math.floor(Math.random() * maxB) + 1;
-  } else {
-    b = Math.floor(Math.random() * 10) + 1;
-  }
-  // shuffle so question is not always "table × b"
-  if (Math.random() < 0.5) [a, b] = [b, a];
-
-  // 30% chance of reverse question (find missing factor), but only after level 1 in levels mode
-  const allowReverse = selectedMode !== 'levels' || level >= 2;
-  const isReverse = allowReverse && Math.random() < 0.3;
-
-  return { a, b, product: a * b, isReverse };
+function updateHUD(){
+  var ld=document.getElementById('lives-display');
+  if(selectedMode==='lives'){ld.innerHTML='';for(var i=0;i<3;i++)ld.innerHTML+=i<lives?'❤️':'🖤';}
+  else if(selectedMode==='levels')ld.innerHTML='⭐ '+sessionScore;
+  else ld.innerHTML='✅ '+correct;
+  document.getElementById('streak-badge').textContent=streak>=3?'🔥 '+streak+' ברצף!':'🔥 '+streak+' ברצף';
+  var lb=document.getElementById('level-badge'),lp=document.getElementById('level-progress');
+  if(selectedMode==='levels'){
+    lb.style.display='block';lp.style.display='flex';
+    lb.textContent='שלב '+level;
+    document.getElementById('lp-label').textContent=levelCorrect+' / '+LEVELS_PER_STAGE+' נכון';
+    document.getElementById('lp-bar').style.width=(levelCorrect/LEVELS_PER_STAGE*100)+'%';
+  }else{lb.style.display='none';lp.style.display='none';}
 }
 
-function nextQuestion() {
-  const q = generateQuestion();
-  currentQ = q;
-  // answer is the product for normal, or the missing factor for reverse
-  currentAns = q.isReverse ? q.b : q.product;
+function generateQuestion(){
+  var a,b;
+  if(selectedTable==='mixed')a=Math.floor(Math.random()*9)+2;
+  else a=selectedTable;
+  if(selectedMode==='levels'){var maxB=Math.min(2+level,10);b=Math.floor(Math.random()*maxB)+1;}
+  else b=Math.floor(Math.random()*10)+1;
+  if(Math.random()<0.5){var t=a;a=b;b=t;}
+  var allowReverse=selectedMode!=='levels'||level>=2;
+  var isReverse=allowReverse&&Math.random()<0.3;
+  return{a:a,b:b,product:a*b,isReverse:isReverse};
+}
 
-  if (q.isReverse) {
-    // show: product = a × ?   or   product = ? × a  (random side)
-    if (Math.random() < 0.5) {
-      document.getElementById('question-text').innerHTML =
-        `${q.product} = ${q.a} × <span class="q-mark">?</span>`;
-    } else {
-      document.getElementById('question-text').innerHTML =
-        `${q.product} = <span class="q-mark">?</span> × ${q.a}`;
-    }
-  } else {
-    document.getElementById('question-text').innerHTML =
-      `${q.a} × ${q.b} = <span class="q-mark">?</span>`;
+function nextQuestion(){
+  var q=generateQuestion();currentQ=q;
+  currentAns=q.isReverse?q.b:q.product;
+  if(q.isReverse){
+    if(Math.random()<0.5)document.getElementById('question-text').innerHTML=q.product+' = '+q.a+' × <span class="q-mark">?</span>';
+    else document.getElementById('question-text').innerHTML=q.product+' = <span class="q-mark">?</span> × '+q.a;
+  }else{
+    document.getElementById('question-text').innerHTML=q.a+' × '+q.b+' = <span class="q-mark">?</span>';
   }
-  const inp = document.getElementById('answer-input');
-  inp.value = '';
-  inp.focus();
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = 'feedback';
-
-  // timer (lives & levels modes)
+  var inp=document.getElementById('answer-input');inp.value='';inp.focus();
+  document.getElementById('feedback').textContent='';document.getElementById('feedback').className='feedback';
   clearInterval(timerInterval);
-  const tw = document.getElementById('timer-wrap');
-  if (selectedMode !== 'practice') {
-    tw.style.display = 'flex';
-    timeLeft = Math.max(4, 10 - (level - 1)); // gets shorter with levels
-    startTimer();
-  } else {
-    tw.style.display = 'none';
-  }
+  var tw=document.getElementById('timer-wrap');
+  if(selectedMode!=='practice'){
+    tw.style.display='flex';timeLeft=Math.max(4,10-(level-1));startTimer();
+  }else tw.style.display='none';
 }
 
-function startTimer() {
-  const bar = document.getElementById('timer-bar');
-  const num = document.getElementById('timer-num');
-  const total = timeLeft;
-  bar.style.width = '100%';
-  bar.style.background = 'var(--green)';
-
-  timerInterval = setInterval(() => {
-    timeLeft -= 0.1;
-    const pct = Math.max(0, timeLeft / total * 100);
-    bar.style.width = pct + '%';
-    num.textContent = Math.ceil(timeLeft);
-    if (pct < 40) bar.style.background = '#ff9800';
-    if (pct < 20) bar.style.background = 'var(--red)';
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      handleWrong(true);
-    }
-  }, 100);
+function startTimer(){
+  var bar=document.getElementById('timer-bar'),num=document.getElementById('timer-num'),total=timeLeft;
+  bar.style.width='100%';bar.style.background='var(--green)';
+  timerInterval=setInterval(function(){
+    timeLeft-=0.1;var pct=Math.max(0,timeLeft/total*100);
+    bar.style.width=pct+'%';num.textContent=Math.ceil(timeLeft);
+    if(pct<40)bar.style.background='#ff9800';
+    if(pct<20)bar.style.background='var(--red)';
+    if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}
+  },100);
 }
 
-// ── Answer ───────────────────────────────────────────────────────────────────
-document.getElementById('answer-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') submitAnswer();
-});
-
-function submitAnswer() {
-  const val = parseInt(document.getElementById('answer-input').value);
-  if (isNaN(val)) return;
+function submitAnswer(){
+  var val=parseInt(document.getElementById('answer-input').value);
+  if(isNaN(val))return;
   clearInterval(timerInterval);
-  if (val === currentAns) {
-    handleCorrect();
-  } else {
-    handleWrong(false);
-  }
+  if(val===currentAns)handleCorrect();else handleWrong(false);
 }
 
-function handleCorrect() {
-  streak++; correct++;
-  if (streak > sessionMaxStreak) sessionMaxStreak = streak;
-  const bonus = streak >= 5 ? 3 : streak >= 3 ? 2 : 1;
-  const points = 10 * bonus;
-  sessionScore += points;
-  totalScore += points;
-  document.getElementById('total-score').textContent = totalScore;
-
-  showFeedback(streak >= 3 ? `🔥 +${points} מדהים!` : `✅ +${points} נכון!`, true);
-  floatEmoji(streak >= 5 ? '🌟' : streak >= 3 ? '⚽' : '✅');
-
-  document.getElementById('question-card').classList.remove('shake');
-  document.getElementById('question-card').classList.add('pop');
-  setTimeout(() => document.getElementById('question-card').classList.remove('pop'), 300);
-
-  if (selectedMode === 'levels') {
-    levelCorrect++;
-    if (levelCorrect >= LEVELS_PER_STAGE) {
-      level++;
-      levelCorrect = 0;
-      // celebrate level up
-      setTimeout(() => floatEmoji('🏆'), 200);
-    }
-  }
-
+function handleCorrect(){
+  streak++;correct++;if(streak>sessionMaxStreak)sessionMaxStreak=streak;
+  var bonus=streak>=5?3:streak>=3?2:1,pts=10*bonus;
+  sessionScore+=pts;totalScore+=pts;
+  document.getElementById('total-score').textContent=totalScore;
+  showFeedback(streak>=3?'🔥 +'+pts+' מדהים!':'✅ +'+pts+' נכון!',true);
+  floatEmoji(streak>=5?'🌟':streak>=3?'⚽':'✅');
+  var card=document.getElementById('question-card');card.classList.remove('shake');card.classList.add('pop');
+  setTimeout(function(){card.classList.remove('pop');},300);
+  if(selectedMode==='levels'){levelCorrect++;if(levelCorrect>=LEVELS_PER_STAGE){level++;levelCorrect=0;setTimeout(function(){floatEmoji('🏆');},200);}}
   updateHUD();
-
-  if (selectedMode === 'practice' && ++practiceCount >= TOTAL_QUESTIONS_PRACTICE) {
-    setTimeout(() => endGame(true), 500);
-    return;
-  }
-  setTimeout(nextQuestion, 600);
+  if(selectedMode==='practice'&&++practiceCount>=TOTAL_QUESTIONS_PRACTICE){setTimeout(function(){endGame(true);},500);return;}
+  setTimeout(nextQuestion,600);
 }
 
-function handleWrong(timeout) {
-  streak = 0; wrong++;
-  recordMistake(currentQ);
-  const ans = currentAns;
-  const q = currentQ;
-  const hint = q.isReverse ? `${q.product} = ${q.a} × ${q.b}` : `${q.a} × ${q.b} = ${q.product}`;
-  showFeedback(timeout ? `⏰ ${hint}` : `❌ ${hint}`, false);
+function handleWrong(timeout){
+  streak=0;wrong++;
+  var q=currentQ,hint=q.isReverse?q.product+'='+q.a+'×'+q.b:q.a+'×'+q.b+'='+q.product;
+  recordMistake(hint,q.isReverse?'כפל הפוך':'כפל');
+  showFeedback(timeout?'⏰ '+hint:'❌ '+hint,false);
   floatEmoji('❌');
-
-  document.getElementById('question-card').classList.add('shake');
-  setTimeout(() => document.getElementById('question-card').classList.remove('shake'), 400);
-
-  if (selectedMode === 'lives') {
-    lives--;
-    if (lives <= 0) {
-      updateHUD();
-      setTimeout(() => endGame(false), 800);
-      return;
-    }
-  }
-  updateHUD();
-  setTimeout(nextQuestion, 900);
+  var card=document.getElementById('question-card');card.classList.add('shake');
+  setTimeout(function(){card.classList.remove('shake');},400);
+  if(selectedMode==='lives'){lives--;if(lives<=0){updateHUD();setTimeout(function(){endGame(false);},800);return;}}
+  updateHUD();setTimeout(nextQuestion,900);
 }
 
-function showFeedback(msg, good) {
-  const el = document.getElementById('feedback');
-  el.textContent = msg;
-  el.className = 'feedback ' + (good ? 'correct' : 'wrong');
-}
+function showFeedback(msg,good){var el=document.getElementById('feedback');el.textContent=msg;el.className='feedback '+(good?'correct':'wrong');}
 
-// ── End ───────────────────────────────────────────────────────────────────────
-function endGame(win) {
+function endGame(win){
   clearInterval(timerInterval);
-  saveSessionStats();
-  const emojis = win
-    ? (sessionScore >= 120 ? '🏆' : '⭐')
-    : (wrong === 3 ? '😅' : '💪');
-  const titles = win
-    ? (sessionScore >= 120 ? 'אלוף הכפל! 🏆' : 'כל הכבוד! 🎉')
-    : 'אל תוותר! 💪';
-
-  document.getElementById('result-emoji').textContent = emojis;
-  document.getElementById('result-title').textContent = titles;
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent = wrong;
-  document.getElementById('stat-score').textContent = sessionScore;
+  var tKey=selectedTable==='mixed'?'מעורב':'×'+selectedTable;
+  saveSession({game:'times-tables',mode:selectedMode,topic:tKey,score:sessionScore,correct:correct,wrong:wrong,bestStreak:sessionMaxStreak});
+  document.getElementById('result-emoji').textContent=win?(sessionScore>=120?'🏆':'⭐'):(wrong===3?'😅':'💪');
+  document.getElementById('result-title').textContent=win?(sessionScore>=120?'אלוף הכפל! 🏆':'כל הכבוד! 🎉'):'אל תוותר! 💪';
+  document.getElementById('stat-correct').textContent=correct;
+  document.getElementById('stat-wrong').textContent=wrong;
+  document.getElementById('stat-score').textContent=sessionScore;
   showScreen('screen-result');
 }
 
-// ── Utils ─────────────────────────────────────────────────────────────────────
-function floatEmoji(emoji) {
-  const el = document.createElement('div');
-  el.className = 'float-emoji';
-  el.textContent = emoji;
-  const card = document.getElementById('question-card').getBoundingClientRect();
-  el.style.left = (card.left + card.width / 2 - 16) + 'px';
-  el.style.top  = (card.top + 30) + 'px';
-  document.body.appendChild(el);
-  setTimeout(() => el.remove(), 1000);
+function setStatus(msg){document.getElementById('status').textContent=msg;}
+
+function floatEmoji(emoji){
+  var el=document.createElement('div');el.className='float-emoji';el.textContent=emoji;
+  var card=document.getElementById('question-card').getBoundingClientRect();
+  el.style.left=(card.left+card.width/2-16)+'px';el.style.top=(card.top+30)+'px';
+  document.body.appendChild(el);setTimeout(function(){el.remove();},1000);
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-initPlayerDisplay();
+initGameHeader();
 startGame();
 </script>
 
