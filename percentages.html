@@ -7,136 +7,97 @@
 <title>% אחוזים</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root { --main: #e65100; --light: #ff9800; --dark: #bf360c; --yellow: #ffd600; --red: #ff1744; --green: #00c853; --shadow: 0 4px 20px rgba(0,0,0,0.2); }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Heebo', sans-serif; background: linear-gradient(160deg, #bf360c, #e65100, #f57c00); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 10px; overflow-x: hidden; position: relative; }
-body::before { content: '% % % % %'; position: fixed; top: 0; left: 0; right: 0; bottom: 0; font-family: 'Fredoka One', cursive; font-size: 8rem; color: rgba(255,255,255,0.03); word-break: break-all; line-height: 1; z-index: 0; pointer-events: none; overflow: hidden; }
-.wrap { position: relative; z-index: 1; width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-
-.header { width: 100%; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.1); }
-.title { font-family: ‘Fredoka One’, cursive; color: var(–yellow); font-size: 1.4rem; }
-.score-box { display: flex; flex-direction: column; align-items: center; }
-.score-label { color: rgba(255,255,255,0.5); font-size: 0.65rem; }
-.score-val { font-family: ‘Fredoka One’, cursive; color: white; font-size: 1.4rem; }
-
-.screen { width: 100%; display: none; flex-direction: column; align-items: center; gap: 10px; }
-.screen.active { display: flex; }
-.section-title { font-family: ‘Fredoka One’, cursive; color: var(–yellow); font-size: 1.05rem; align-self: flex-start; }
-
-/* Question type cards */
-.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-.type-btn { padding: 14px 10px; border-radius: 16px; border: 2px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); color: white; font-family: ‘Fredoka One’, cursive; font-size: 0.9rem; cursor: pointer; transition: all 0.15s; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.type-btn .ti { font-size: 1.8rem; }
-.type-btn .te { font-size: 0.65rem; color: rgba(255,255,255,0.5); line-height: 1.3; text-align: center; }
-.type-btn:hover { background: rgba(255,255,255,0.18); }
-.type-btn.selected { border-color: var(–yellow); background: rgba(255,214,0,0.12); }
-.type-btn.mixed { grid-column: span 2; aspect-ratio: auto; }
-
-.start-btn { width: 100%; padding: 16px; border-radius: 50px; border: none; background: linear-gradient(135deg, var(–yellow), #ff9800); color: #1a1a1a; font-family: ‘Fredoka One’, cursive; font-size: 1.2rem; cursor: pointer; box-shadow: 0 6px 20px rgba(255,152,0,0.4); transition: all 0.15s; }
-.start-btn:hover { transform: scale(1.02); }
-
-/* Progress bar visual for percentages */
-.pct-visual { width: 100%; background: rgba(255,255,255,0.08); border-radius: 16px; padding: 12px 14px; }
-.pct-bar-outer { width: 100%; height: 20px; background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; position: relative; }
-.pct-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(–yellow), var(–light)); transition: width 0.5s ease; }
-.pct-labels { display: flex; justify-content: space-between; margin-top: 4px; font-size: 0.7rem; color: rgba(255,255,255,0.5); }
-.pct-label-center { font-family: ‘Fredoka One’, cursive; color: var(–yellow); font-size: 0.85rem; text-align: center; margin-top: 4px; }
-
-/* HUD */
-.hud { width: 100%; display: flex; justify-content: space-between; align-items: center; }
-.lives { font-size: 1.5rem; display: flex; gap: 3px; min-width: 80px; }
-.timer-wrap { display: flex; flex-direction: column; align-items: center; }
-.timer-bar-bg { width: 110px; height: 10px; background: rgba(255,255,255,0.15); border-radius: 10px; overflow: hidden; }
-.timer-bar { height: 100%; border-radius: 10px; background: var(–green); transition: width 0.1s linear, background 0.3s; }
-.timer-num { font-family: ‘Fredoka One’, cursive; color: white; font-size: 0.85rem; margin-top: 2px; }
-.streak-badge { background: rgba(255,214,0,0.15); border: 2px solid var(–yellow); border-radius: 20px; padding: 4px 10px; color: var(–yellow); font-family: ‘Fredoka One’, cursive; font-size: 0.8rem; min-width: 70px; text-align: center; }
-
-/* Question card */
-.question-card { width: 100%; background: rgba(255,255,255,0.97); border-radius: 24px; padding: 20px 16px 16px; box-shadow: var(–shadow), 0 0 0 4px rgba(255,214,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.question-card.shake { animation: shake 0.4s ease; }
-.question-card.pop   { animation: pop   0.3s ease; }
-@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 60%{transform:translateX(10px)} 80%{transform:translateX(-6px)} }
-@keyframes pop   { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
-
-.q-type-chip { background: rgba(230,81,0,0.1); border: 1px solid rgba(230,81,0,0.3); border-radius: 20px; padding: 3px 10px; font-size: 0.75rem; color: var(–main); font-weight: bold; }
-.question-text { font-family: ‘Fredoka One’, cursive; font-size: clamp(1.3rem, 5vw, 1.8rem); color: #1a1a1a; text-align: center; line-height: 1.4; }
-.question-text .pct { color: var(–main); }
-.question-text .q-mark { color: #6a1b9a; }
-.hint-text { font-size: 0.8rem; color: #888; text-align: center; background: #f5f5f5; border-radius: 10px; padding: 6px 12px; width: 100%; }
-
-.choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-.choice-btn { padding: 14px 8px; border-radius: 16px; border: 3px solid #e0e0e0; background: #f8f8f8; font-family: ‘Fredoka One’, cursive; font-size: 1.3rem; color: #1a1a1a; cursor: pointer; transition: all 0.12s; text-align: center; }
-.choice-btn:hover { background: #fff3e0; border-color: var(–main); transform: scale(1.03); }
-.choice-btn.correct { background: #e8f5e9; border-color: var(–green); color: #2e7d32; }
-.choice-btn.wrong   { background: #ffebee; border-color: var(–red);   color: #c62828; }
-
-.feedback { font-family: ‘Fredoka One’, cursive; font-size: 0.95rem; min-height: 1.3em; text-align: center; }
-.feedback.correct { color: #2e7d32; } .feedback.wrong { color: #c62828; }
-
-.lp-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.15); border-radius: 8px; overflow: hidden; }
-.lp-bar { height: 100%; background: linear-gradient(90deg, var(–yellow), #ff9800); border-radius: 8px; transition: width 0.4s; }
-.lp-label { font-size: 0.72rem; color: rgba(255,255,255,0.5); text-align: center; margin-top: 3px; }
-
-.result-card { width: 100%; background: rgba(255,255,255,0.97); border-radius: 24px; padding: 28px 20px; box-shadow: var(–shadow); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
-.result-emoji { font-size: 4rem; animation: bounce 0.6s ease; }
-@keyframes bounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
-.result-title { font-family: ‘Fredoka One’, cursive; font-size: 1.6rem; color: #1a1a1a; }
-.result-stats { display: flex; gap: 14px; }
-.stat-box { display: flex; flex-direction: column; align-items: center; background: #fff3e0; border-radius: 12px; padding: 10px 14px; }
-.stat-num { font-family: ‘Fredoka One’, cursive; font-size: 1.7rem; color: var(–dark); }
-.stat-label { font-size: 0.72rem; color: #555; }
-.btn-row { display: flex; gap: 10px; width: 100%; }
-.btn-back { flex:1; padding:12px; border-radius:50px; border:2px solid rgba(230,81,0,0.3); background:rgba(230,81,0,0.08); color:var(–main); font-family:‘Fredoka One’,cursive; font-size:1rem; cursor:pointer; }
-.btn-again { flex:1.5; padding:12px; border-radius:50px; border:none; background:linear-gradient(135deg,var(–yellow),#ff9800); color:#1a1a1a; font-family:‘Fredoka One’,cursive; font-size:1rem; cursor:pointer; box-shadow:0 4px 14px rgba(255,152,0,0.4); }
-.back-btn { align-self:flex-start; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; border-radius:50px; padding:6px 14px; font-family:‘Fredoka One’,cursive; font-size:0.85rem; cursor:pointer; }
-.float-emoji { position:fixed; font-size:2rem; pointer-events:none; z-index:999; animation:floatUp 1s ease forwards; }
-@keyframes floatUp { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-120px) scale(1.4)} }
+:root{--main:#e65100;--dark:#bf360c;--yellow:#ffd600;--red:#ff1744;--green:#00c853;--shadow:0 4px 20px rgba(0,0,0,0.2);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e65100,#f57c00);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:10px;overflow-x:hidden;}
+.wrap{position:relative;z-index:1;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;gap:12px;}
+.header{width:100%;background:rgba(0,0,0,0.3);border-radius:16px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);}
+.title{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.4rem;}
+.score-box{display:flex;flex-direction:column;align-items:center;}
+.score-label{color:rgba(255,255,255,0.5);font-size:0.65rem;}
+.score-val{font-family:'Fredoka One',cursive;color:white;font-size:1.4rem;}
+.screen{width:100%;display:none;flex-direction:column;align-items:center;gap:10px;}
+.screen.active{display:flex;}
+.section-title{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.05rem;align-self:flex-start;}
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
+.type-btn{padding:14px 10px;border-radius:16px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.type-btn .ti{font-size:1.8rem;}
+.type-btn .te{font-size:0.65rem;color:rgba(255,255,255,0.5);line-height:1.3;text-align:center;}
+.type-btn:hover{background:rgba(255,255,255,0.18);}
+.type-btn.selected{border-color:var(--yellow);background:rgba(255,214,0,0.12);}
+.type-btn.full{grid-column:span 2;}
+.start-btn{width:100%;padding:16px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.4);transition:all 0.15s;}
+.start-btn:hover{transform:scale(1.02);}
+.hud{width:100%;display:flex;justify-content:space-between;align-items:center;}
+.lives{font-size:1.5rem;display:flex;gap:3px;min-width:80px;}
+.timer-wrap{display:flex;flex-direction:column;align-items:center;}
+.timer-bar-bg{width:110px;height:10px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;}
+.timer-bar{height:100%;border-radius:10px;background:var(--green);transition:width 0.1s linear,background 0.3s;}
+.timer-num{font-family:'Fredoka One',cursive;color:white;font-size:0.85rem;margin-top:2px;}
+.streak-badge{background:rgba(255,214,0,0.15);border:2px solid var(--yellow);border-radius:20px;padding:4px 10px;color:var(--yellow);font-family:'Fredoka One',cursive;font-size:0.8rem;min-width:70px;text-align:center;}
+.pct-visual{width:100%;background:rgba(255,255,255,0.08);border-radius:16px;padding:12px 14px;}
+.pct-bar-outer{width:100%;height:20px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;}
+.pct-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--yellow),#ff9800);transition:width 0.5s ease;}
+.pct-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:0.7rem;color:rgba(255,255,255,0.5);}
+.pct-label-center{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:0.85rem;text-align:center;margin-top:4px;}
+.question-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:20px 16px 16px;box-shadow:var(--shadow),0 0 0 4px rgba(255,214,0,0.15);display:flex;flex-direction:column;align-items:center;gap:12px;}
+.question-card.shake{animation:shake 0.4s ease;}
+.question-card.pop{animation:pop 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}60%{transform:translateX(10px)}80%{transform:translateX(-6px)}}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+.q-chip{background:rgba(230,81,0,0.1);border:1px solid rgba(230,81,0,0.3);border-radius:20px;padding:3px 10px;font-size:0.75rem;color:var(--main);font-weight:bold;}
+.question-text{font-family:'Fredoka One',cursive;font-size:clamp(1.3rem,5vw,1.8rem);color:#1a1a1a;text-align:center;line-height:1.4;}
+.question-text .pct{color:var(--main);}
+.question-text .q-mark{color:#6a1b9a;}
+.hint-text{font-size:0.8rem;color:#888;text-align:center;background:#f5f5f5;border-radius:10px;padding:6px 12px;width:100%;}
+.choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
+.choice-btn{padding:14px 8px;border-radius:16px;border:3px solid #e0e0e0;background:#f8f8f8;font-family:'Fredoka One',cursive;font-size:1.3rem;color:#1a1a1a;cursor:pointer;transition:all 0.12s;text-align:center;}
+.choice-btn:hover{background:#fff3e0;border-color:var(--main);transform:scale(1.03);}
+.choice-btn.correct{background:#e8f5e9;border-color:var(--green);color:#2e7d32;}
+.choice-btn.wrong{background:#ffebee;border-color:var(--red);color:#c62828;}
+.feedback{font-family:'Fredoka One',cursive;font-size:0.95rem;min-height:1.3em;text-align:center;}
+.feedback.correct{color:#2e7d32;}.feedback.wrong{color:#c62828;}
+.lp-bar-bg{width:100%;height:8px;background:rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;}
+.lp-bar{height:100%;background:linear-gradient(90deg,var(--yellow),#ff9800);border-radius:8px;transition:width 0.4s;}
+.lp-label{font-size:0.72rem;color:rgba(255,255,255,0.5);text-align:center;margin-top:3px;}
+.result-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:28px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;}
+.result-emoji{font-size:4rem;animation:bounce 0.6s ease;}
+@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+.result-title{font-family:'Fredoka One',cursive;font-size:1.6rem;color:#1a1a1a;}
+.result-stats{display:flex;gap:14px;}
+.stat-box{display:flex;flex-direction:column;align-items:center;background:#fff3e0;border-radius:12px;padding:10px 14px;}
+.stat-num{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--dark);}
+.stat-label{font-size:0.72rem;color:#555;}
+.btn-row{display:flex;gap:10px;width:100%;}
+.btn-back{flex:1;padding:12px;border-radius:50px;border:2px solid rgba(230,81,0,0.3);background:rgba(230,81,0,0.08);color:var(--main);font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;}
+.btn-again{flex:1.5;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(255,152,0,0.4);}
+.back-btn{align-self:flex-start;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:50px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;}
+.float-emoji{position:fixed;font-size:2rem;pointer-events:none;z-index:999;animation:floatUp 1s ease forwards;}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(1.4)}}
 </style>
-
 </head>
 <body>
 <div class="wrap">
   <div class="header">
     <a href="index.html" style="color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.8rem;font-family:'Fredoka One',cursive;">← בית</a>
     <div class="title">% אחוזים</div>
-    <div class="score-box">
-      <div class="score-label" id="player-label">ניקוד</div>
-      <div class="score-val" id="total-score">0</div>
-    </div>
+    <div class="score-box"><div class="score-label" id="player-label">ניקוד</div><div class="score-val" id="total-score">0</div></div>
   </div>
-
-  <!-- MENU -->
 
   <div class="screen active" id="screen-menu">
     <div class="section-title">📋 סוג תרגיל</div>
     <div class="type-grid">
-      <button class="type-btn selected" data-type="find_pct" onclick="selectType(this)">
-        <span class="ti">🔢</span>מה האחוז?
-        <span class="te">כמה אחוז הוא X מתוך Y?</span>
-      </button>
-      <button class="type-btn" data-type="find_part" onclick="selectType(this)">
-        <span class="ti">🍕</span>מה החלק?
-        <span class="te">כמה זה X% מתוך Y?</span>
-      </button>
-      <button class="type-btn" data-type="find_whole" onclick="selectType(this)">
-        <span class="ti">🔍</span>מה השלם?
-        <span class="te">X הוא Y%, מה השלם?</span>
-      </button>
-      <button class="type-btn" data-type="sale" onclick="selectType(this)">
-        <span class="ti">🏷️</span>הנחה במחיר
-        <span class="te">כמה משלמים אחרי הנחה?</span>
-      </button>
-      <button class="type-btn mixed selected" data-type="mix" onclick="selectType(this)">
-        <span class="ti">🎲</span> מעורב — כל סוגי השאלות
-      </button>
+      <button class="type-btn" data-type="find_pct"><span class="ti">🔢</span>מה האחוז?<span class="te">כמה אחוז הוא X מתוך Y?</span></button>
+      <button class="type-btn" data-type="find_part"><span class="ti">🍕</span>מה החלק?<span class="te">כמה זה X% מתוך Y?</span></button>
+      <button class="type-btn" data-type="find_whole"><span class="ti">🔍</span>מה השלם?<span class="te">X הוא Y%, מה השלם?</span></button>
+      <button class="type-btn" data-type="sale"><span class="ti">🏷️</span>הנחה<span class="te">כמה משלמים אחרי הנחה?</span></button>
+      <button class="type-btn full selected" data-type="mix"><span class="ti">🎲</span> מעורב — כל סוגי השאלות</button>
     </div>
-    <button class="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
+    <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
   </div>
 
-  <!-- GAME -->
-
   <div class="screen" id="screen-game">
-    <button class="back-btn" onclick="goMenu()">← חזרה</button>
+    <button class="back-btn" id="back-btn">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
       <div class="timer-wrap">
@@ -145,31 +106,23 @@ body::before { content: '% % % % %'; position: fixed; top: 0; left: 0; right: 0;
       </div>
       <div class="streak-badge" id="streak-badge">🔥 0 ברצף</div>
     </div>
-
-```
-<div class="pct-visual" id="pct-visual">
-  <div class="pct-bar-outer"><div class="pct-bar-fill" id="pct-bar-fill" style="width:0%"></div></div>
-  <div class="pct-labels"><span>0%</span><span>50%</span><span>100%</span></div>
-  <div class="pct-label-center" id="pct-label-center"></div>
-</div>
-
-<div class="question-card" id="question-card">
-  <div class="q-type-chip" id="q-type-chip">חישוב אחוזים</div>
-  <div class="question-text" id="question-text"></div>
-  <div class="hint-text" id="hint-text" style="display:none"></div>
-  <div class="choices-grid" id="choices-grid"></div>
-  <div class="feedback" id="feedback"></div>
-</div>
-
-<div>
-  <div class="lp-bar-bg"><div class="lp-bar" id="lp-bar" style="width:0%"></div></div>
-  <div class="lp-label" id="lp-label">0 / 10</div>
-</div>
-```
-
+    <div class="pct-visual">
+      <div class="pct-bar-outer"><div class="pct-bar-fill" id="pct-bar-fill" style="width:50%"></div></div>
+      <div class="pct-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+      <div class="pct-label-center" id="pct-label-center">50%</div>
+    </div>
+    <div class="question-card" id="question-card">
+      <div class="q-chip" id="q-chip">חישוב אחוזים</div>
+      <div class="question-text" id="question-text"></div>
+      <div class="hint-text" id="hint-text"></div>
+      <div class="choices-grid" id="choices-grid"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div>
+      <div class="lp-bar-bg"><div class="lp-bar" id="lp-bar" style="width:0%"></div></div>
+      <div class="lp-label" id="lp-label">0 / 10</div>
+    </div>
   </div>
-
-  <!-- RESULT -->
 
   <div class="screen" id="screen-result">
     <div class="result-card">
@@ -181,223 +134,62 @@ body::before { content: '% % % % %'; position: fixed; top: 0; left: 0; right: 0;
         <div class="stat-box"><div class="stat-num" id="stat-score">0</div><div class="stat-label">ניקוד</div></div>
       </div>
       <div class="btn-row">
-        <button class="btn-back"  onclick="goMenu()">🏠 תפריט</button>
-        <button class="btn-again" onclick="startGame()">🔄 שוב!</button>
+        <button class="btn-back" id="res-menu">🏠 תפריט</button>
+        <button class="btn-again" id="res-again">🔄 שוב!</button>
       </div>
     </div>
   </div>
 </div>
-
 <script>
-// ── Shared utilities ──────────────────────────────
-const AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
+var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
 function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch{return{}}}
 function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
 function getPlayerName(){return localStorage.getItem('mathapp_current')||''}
-function getPlayerData(name){const p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p)}if(!Array.isArray(p[name].sessions))p[name].sessions=[];if(typeof p[name].tableStats!=='object'||Array.isArray(p[name].tableStats))p[name].tableStats={};if(typeof p[name].mistakeMap!=='object'||Array.isArray(p[name].mistakeMap))p[name].mistakeMap={};return p[name]}
-function saveSession(data){const name=getPlayerName();if(!name)return;const p=getPlayers();const d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);if((data.bestStreak||0)>(d.bestStreak||0))d.bestStreak=data.bestStreak;const k=data.topic||'general';if(!d.tableStats[k])d.tableStats[k]={correct:0,wrong:0};d.tableStats[k].correct+=(data.correct||0);d.tableStats[k].wrong+=(data.wrong||0);d.sessions.push({ts:Date.now(),...data});if(d.sessions.length>200)d.sessions=d.sessions.slice(-200);p[name]=d;savePlayers(p)}
-function recordMistake(q,topic){const name=getPlayerName();if(!name)return;const p=getPlayers();const d=getPlayerData(name);const k=`[${topic||'?'}] ${q}`;d.mistakeMap[k]=(d.mistakeMap[k]||0)+1;p[name]=d;savePlayers(p)}
-function initGameHeader(){const name=getPlayerName();if(!name)return;const d=getPlayerData(name);const lbl=document.getElementById('player-label');const scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0}
-</script>
+function getPlayerData(name){var p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p);}if(!Array.isArray(p[name].sessions))p[name].sessions=[];if(!p[name].tableStats||typeof p[name].tableStats!=='object')p[name].tableStats={};if(!p[name].mistakeMap||typeof p[name].mistakeMap!=='object')p[name].mistakeMap={};return p[name];}
+function saveSession(data){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);if((data.bestStreak||0)>(d.bestStreak||0))d.bestStreak=data.bestStreak;var k=data.topic||'general';if(!d.tableStats[k])d.tableStats[k]={correct:0,wrong:0};d.tableStats[k].correct+=(data.correct||0);d.tableStats[k].wrong+=(data.wrong||0);d.sessions.push(Object.assign({ts:Date.now()},data));if(d.sessions.length>200)d.sessions=d.sessions.slice(-200);p[name]=d;savePlayers(p);}
+function recordMistake(q,topic){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);var k='['+(topic||'?')+'] '+q;d.mistakeMap[k]=(d.mistakeMap[k]||0)+1;p[name]=d;savePlayers(p);}
+function initGameHeader(){var name=getPlayerName();if(!name)return;var d=getPlayerData(name);var lbl=document.getElementById('player-label');var scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0;}
 
-<script>
-const TOTAL_Q = 10;
-const TIME_LIMIT = 20;
-// "nice" percentages kids learn: 10, 20, 25, 50, 75
-const NICE_PCTS = [10, 20, 25, 50, 75];
-// nice round numbers to use as "whole"
-const NICE_WHOLES = [20, 40, 50, 60, 80, 100, 120, 200, 500, 1000];
+var TOTAL_Q=10,TIME_LIMIT=20;
+var NICE_PCTS=[10,20,25,50,75];
+var NICE_WHOLES=[20,40,50,60,80,100,120,200,500,1000];
+var selectedType=‘mix’;
+var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
+var currentAns,currentQ,timerInterval,timeLeft,totalScore=0;
 
-let selectedType = 'mix';
-let lives, streak, correct, wrong, sessionScore, sessionMaxStreak, questionNum;
-let currentAns, currentQ;
-let timerInterval, timeLeft;
-let totalScore = 0;
+document.querySelectorAll(’.type-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.type-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedType=btn.dataset.type;});});
+function showScreen(id){document.querySelectorAll(’.screen’).forEach(function(s){s.classList.remove(‘active’);});document.getElementById(id).classList.add(‘active’);}
+function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
+document.getElementById(‘back-btn’).addEventListener(‘click’,goMenu);
+document.getElementById(‘res-menu’).addEventListener(‘click’,goMenu);
+document.getElementById(‘res-again’).addEventListener(‘click’,startGame);
+document.getElementById(‘start-btn’).addEventListener(‘click’,startGame);
 
-function selectType(btn) {
-  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedType = btn.dataset.type;
-}
-function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function goMenu() { clearInterval(timerInterval); showScreen('screen-menu'); }
+function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;clearInterval(timerInterval);showScreen(‘screen-game’);nextQuestion();}
 
-function startGame() {
-  lives = 3; streak = 0; correct = 0; wrong = 0; sessionScore = 0; sessionMaxStreak = 0; questionNum = 0;
-  clearInterval(timerInterval);
-  showScreen('screen-game');
-  nextQuestion();
-}
+function updateHUD(){var ld=document.getElementById(‘lives-display’);ld.innerHTML=’’;for(var i=0;i<3;i++)ld.innerHTML+=i<lives?‘❤️’:‘🖤’;document.getElementById(‘streak-badge’).textContent=streak>=3?‘🔥 ‘+streak+’ ברצף!’:‘🔥 ‘+streak+’ ברצף’;document.getElementById(‘lp-bar’).style.width=(questionNum/TOTAL_Q*100)+’%’;document.getElementById(‘lp-label’).textContent=questionNum+’ / ’+TOTAL_Q;}
 
-function updateHUD() {
-  const ld = document.getElementById('lives-display');
-  ld.innerHTML = ''; for (let i = 0; i < 3; i++) ld.innerHTML += i < lives ? '❤️' : '🖤';
-  document.getElementById('streak-badge').textContent = streak >= 3 ? `🔥 ${streak} ברצף!` : `🔥 ${streak} ברצף`;
-  document.getElementById('lp-bar').style.width = (questionNum / TOTAL_Q * 100) + '%';
-  document.getElementById('lp-label').textContent = `${questionNum} / ${TOTAL_Q}`;
-}
+function rnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function genFindPct(){var w=rnd(NICE_WHOLES),p=rnd(NICE_PCTS),part=w*p/100;return{type:‘find_pct’,text:part+’ מתוך ‘+w+’ — זה כמה <span class="pct">אחוז</span>?’,ans:p,hint:‘💡 ‘+part+’ ÷ ‘+w+’ × 100’,visual:p,chip:‘🔢 מה האחוז?’};}
+function genFindPart(){var w=rnd(NICE_WHOLES),p=rnd(NICE_PCTS),part=w*p/100;return{type:‘find_part’,text:‘כמה זה <span class="pct">’+p+’%</span> מתוך ‘+w+’?’,ans:part,hint:‘💡 ‘+w+’ × ‘+p+’ ÷ 100’,visual:p,chip:‘🍕 מה החלק?’};}
+function genFindWhole(){var w=rnd(NICE_WHOLES),p=rnd(NICE_PCTS),part=w*p/100;return{type:‘find_whole’,text:part+’ הוא <span class="pct">’+p+’%</span> — מה המספר המלא?’,ans:w,hint:‘💡 ‘+part+’ ÷ ‘+p+’ × 100’,visual:p,chip:‘🔍 מה השלם?’};}
+function genSale(){var prices=[50,80,100,120,150,200,250,300,400,500];var discounts=[10,20,25,50];var price=rnd(prices),disc=rnd(discounts),saved=price*disc/100,final=price-saved;return{type:‘sale’,text:‘מוצר עולה ₪’+price+’<br>הנחה של <span class="pct">’+disc+’%</span><br>כמה משלמים?’,ans:final,hint:’💡 ‘+price+’ − ‘+saved+’ = ’+final,visual:disc,chip:‘🏷️ הנחה במחיר’};}
 
-// Question generators
-function genFindPct() {
-  const whole = NICE_WHOLES[Math.floor(Math.random() * NICE_WHOLES.length)];
-  const pct   = NICE_PCTS[Math.floor(Math.random() * NICE_PCTS.length)];
-  const part  = whole * pct / 100;
-  return { type: 'find_pct', text: `${part} מתוך ${whole} — זה כמה אחוז?`, ans: pct, hint: `${part} ÷ ${whole} × 100`, visual: pct, chip: '🔢 מה האחוז?' };
-}
+function generateQuestion(){var types=[‘find_pct’,‘find_part’,‘find_whole’,‘sale’];var type=selectedType===‘mix’?rnd(types):selectedType;if(type===‘find_pct’)return genFindPct();if(type===‘find_part’)return genFindPart();if(type===‘find_whole’)return genFindWhole();return genSale();}
 
-function genFindPart() {
-  const whole = NICE_WHOLES[Math.floor(Math.random() * NICE_WHOLES.length)];
-  const pct   = NICE_PCTS[Math.floor(Math.random() * NICE_PCTS.length)];
-  const part  = whole * pct / 100;
-  return { type: 'find_part', text: `כמה זה ${pct}% מתוך ${whole}?`, ans: part, hint: `${whole} × ${pct} ÷ 100`, visual: pct, chip: '🍕 מה החלק?' };
-}
+function genChoices(ans){var c=[ans],att=0;var deltas=[Math.round(ans*0.1)||5,Math.round(ans*0.25)||10,Math.round(ans*0.5)||25,5,10,25];while(c.length<4&&att<50){att++;var d=rnd(deltas);var w=Math.random()<0.5?ans+d:Math.max(1,ans-d);if(w!==ans&&w>0&&c.indexOf(w)===-1)c.push(w);}while(c.length<4)c.push(ans+c.length*5);return c.sort(function(){return Math.random()-0.5;});}
 
-function genFindWhole() {
-  const whole = NICE_WHOLES[Math.floor(Math.random() * NICE_WHOLES.length)];
-  const pct   = NICE_PCTS[Math.floor(Math.random() * NICE_PCTS.length)];
-  const part  = whole * pct / 100;
-  return { type: 'find_whole', text: `${part} הוא ${pct}% — מה המספר המלא?`, ans: whole, hint: `${part} ÷ ${pct} × 100`, visual: pct, chip: '🔍 מה השלם?' };
-}
+function nextQuestion(){if(questionNum>=TOTAL_Q){endGame();return;}var q=generateQuestion();currentQ=q;currentAns=q.ans;document.getElementById(‘q-chip’).textContent=q.chip;document.getElementById(‘question-text’).innerHTML=q.text;document.getElementById(‘hint-text’).innerHTML=q.hint;document.getElementById(‘pct-bar-fill’).style.width=Math.min(q.visual,100)+’%’;document.getElementById(‘pct-label-center’).textContent=q.visual+’%’;var choices=genChoices(q.ans);var grid=document.getElementById(‘choices-grid’);grid.innerHTML=’’;choices.forEach(function(c){var btn=document.createElement(‘button’);btn.className=‘choice-btn’;var label=q.type===‘find_pct’?c+’%’:‘₪’+c;btn.textContent=label;btn.dataset.val=c;btn.addEventListener(‘click’,function(){checkAnswer(c,btn);});grid.appendChild(btn);});document.getElementById(‘feedback’).textContent=’’;document.getElementById(‘feedback’).className=‘feedback’;clearInterval(timerInterval);timeLeft=TIME_LIMIT;var bar=document.getElementById(‘timer-bar’),num=document.getElementById(‘timer-num’);bar.style.width=‘100%’;bar.style.background=‘var(–green)’;timerInterval=setInterval(function(){timeLeft-=0.1;var pct=Math.max(0,timeLeft/TIME_LIMIT*100);bar.style.width=pct+’%’;num.textContent=Math.ceil(timeLeft);if(pct<40)bar.style.background=’#ff9800’;if(pct<20)bar.style.background=‘var(–red)’;if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}},100);updateHUD();}
 
-function genSale() {
-  const price    = [50, 80, 100, 120, 150, 200, 250, 300, 400, 500][Math.floor(Math.random() * 10)];
-  const discount = [10, 20, 25, 50][Math.floor(Math.random() * 4)];
-  const saved    = price * discount / 100;
-  const final    = price - saved;
-  return { type: 'sale', text: `מוצר עולה ₪${price}.\nיש הנחה של ${discount}%.\nכמה משלמים?`, ans: final, hint: `${price} × (1 − ${discount}/100) = ${price} − ${saved}`, visual: discount, chip: '🏷️ הנחה במחיר' };
-}
+function checkAnswer(val,btn){clearInterval(timerInterval);document.querySelectorAll(’.choice-btn’).forEach(function(b){b.style.pointerEvents=‘none’;});if(parseInt(val)===currentAns){btn.classList.add(‘correct’);handleCorrect();}else{btn.classList.add(‘wrong’);document.querySelectorAll(’.choice-btn’).forEach(function(b){if(parseInt(b.dataset.val)===currentAns)b.classList.add(‘correct’);});handleWrong(false);}}
 
-function generateQuestion() {
-  const types = ['find_pct', 'find_part', 'find_whole', 'sale'];
-  const type = selectedType === 'mix' ? types[Math.floor(Math.random() * types.length)] : selectedType;
-  if (type === 'find_pct')   return genFindPct();
-  if (type === 'find_part')  return genFindPart();
-  if (type === 'find_whole') return genFindWhole();
-  return genSale();
-}
+function handleCorrect(){streak++;correct++;questionNum++;if(streak>sessionMaxStreak)sessionMaxStreak=streak;var bonus=streak>=5?3:streak>=3?2:1;var pts=10*bonus;sessionScore+=pts;totalScore+=pts;document.getElementById(‘total-score’).textContent=totalScore;document.getElementById(‘feedback’).textContent=streak>=3?‘🔥 +’+pts+’ מדהים!’:‘✅ +’+pts+’ נכון!’;document.getElementById(‘feedback’).className=‘feedback correct’;document.getElementById(‘question-card’).classList.add(‘pop’);setTimeout(function(){document.getElementById(‘question-card’).classList.remove(‘pop’);},300);floatEmoji(streak>=5?‘🌟’:‘✅’);updateHUD();if(questionNum>=TOTAL_Q){setTimeout(endGame,700);return;}setTimeout(nextQuestion,1000);}
 
-function generateChoices(ans) {
-  const choices = new Set([ans]);
-  const deltas = [ans * 0.1, ans * 0.25, ans * 0.5, 5, 10, 25].map(Math.round).filter(d => d > 0);
-  let attempts = 0;
-  while (choices.size < 4 && attempts < 30) {
-    attempts++;
-    const d = deltas[Math.floor(Math.random() * deltas.length)];
-    const w = Math.random() < 0.5 ? ans + d : Math.max(1, ans - d);
-    if (w !== ans && w > 0) choices.add(w);
-  }
-  while (choices.size < 4) choices.add(ans + choices.size * 5);
-  return [...choices].sort(() => Math.random() - 0.5);
-}
+function handleWrong(timeout){streak=0;wrong++;questionNum++;var q=currentQ;var ansLabel=q.type===‘find_pct’?q.ans+’%’:‘₪’+q.ans;recordMistake(q.chip+’: תשובה=’+q.ans,q.type);document.getElementById(‘feedback’).textContent=timeout?’⏰ ’+ansLabel:’❌ ’+ansLabel;document.getElementById(‘feedback’).className=‘feedback wrong’;document.getElementById(‘question-card’).classList.add(‘shake’);setTimeout(function(){document.getElementById(‘question-card’).classList.remove(‘shake’);},400);floatEmoji(‘❌’);lives–;if(lives<=0){updateHUD();setTimeout(endGame,900);return;}updateHUD();if(questionNum>=TOTAL_Q){setTimeout(endGame,900);return;}setTimeout(nextQuestion,1300);}
 
-function nextQuestion() {
-  if (questionNum >= TOTAL_Q) { endGame(); return; }
-  const q = generateQuestion();
-  currentQ = q;
-  currentAns = q.ans;
+function endGame(){clearInterval(timerInterval);var pct=(correct+wrong)>0?Math.round(correct/(correct+wrong)*100):0;saveSession({game:‘percentages’,mode:selectedType,topic:‘אחוזים’,score:sessionScore,correct:correct,wrong:wrong,bestStreak:sessionMaxStreak});document.getElementById(‘result-emoji’).textContent=pct>=80?‘🏆’:pct>=60?‘⭐’:‘💪’;document.getElementById(‘result-title’).textContent=pct>=80?‘אלוף האחוזים! 🏆’:pct>=60?‘כל הכבוד! 🎉’:‘אל תוותר! 💪’;document.getElementById(‘stat-correct’).textContent=correct;document.getElementById(‘stat-wrong’).textContent=wrong;document.getElementById(‘stat-score’).textContent=sessionScore;showScreen(‘screen-result’);}
 
-  document.getElementById('q-type-chip').textContent = q.chip;
-  document.getElementById('question-text').innerHTML = q.text.replace(/\n/g, '<br>').replace(/(\d+%)/g, '<span class="pct">$1</span>').replace(/(\?)/g, '<span class="q-mark">?</span>');
-
-  // hint
-  const ht = document.getElementById('hint-text');
-  ht.style.display = 'block';
-  ht.textContent = `💡 רמז: ${q.hint}`;
-
-  // visual bar
-  document.getElementById('pct-bar-fill').style.width = Math.min(q.visual, 100) + '%';
-  document.getElementById('pct-label-center').textContent = `${q.visual}%`;
-
-  const choices = generateChoices(q.ans);
-  const grid = document.getElementById('choices-grid');
-  grid.innerHTML = '';
-  choices.forEach(c => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = q.type === 'find_pct' ? c + '%' : (q.type === 'sale' || q.type === 'find_part' || q.type === 'find_whole' ? '₪' + c : c + '%');
-    btn.dataset.val = c;
-    btn.onclick = () => checkAnswer(c, btn);
-    grid.appendChild(btn);
-  });
-
-  document.getElementById('feedback').textContent = '';
-  document.getElementById('feedback').className = 'feedback';
-  clearInterval(timerInterval);
-  timeLeft = TIME_LIMIT;
-  const bar = document.getElementById('timer-bar'); const num = document.getElementById('timer-num');
-  bar.style.width = '100%'; bar.style.background = 'var(--green)';
-  timerInterval = setInterval(() => {
-    timeLeft -= 0.1;
-    const pct = Math.max(0, timeLeft / TIME_LIMIT * 100);
-    bar.style.width = pct + '%'; num.textContent = Math.ceil(timeLeft);
-    if (pct < 40) bar.style.background = '#ff9800';
-    if (pct < 20) bar.style.background = 'var(--red)';
-    if (timeLeft <= 0) { clearInterval(timerInterval); handleWrong(true); }
-  }, 100);
-  updateHUD();
-}
-
-function checkAnswer(val, btn) {
-  clearInterval(timerInterval);
-  document.querySelectorAll('.choice-btn').forEach(b => b.onclick = null);
-  if (parseInt(val) === currentAns) { btn.classList.add('correct'); handleCorrect(); }
-  else {
-    btn.classList.add('wrong');
-    document.querySelectorAll('.choice-btn').forEach(b => { if (parseInt(b.dataset.val) === currentAns) b.classList.add('correct'); });
-    handleWrong(false);
-  }
-}
-
-function handleCorrect() {
-  streak++; correct++; questionNum++;
-  if (streak > sessionMaxStreak) sessionMaxStreak = streak;
-  const bonus = streak >= 5 ? 3 : streak >= 3 ? 2 : 1; const pts = 10 * bonus;
-  sessionScore += pts; totalScore += pts;
-  document.getElementById('total-score').textContent = totalScore;
-  document.getElementById('feedback').textContent = streak >= 3 ? `🔥 +${pts} מדהים!` : `✅ +${pts} נכון!`;
-  document.getElementById('feedback').className = 'feedback correct';
-  document.getElementById('question-card').classList.add('pop');
-  setTimeout(() => document.getElementById('question-card').classList.remove('pop'), 300);
-  floatEmoji(streak >= 5 ? '🌟' : '✅');
-  updateHUD();
-  if (questionNum >= TOTAL_Q) { setTimeout(endGame, 700); return; }
-  setTimeout(nextQuestion, 1000);
-}
-
-function handleWrong(timeout) {
-  streak = 0; wrong++; questionNum++;
-  const q = currentQ;
-  const ansLabel = q.type === 'find_pct' ? q.ans + '%' : '₪' + q.ans;
-  recordMistake(q.text.replace(/\n/g,' '), q.type);
-  document.getElementById('feedback').textContent = timeout ? `⏰ התשובה: ${ansLabel}` : `❌ התשובה: ${ansLabel}`;
-  document.getElementById('feedback').className = 'feedback wrong';
-  document.getElementById('question-card').classList.add('shake');
-  setTimeout(() => document.getElementById('question-card').classList.remove('shake'), 400);
-  floatEmoji('❌'); lives--;
-  if (lives <= 0) { updateHUD(); setTimeout(endGame, 900); return; }
-  updateHUD();
-  if (questionNum >= TOTAL_Q) { setTimeout(endGame, 900); return; }
-  setTimeout(nextQuestion, 1300);
-}
-
-function endGame() {
-  clearInterval(timerInterval);
-  saveSession({ game: 'percentages', mode: selectedType, topic: 'אחוזים', score: sessionScore, correct, wrong, bestStreak: sessionMaxStreak });
-  const pct = (correct + wrong) > 0 ? Math.round(correct / (correct + wrong) * 100) : 0;
-  document.getElementById('result-emoji').textContent = pct >= 80 ? '🏆' : pct >= 60 ? '⭐' : '💪';
-  document.getElementById('result-title').textContent = pct >= 80 ? 'אלוף האחוזים! 🏆' : pct >= 60 ? 'כל הכבוד! 🎉' : 'אל תוותר! 💪';
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent = wrong;
-  document.getElementById('stat-score').textContent = sessionScore;
-  showScreen('screen-result');
-}
-
-function floatEmoji(emoji) {
-  const el = document.createElement('div'); el.className = 'float-emoji'; el.textContent = emoji;
-  const card = document.getElementById('question-card').getBoundingClientRect();
-  el.style.left = (card.left + card.width / 2 - 16) + 'px'; el.style.top = (card.top + 20) + 'px';
-  document.body.appendChild(el); setTimeout(() => el.remove(), 1000);
-}
+function floatEmoji(emoji){var el=document.createElement(‘div’);el.className=‘float-emoji’;el.textContent=emoji;var card=document.getElementById(‘question-card’).getBoundingClientRect();el.style.left=(card.left+card.width/2-16)+‘px’;el.style.top=(card.top+20)+‘px’;document.body.appendChild(el);setTimeout(function(){el.remove();},1000);}
 
 initGameHeader();
 </script>
