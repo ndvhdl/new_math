@@ -4,220 +4,185 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🧮 חשבון מהנה</title>
+<title>חשבון מהנה</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#0f2027;--bg2:#203a43;--bg3:#2c5364;--yellow:#ffd600;--orange:#ff9800;--card:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{font-family:'Heebo',sans-serif;min-height:100%;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));display:flex;flex-direction:column;align-items:center;overflow-x:hidden;}
-.wrap{position:relative;z-index:1;width:100%;max-width:460px;flex:1;display:flex;flex-direction:column;padding:0 12px 20px;}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);min-height:100%;display:flex;justify-content:center;overflow-x:hidden;}
+.wrap{width:100%;max-width:460px;padding:0 14px;}
 
-/* מסך שם */
-#screen-name{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 0;}
-#screen-main{display:none;flex-direction:column;align-items:center;gap:14px;padding:20px 0 40px;}
+/* שני המסכים */
+#pg-name{padding-top:30px;padding-bottom:100px;}
+#pg-main{display:none;padding:20px 0 40px;flex-direction:column;gap:14px;align-items:center;}
 
-.logo{font-family:‘Fredoka One’,cursive;font-size:clamp(2rem,8vw,3rem);color:var(–yellow);text-align:center;line-height:1.2;margin-top:10px;}
-.logo span{color:white;}
-.subtitle{color:rgba(255,255,255,0.55);font-size:0.95rem;text-align:center;margin-bottom:16px;}
+.logo{font-family:‘Fredoka One’,cursive;font-size:2.6rem;color:#ffd600;text-align:center;margin-bottom:6px;}
+.logo span{color:#fff;}
+.sub{color:rgba(255,255,255,.5);text-align:center;font-size:.9rem;margin-bottom:20px;}
 
-.name-card{width:100%;background:var(–card);border:1px solid var(–border);border-radius:24px;padding:24px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:14px;}
-.name-card h2{font-family:‘Fredoka One’,cursive;color:white;font-size:1.3rem;}
-.players-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%;}
-.player-chip{display:flex;align-items:center;gap:6px;background:rgba(255,214,0,0.12);border:2px solid rgba(255,214,0,0.3);border-radius:50px;padding:8px 16px;color:var(–yellow);font-family:‘Fredoka One’,cursive;font-size:1rem;cursor:pointer;}
-.divider{color:rgba(255,255,255,0.3);font-size:0.85rem;width:100%;text-align:center;}
+.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:24px 20px;}
+.card h2{font-family:‘Fredoka One’,cursive;color:#fff;font-size:1.2rem;text-align:center;margin-bottom:14px;}
 
-.name-input{width:100%;background:rgba(255,255,255,0.08);border:2px solid rgba(255,255,255,0.2);border-radius:14px;padding:16px;color:white;font-family:‘Fredoka One’,cursive;font-size:1.3rem;text-align:center;outline:none;}
-.name-input::placeholder{color:rgba(255,255,255,0.3);}
-.name-input:focus{border-color:var(–yellow);background:rgba(255,255,255,0.12);}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;}
+.chip{background:rgba(255,214,0,.12);border:2px solid rgba(255,214,0,.3);border-radius:50px;padding:8px 16px;color:#ffd600;font-family:‘Fredoka One’,cursive;font-size:.95rem;cursor:pointer;}
+.chip:active{background:rgba(255,214,0,.3);}
 
-/* הכפתור הדביק בתחתית - תמיד נראה גם עם מקלדת פתוחה */
-.go-btn-wrap{position:fixed;bottom:0;right:0;left:0;padding:12px 20px 24px;background:linear-gradient(transparent,rgba(15,32,39,0.98) 30%);z-index:100;}
-.go-btn{width:100%;max-width:436px;margin:0 auto;display:block;padding:16px;border-radius:50px;border:none;background:linear-gradient(135deg,var(–yellow),var(–orange));color:#1a1a1a;font-family:‘Fredoka One’,cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.5);}
+.or{color:rgba(255,255,255,.3);font-size:.8rem;text-align:center;margin-bottom:10px;}
+
+.inp{width:100%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:14px;padding:16px;color:#fff;font-family:‘Fredoka One’,cursive;font-size:1.3rem;text-align:center;outline:none;display:block;}
+.inp:focus{border-color:#ffd600;background:rgba(255,255,255,.15);}
+.inp::placeholder{color:rgba(255,255,255,.3);}
+
+/* כפתור דביק בתחתית */
+#sticky-btn{position:fixed;bottom:0;left:0;right:0;z-index:999;padding:10px 14px 24px;background:linear-gradient(to bottom,transparent,#0f2027 35%);}
+#sticky-btn button{width:100%;max-width:432px;display:block;margin:0 auto;padding:16px;border:none;border-radius:50px;background:linear-gradient(135deg,#ffd600,#ff9800);color:#111;font-family:‘Fredoka One’,cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 20px rgba(255,152,0,.5);}
 
 /* מסך ראשי */
-.welcome-bar{width:100%;background:var(–card);border:1px solid var(–border);border-radius:18px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
-.welcome-name{font-family:‘Fredoka One’,cursive;color:var(–yellow);font-size:1.1rem;}
-.welcome-score{color:rgba(255,255,255,0.6);font-size:0.8rem;}
-.welcome-score strong{color:white;}
-.switch-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:6px 14px;color:rgba(255,255,255,0.6);font-size:0.85rem;cursor:pointer;font-family:‘Fredoka One’,cursive;}
-.section-label{font-family:‘Fredoka One’,cursive;color:rgba(255,255,255,0.5);font-size:0.85rem;letter-spacing:2px;align-self:flex-start;}
-.exercise-grid{display:flex;flex-direction:column;gap:10px;width:100%;}
-.exercise-card{width:100%;background:var(–card);border:1px solid var(–border);border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:14px;text-decoration:none;}
-.card-icon{font-size:2.4rem;flex-shrink:0;}
-.card-info{flex:1;text-align:right;}
-.card-title{font-family:‘Fredoka One’,cursive;color:white;font-size:1.1rem;}
-.card-desc{color:rgba(255,255,255,0.45);font-size:0.75rem;margin-top:2px;}
-.card-badge{background:rgba(255,214,0,0.15);border:1px solid rgba(255,214,0,0.3);border-radius:20px;padding:4px 10px;color:var(–yellow);font-size:0.75rem;font-weight:bold;white-space:nowrap;}
-.stats-mini{width:100%;background:var(–card);border:1px solid var(–border);border-radius:18px;padding:14px 18px;}
-.stats-mini h3{font-family:‘Fredoka One’,cursive;color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:10px;}
-.stats-row{display:flex;gap:8px;}
-.mini-stat{flex:1;background:rgba(255,255,255,0.05);border-radius:12px;padding:8px 4px;text-align:center;}
-.mini-stat .n{font-family:‘Fredoka One’,cursive;color:var(–yellow);font-size:1.2rem;}
-.mini-stat .l{color:rgba(255,255,255,0.4);font-size:0.6rem;margin-top:2px;}
-.parent-link{color:rgba(255,255,255,0.2);font-size:0.75rem;text-decoration:none;padding-bottom:10px;}
+.wbar{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.wname{font-family:‘Fredoka One’,cursive;color:#ffd600;font-size:1.1rem;}
+.wscore{color:rgba(255,255,255,.6);font-size:.8rem;}
+.wscore b{color:#fff;}
+.swbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:6px 14px;color:rgba(255,255,255,.6);font-size:.8rem;cursor:pointer;font-family:‘Fredoka One’,cursive;}
+
+.slabel{font-family:‘Fredoka One’,cursive;color:rgba(255,255,255,.5);font-size:.8rem;letter-spacing:2px;align-self:flex-start;}
+.egrid{width:100%;display:flex;flex-direction:column;gap:10px;}
+.ecard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:14px;text-decoration:none;}
+.ecard:active{background:rgba(255,255,255,.12);}
+.eico{font-size:2.2rem;flex-shrink:0;}
+.einfo{flex:1;text-align:right;}
+.etitle{font-family:‘Fredoka One’,cursive;color:#fff;font-size:1.05rem;}
+.edesc{color:rgba(255,255,255,.4);font-size:.72rem;margin-top:2px;}
+.ebadge{background:rgba(255,214,0,.15);border:1px solid rgba(255,214,0,.3);border-radius:20px;padding:4px 10px;color:#ffd600;font-size:.72rem;white-space:nowrap;}
+
+.sbox{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;}
+.sbox h3{font-family:‘Fredoka One’,cursive;color:rgba(255,255,255,.6);font-size:.85rem;margin-bottom:10px;}
+.srow{display:flex;gap:8px;}
+.ss{flex:1;background:rgba(255,255,255,.05);border-radius:10px;padding:8px 4px;text-align:center;}
+.ss .n{font-family:‘Fredoka One’,cursive;color:#ffd600;font-size:1.1rem;}
+.ss .l{color:rgba(255,255,255,.35);font-size:.6rem;margin-top:2px;}
+.plink{color:rgba(255,255,255,.2);font-size:.7rem;text-decoration:none;padding-bottom:10px;}
+
+/* תג גרסה */
+.ver{position:fixed;top:6px;left:6px;background:rgba(255,214,0,.2);color:#ffd600;font-size:.6rem;border-radius:6px;padding:2px 6px;pointer-events:none;z-index:9999;}
 </style>
 
 </head>
 <body>
+<div class="ver">v6</div>
 <div class="wrap">
 
-  <!-- מסך הכנסת שם -->
+  <!-- מסך שם -->
 
-  <div id="screen-name">
+  <div id="pg-name">
     <div class="logo">🧮 <span>חשבון</span> מהנה</div>
-    <div class="subtitle">לימוד חשבון בצורה מהנה</div>
-    <div class="name-card">
+    <div class="sub">לימוד חשבון בצורה מהנה</div>
+    <div class="card">
       <h2>👋 מי משחק?</h2>
-      <div class="players-row" id="saved-players"></div>
-      <div class="divider" id="or-divider" style="display:none">או הוסף שם חדש</div>
-      <input class="name-input" id="name-input" type="text"
-             placeholder="כתוב את השם שלך..."
-             maxlength="20" autocomplete="off"
-             inputmode="text" enterkeyhint="go">
+      <div class="chips" id="chips"></div>
+      <div class="or" id="or-div" style="display:none">או הכנס שם חדש:</div>
+      <input class="inp" id="inp" type="text" placeholder="כתוב את השם שלך..." maxlength="20" autocomplete="off" inputmode="text" enterkeyhint="go">
     </div>
-    <!-- ריווח לכפתור הדביק -->
-    <div style="height:80px"></div>
   </div>
 
-  <!-- כפתור דביק - נראה תמיד, גם עם מקלדת פתוחה -->
+  <!-- כפתור דביק -->
 
-  <div class="go-btn-wrap" id="go-btn-wrap">
-    <button class="go-btn" onclick="enterApp()">🚀 בואו נתחיל!</button>
+  <div id="sticky-btn">
+    <button onclick="enterApp()">🚀 בואו נתחיל!</button>
   </div>
 
   <!-- מסך ראשי -->
 
-  <div id="screen-main">
-    <div class="welcome-bar">
-      <button class="switch-btn" onclick="goSwitch()">החלף</button>
-      <div>
-        <div class="welcome-name" id="welcome-name">שלום!</div>
-        <div class="welcome-score">ניקוד כולל: <strong id="welcome-score">0</strong></div>
-      </div>
-      <div style="font-size:2rem" id="welcome-avatar">⭐</div>
+  <div id="pg-main">
+    <div class="wbar">
+      <button class="swbtn" onclick="doSwitch()">החלף</button>
+      <div><div class="wname" id="wname">שלום!</div><div class="wscore">ניקוד: <b id="wscore">0</b></div></div>
+      <div style="font-size:2rem" id="wavatar">⭐</div>
     </div>
-    <div class="section-label">📚 תרגילים</div>
-    <div class="exercise-grid">
-      <a class="exercise-card" href="addition.html">
-        <div class="card-icon">➕</div>
-        <div class="card-info"><div class="card-title">חיבור וחיסור</div><div class="card-desc">כיתה א׳ — עד 10, 20, 100</div></div>
-        <div class="card-badge">שחק!</div>
-      </a>
-      <a class="exercise-card" href="times-tables.html">
-        <div class="card-icon">⚽</div>
-        <div class="card-info"><div class="card-title">לוח הכפל</div><div class="card-desc">כיתה ב׳-ג׳ — אימון ושלבים</div></div>
-        <div class="card-badge">שחק!</div>
-      </a>
-      <a class="exercise-card" href="division.html">
-        <div class="card-icon">➗</div>
-        <div class="card-info"><div class="card-title">חילוק</div><div class="card-desc">כיתה ג׳ — חלוקה עם ויזואל</div></div>
-        <div class="card-badge">שחק!</div>
-      </a>
-      <a class="exercise-card" href="percentages.html">
-        <div class="card-icon">%</div>
-        <div class="card-info"><div class="card-title">אחוזים</div><div class="card-desc">כיתה ה׳-ו׳ — חישובי אחוזים</div></div>
-        <div class="card-badge">שחק!</div>
-      </a>
-      <a class="exercise-card" href="sudoku.html">
-        <div class="card-icon">🧩</div>
-        <div class="card-info"><div class="card-title">סודוקו</div><div class="card-desc">4×4, 6×6, 9×9 — קל עד קשה</div></div>
-        <div class="card-badge">שחק!</div>
-      </a>
+    <div class="slabel">📚 תרגילים</div>
+    <div class="egrid">
+      <a class="ecard" href="addition.html"><div class="eico">➕</div><div class="einfo"><div class="etitle">חיבור וחיסור</div><div class="edesc">כיתה א׳ — עד 10, 20, 100</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="times-tables.html"><div class="eico">⚽</div><div class="einfo"><div class="etitle">לוח הכפל</div><div class="edesc">כיתה ב׳-ג׳ — אימון ושלבים</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="division.html"><div class="eico">➗</div><div class="einfo"><div class="etitle">חילוק</div><div class="edesc">כיתה ג׳ — חלוקה עם ויזואל</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="percentages.html"><div class="eico">%</div><div class="einfo"><div class="etitle">אחוזים</div><div class="edesc">כיתה ה׳-ו׳ — חישובי אחוזים</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="sudoku.html"><div class="eico">🧩</div><div class="einfo"><div class="etitle">סודוקו</div><div class="edesc">4×4, 6×6, 9×9 — קל עד קשה</div></div><div class="ebadge">שחק!</div></a>
     </div>
-    <div class="stats-mini">
+    <div class="sbox">
       <h3>📊 הסטטיסטיקה שלי</h3>
-      <div class="stats-row">
-        <div class="mini-stat"><div class="n" id="st-games">0</div><div class="l">משחקים</div></div>
-        <div class="mini-stat"><div class="n" id="st-correct">0</div><div class="l">נכון</div></div>
-        <div class="mini-stat"><div class="n" id="st-streak">0</div><div class="l">רצף שיא</div></div>
-        <div class="mini-stat"><div class="n" id="st-score">0</div><div class="l">ניקוד</div></div>
+      <div class="srow">
+        <div class="ss"><div class="n" id="s1">0</div><div class="l">משחקים</div></div>
+        <div class="ss"><div class="n" id="s2">0</div><div class="l">נכון</div></div>
+        <div class="ss"><div class="n" id="s3">0</div><div class="l">רצף שיא</div></div>
+        <div class="ss"><div class="n" id="s4">0</div><div class="l">ניקוד</div></div>
       </div>
     </div>
-    <a class="parent-link" href="parent.html">🔐 דף הורה</a>
+    <a class="plink" href="parent.html">🔐 דף הורה</a>
   </div>
 
 </div>
 <script>
-var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
+var AV=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
 
-function getPlayers(){try{return JSON.parse(localStorage.getItem(‘mathapp_players’)||’{}’)}catch(e){return{}}}
-function savePlayers(p){localStorage.setItem(‘mathapp_players’,JSON.stringify(p))}
-function getCurrent(){return localStorage.getItem(‘mathapp_current’)||’’}
-function setCurrent(n){localStorage.setItem(‘mathapp_current’,n)}
+function gp(){try{return JSON.parse(localStorage.getItem(‘mathapp_players’)||’{}’)}catch(e){return {}}}
+function sp(p){localStorage.setItem(‘mathapp_players’,JSON.stringify(p))}
+function gc(){return localStorage.getItem(‘mathapp_current’)||’’}
+function sc(n){localStorage.setItem(‘mathapp_current’,n)}
 
-function getOrCreate(name){
-var p=getPlayers();
-if(!p[name]){
-p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],
-totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,
-sessions:[],tableStats:{},mistakeMap:{}};
-savePlayers(p);
-}
+function mkPlayer(name){
+var p=gp();
+if(!p[name]){p[name]={avatar:AV[Object.keys(p).length%AV.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};sp(p);}
 return p[name];
 }
 
 function enterApp(){
-var name=document.getElementById(‘name-input’).value.trim();
-if(!name) name=‘שחקן’;
-setCurrent(name);
-getOrCreate(name);
-showMain(name);
+var name=(document.getElementById(‘inp’).value||’’).trim()||‘שחקן’;
+sc(name); mkPlayer(name); goMain(name);
 }
 
-function goSwitch(){
-document.getElementById(‘name-input’).value=’’;
-document.getElementById(‘screen-main’).style.display=‘none’;
-document.getElementById(‘screen-name’).style.display=‘flex’;
-document.getElementById(‘go-btn-wrap’).style.display=‘block’;
-buildSaved();
+function doSwitch(){
+document.getElementById(‘inp’).value=’’;
+document.getElementById(‘pg-main’).style.display=‘none’;
+document.getElementById(‘pg-name’).style.display=‘block’;
+document.getElementById(‘sticky-btn’).style.display=‘block’;
+buildChips();
 }
 
-function showMain(name){
-var d=getOrCreate(name);
-document.getElementById(‘welcome-name’).textContent=‘שלום, ‘+name+’!’;
-document.getElementById(‘welcome-avatar’).textContent=d.avatar;
-document.getElementById(‘welcome-score’).textContent=d.totalScore||0;
-document.getElementById(‘st-games’).textContent=d.games||0;
-document.getElementById(‘st-correct’).textContent=d.correct||0;
-document.getElementById(‘st-streak’).textContent=d.bestStreak||0;
-document.getElementById(‘st-score’).textContent=d.totalScore||0;
-document.getElementById(‘screen-name’).style.display=‘none’;
-document.getElementById(‘go-btn-wrap’).style.display=‘none’;
-document.getElementById(‘screen-main’).style.display=‘flex’;
+function goMain(name){
+var d=mkPlayer(name);
+document.getElementById(‘wname’).textContent=‘שלום, ‘+name+’!’;
+document.getElementById(‘wavatar’).textContent=d.avatar;
+document.getElementById(‘wscore’).textContent=d.totalScore||0;
+document.getElementById(‘s1’).textContent=d.games||0;
+document.getElementById(‘s2’).textContent=d.correct||0;
+document.getElementById(‘s3’).textContent=d.bestStreak||0;
+document.getElementById(‘s4’).textContent=d.totalScore||0;
+document.getElementById(‘pg-name’).style.display=‘none’;
+document.getElementById(‘sticky-btn’).style.display=‘none’;
+document.getElementById(‘pg-main’).style.display=‘flex’;
 }
 
-function buildSaved(){
-var players=getPlayers();
-var names=Object.keys(players);
-var row=document.getElementById(‘saved-players’);
-var div=document.getElementById(‘or-divider’);
-row.innerHTML=’’;
-if(!names.length){div.style.display=‘none’;return;}
-div.style.display=‘block’;
+function buildChips(){
+var p=gp(), names=Object.keys(p);
+var chips=document.getElementById(‘chips’);
+var or=document.getElementById(‘or-div’);
+chips.innerHTML=’’;
+if(!names.length){or.style.display=‘none’;return;}
+or.style.display=‘block’;
 names.forEach(function(name){
-var chip=document.createElement(‘button’);
-chip.className=‘player-chip’;
-chip.innerHTML=’<span>’+(players[name].avatar||‘⭐’)+’</span> ’+name;
-chip.onclick=function(){
-document.getElementById(‘name-input’).value=name;
-enterApp();
-};
-row.appendChild(chip);
+var b=document.createElement(‘button’);
+b.className=‘chip’;
+b.textContent=(p[name].avatar||‘⭐’)+’ ’+name;
+b.onclick=function(){document.getElementById(‘inp’).value=name;enterApp();};
+chips.appendChild(b);
 });
 }
 
-// Enter key submits
-document.getElementById(‘name-input’).addEventListener(‘keydown’,function(e){
+document.getElementById(‘inp’).addEventListener(‘keydown’,function(e){
 if(e.key===‘Enter’){e.preventDefault();enterApp();}
 });
 
-// Init
-buildSaved();
-var cur=getCurrent();
-if(cur && getPlayers()[cur]){
-showMain(cur);
-}
+buildChips();
+var cur=gc();
+if(cur && gp()[cur]){goMain(cur);}
 </script>
 
 </body>
