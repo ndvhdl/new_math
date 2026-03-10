@@ -10,7 +10,7 @@
 :root{--bg1:#0f2027;--bg2:#203a43;--bg3:#2c5364;--yellow:#ffd600;--orange:#ff9800;--green:#00c853;--red:#ff1744;--card:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.12);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Heebo',sans-serif;min-height:100vh;background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));display:flex;flex-direction:column;align-items:center;padding:20px 12px 40px;overflow-x:hidden;}
-.wrap{width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;gap:18px;}
+.wrap{width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;gap:18px;position:relative;z-index:1;}
 .screen{width:100%;display:none;flex-direction:column;align-items:center;gap:16px;}
 .screen.active{display:flex;}
 .logo{font-family:'Fredoka One',cursive;font-size:2rem;color:var(--yellow);text-align:center;margin-top:20px;}
@@ -69,7 +69,7 @@ body{font-family:'Heebo',sans-serif;min-height:100vh;background:linear-gradient(
     <div class="logo">🔐 דף הורה</div>
     <div class="card">
       <h2>👨‍👩‍👧 כניסת הורים</h2>
-      <input class="pin-input" id="pin-input" type="password" maxlength="6" placeholder="••••" autocomplete="off">
+      <input class="pin-input" id="pin-input" type="text" maxlength="6" placeholder="1234" inputmode="numeric" autocomplete="off">
       <div class="err" id="pin-err"></div>
       <button class="go-btn" id="pin-btn">כניסה</button>
     </div>
@@ -147,7 +147,7 @@ function showScreen(id){document.querySelectorAll('.screen').forEach(function(s)
 document.getElementById(‘pin-btn’).addEventListener(‘click’, checkPin);
 document.getElementById(‘pin-input’).addEventListener(‘keydown’, function(e){if(e.key===‘Enter’)checkPin();});
 function checkPin(){
-var val = document.getElementById(‘pin-input’).value.trim();
+var val = document.getElementById(‘pin-input’).value.replace(/[^0-9a-zA-Z]/g,’’).trim();
 if(val === DEFAULT_PWD){ showScreen(‘screen-dash’); buildDash(); }
 else { document.getElementById(‘pin-err’).textContent = ‘❌ סיסמה שגויה. נסה שוב.’; }
 }
