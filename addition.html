@@ -17,57 +17,39 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
 .score-val{font-family:'Fredoka One',cursive;color:white;font-size:1.4rem;}
 .section-title{font-family:'Fredoka One',cursive;color:var(--yellow);font-size:1.05rem;align-self:flex-start;}
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
-.diff-btn{padding:18px 10px;border-radius:16px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:6px;}
-.diff-btn .di{font-size:2rem;}
-.diff-btn .ds{font-size:0.7rem;color:rgba(255,255,255,0.5);}
-.diff-btn:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px);}
-.diff-btn.selected{border-color:var(--yellow);background:rgba(255,214,0,0.12);}
+.diff-btn, .timer-btn{padding:18px 10px;border-radius:16px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.diff-btn:hover, .timer-btn:hover{background:rgba(255,255,255,0.18);transform:translateY(-2px);}
+.diff-btn.selected, .timer-btn.selected{border-color:var(--yellow);background:rgba(255,214,0,0.12);}
 .op-row{display:flex;gap:10px;width:100%;}
 .op-btn{flex:1;padding:12px;border-radius:12px;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:white;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;transition:all 0.15s;}
 .op-btn.selected{border-color:var(--yellow);background:rgba(255,214,0,0.15);}
 .start-btn{width:100%;padding:16px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;box-shadow:0 6px 20px rgba(255,152,0,0.4);transition:all 0.15s;}
 .hud{width:100%;display:flex;justify-content:space-between;align-items:center;}
 .lives{font-size:1.5rem;display:flex;gap:3px;min-width:80px;}
-.timer-wrap{display:flex;flex-direction:column;align-items:center;}
+.timer-wrap{display:flex;flex-direction:column;align-items:center;min-width:110px;}
 .timer-bar-bg{width:110px;height:10px;background:rgba(255,255,255,0.15);border-radius:10px;overflow:hidden;}
 .timer-bar{height:100%;border-radius:10px;background:var(--green);transition:width 0.1s linear,background 0.3s;}
 .timer-num{font-family:'Fredoka One',cursive;color:white;font-size:0.85rem;margin-top:2px;}
 .streak-badge{background:rgba(255,214,0,0.15);border:2px solid var(--yellow);border-radius:20px;padding:4px 10px;color:var(--yellow);font-family:'Fredoka One',cursive;font-size:0.8rem;min-width:70px;text-align:center;}
 .number-line-wrap{width:100%;overflow-x:auto;padding:6px 0;}
 .number-line{display:flex;align-items:center;gap:0;min-width:max-content;padding:0 10px;direction: ltr;}
-.nl-num{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);color:white;font-family:'Fredoka One',cursive;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+.nl-num{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.2);color:white;font-family:'Fredoka One',cursive;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .nl-num.highlight{background:var(--yellow);color:#1a1a1a;border-color:var(--yellow);transform:scale(1.2);}
 .nl-line{width:10px;height:2px;background:rgba(255,255,255,0.2);flex-shrink:0;}
 .question-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:22px 16px 18px;box-shadow:var(--shadow),0 0 0 4px rgba(255,214,0,0.15);display:flex;flex-direction:column;align-items:center;gap:14px;}
 .question-text{font-family:'Fredoka One',cursive;font-size:clamp(2.2rem,9vw,3rem);color:#1a1a1a;letter-spacing:3px;text-align:center;direction: ltr;}
-.question-text .op-plus{color:#1565c0;}
-.question-text .op-minus{color:#c62828;}
-.question-text .q-mark{color:#6a1b9a;}
+.op-plus{color:#1565c0;}.op-minus{color:#c62828;}.q-mark{color:#6a1b9a;}
 .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;}
 .choice-btn{padding:18px;border-radius:16px;border:3px solid #e0e0e0;background:#f8f8f8;font-family:'Fredoka One',cursive;font-size:1.6rem;color:#1a1a1a;cursor:pointer;transition:all 0.12s;}
-.choice-btn:hover{background:#e3f2fd;border-color:var(--main);transform:scale(1.03);}
 .choice-btn.correct{background:#e8f5e9;border-color:var(--green);color:#2e7d32;}
 .choice-btn.wrong{background:#ffebee;border-color:var(--red);color:#c62828;}
 .feedback{font-family:'Fredoka One',cursive;font-size:1rem;min-height:1.3em;text-align:center;}
-.feedback.correct{color:#2e7d32;}.feedback.wrong{color:#c62828;}
 .progress-wrap{width:100%;}
 .progress-bar-bg{width:100%;height:8px;background:rgba(255,255,255,0.15);border-radius:8px;overflow:hidden;}
 .progress-bar{height:100%;background:linear-gradient(90deg,var(--yellow),#ff9800);border-radius:8px;transition:width 0.4s ease;}
 .progress-label{font-size:0.75rem;color:rgba(255,255,255,0.5);text-align:center;margin-top:4px;}
-.result-card{width:100%;background:rgba(255,255,255,0.97);border-radius:24px;padding:28px 20px;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;}
-.result-emoji{font-size:4rem;animation:bounce 0.6s ease;}
-@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
-.result-title{font-family:'Fredoka One',cursive;font-size:1.7rem;color:#1a1a1a;}
-.result-stats{display:flex;gap:14px;}
-.stat-box{display:flex;flex-direction:column;align-items:center;background:#f0f7f0;border-radius:12px;padding:10px 14px;}
-.stat-num{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--dark);}
-.stat-label{font-size:0.72rem;color:#555;}
-.btn-row{display:flex;gap:10px;width:100%;}
-.btn-back{flex:1;padding:12px;border-radius:50px;border:2px solid rgba(21,101,192,0.3);background:rgba(21,101,192,0.1);color:var(--main);font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;}
-.btn-again{flex:1.5;padding:12px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--yellow),#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(255,152,0,0.4);}
-.back-btn{align-self:flex-start;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:50px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;}
 .float-emoji{position:fixed;font-size:2rem;pointer-events:none;z-index:999;animation:floatUp 1s ease forwards;}
-@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-120px) scale(1.4)}}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-120px)}}
 </style>
 </head>
 <body>
@@ -81,33 +63,38 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
   <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
     <div class="section-title">📐 בחר רמה</div>
     <div class="diff-grid">
-      <button class="diff-btn selected" data-diff="1" onclick="selectDiff(this)"><span class="di">🌱</span>עד 10<span class="ds">כיתה א' מתחילים</span></button>
-      <button class="diff-btn" data-diff="2" onclick="selectDiff(this)"><span class="di">🌿</span>עד 20<span class="ds">כיתה א' מתקדמים</span></button>
-      <button class="diff-btn" data-diff="3" onclick="selectDiff(this)"><span class="di">🌳</span>עד 100<span class="ds">כיתה ב'</span></button>
-      <button class="diff-btn" data-diff="4" onclick="selectDiff(this)"><span class="di">🏔️</span>עד 1000<span class="ds">כיתה ג'</span></button>
+      <button class="diff-btn selected" data-diff="1" onclick="selectDiff(this)"><span>🌱</span>עד 10</button>
+      <button class="diff-btn" data-diff="2" onclick="selectDiff(this)"><span>🌿</span>עד 20</button>
+      <button class="diff-btn" data-diff="3" onclick="selectDiff(this)"><span>🌳</span>עד 100</button>
+      <button class="diff-btn" data-diff="4" onclick="selectDiff(this)"><span>🏔️</span>עד 1000</button>
     </div>
-    <div class="section-title" style="margin-top:6px">➕➖ סוג חישוב</div>
+    
+    <div class="section-title">⏲️ הגבלת זמן</div>
+    <div class="diff-grid">
+      <button class="timer-btn selected" data-timer="on" onclick="setTimerMode(this)">⏱️ עם טיימר</button>
+      <button class="timer-btn" data-timer="off" onclick="setTimerMode(this)">♾️ ללא הגבלה</button>
+    </div>
+
+    <div class="section-title">➕➖ סוג חישוב</div>
     <div class="op-row">
       <button class="op-btn selected" data-op="add" onclick="selectOp(this)">➕ חיבור</button>
       <button class="op-btn" data-op="sub" onclick="selectOp(this)">➖ חיסור</button>
       <button class="op-btn" data-op="mix" onclick="selectOp(this)">🎲 מעורב</button>
     </div>
-    <button class="start-btn" id="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
+    <button class="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
   </div>
 
   <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
-    <button class="back-btn" id="back-btn" onclick="goMenu()">← חזרה</button>
+    <button class="back-btn" style="align-self:flex-start; background:none; border:none; color:white; cursor:pointer;" onclick="goMenu()">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
-      <div class="timer-wrap">
+      <div class="timer-wrap" id="timer-ui">
         <div class="timer-bar-bg"><div class="timer-bar" id="timer-bar"></div></div>
         <div class="timer-num" id="timer-num">10</div>
       </div>
       <div class="streak-badge" id="streak-badge">🔥 0 ברצף</div>
     </div>
-    <div class="number-line-wrap" id="nl-wrap" style="display:none">
-      <div class="number-line" id="number-line"></div>
-    </div>
+    <div class="number-line-wrap" id="nl-wrap" style="display:none"><div class="number-line" id="number-line"></div></div>
     <div class="question-card" id="question-card">
       <div class="question-text" id="question-text"></div>
       <div class="choices-grid" id="choices-grid"></div>
@@ -120,152 +107,131 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
   </div>
 
   <div id="screen-result" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
-    <div class="result-card">
-      <div class="result-emoji" id="result-emoji">⭐</div>
-      <div class="result-title" id="result-title">כל הכבוד!</div>
-      <div class="result-stats">
-        <div class="stat-box"><div class="stat-num" id="stat-correct">0</div><div class="stat-label">נכון</div></div>
-        <div class="stat-box"><div class="stat-num" id="stat-wrong">0</div><div class="stat-label">טעויות</div></div>
-        <div class="stat-box"><div class="stat-num" id="stat-score">0</div><div class="stat-label">ניקוד</div></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-back" id="res-menu" onclick="goMenu()">🏠 תפריט</button>
-        <button class="btn-again" id="res-again" onclick="startGame()">🔄 שוב!</button>
-      </div>
+    <div class="result-card" style="background:white; padding:20px; border-radius:20px; text-align:center; width:100%;">
+      <h2 id="result-title">כל הכבוד!</h2>
+      <p id="stat-summary" style="margin:10px 0;"></p>
+      <button class="start-btn" onclick="goMenu()">🏠 חזרה לתפריט</button>
     </div>
   </div>
 </div>
 
 <script>
-var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
-function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch(e){return{}}}
-function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
-function getPlayerName(){return localStorage.getItem('mathapp_current')||'אורח'}
-function getPlayerData(name){var p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p);}if(!Array.isArray(p[name].sessions))p[name].sessions=[];return p[name];}
-function saveSession(data){var name=getPlayerName();var p=getPlayers();var d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);d.sessions.push(Object.assign({ts:Date.now()},data));p[name]=d;savePlayers(p);}
-function recordMistake(q,topic){var name=getPlayerName();var p=getPlayers();var d=getPlayerData(name);d.mistakeMap[q]=(d.mistakeMap[q]||0)+1;p[name]=d;savePlayers(p);}
-function initGameHeader(){var name=getPlayerName();var d=getPlayerData(name);document.getElementById('player-label').textContent=name;document.getElementById('total-score').textContent=d.totalScore||0;}
-
-var TOTAL_Q=10, DIFF_CONFIG={1:[10,12],2:[20,10],3:[100,15],4:[1000,20]};
-var selectedDiff=1, selectedOp='add';
-var lives, streak, correct, wrong, sessionScore, sessionMaxStreak, questionNum;
-var currentAns, currentQuestion, timerInterval, timeLeft, totalScore=0;
+var selectedDiff=1, selectedOp='add', isTimerOn=true;
+var lives, streak, correct, wrong, questionNum, sessionScore;
+var currentAns, timerInterval, timeLeft;
+var DIFF_CONFIG={1:[10,12],2:[20,10],3:[100,15],4:[1000,20]};
 
 function selectDiff(btn){document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedDiff=parseInt(btn.dataset.diff);}
 function selectOp(btn){document.querySelectorAll('.op-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedOp=btn.dataset.op;}
+function setTimerMode(btn){document.querySelectorAll('.timer-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');isTimerOn=btn.dataset.timer==='on';}
+
 function showScreen(id){["screen-menu","screen-game","screen-result"].forEach(s=>document.getElementById(s).style.display="none");document.getElementById(id).style.display="flex";}
 function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
 
-function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;showScreen('screen-game');updateHUD();nextQuestion();}
+function startGame(){
+    lives=3; streak=0; correct=0; wrong=0; questionNum=0; sessionScore=0;
+    showScreen('screen-game');
+    document.getElementById('timer-ui').style.visibility = isTimerOn ? 'visible' : 'hidden';
+    updateHUD();
+    nextQuestion();
+}
 
 function nextQuestion(){
-    if(questionNum>=TOTAL_Q){endGame();return;}
-    var q = generateQuestion(); currentQuestion = q; currentAns = q.ans;
-    var maxN = DIFF_CONFIG[selectedDiff][0];
+    if(questionNum>=10){endGame();return;}
+    var q=generateQuestion(); currentAns=q.ans;
+    var maxN=DIFF_CONFIG[selectedDiff][0];
     
-    if(selectedDiff <= 2){document.getElementById('nl-wrap').style.display='block';buildNumberLine(maxN, q.a);}
-    else {document.getElementById('nl-wrap').style.display='none';}
+    if(selectedDiff<=2){document.getElementById('nl-wrap').style.display='block';buildNumberLine(maxN,q.a);}
+    else document.getElementById('nl-wrap').style.display='none';
     
-    var opSym = q.op === 'add' ? '<span class="op-plus">+</span>' : '<span class="op-minus">−</span>';
-    document.getElementById('question-text').innerHTML = `${q.a} ${opSym} ${q.b} = <span class="q-mark">?</span>`;
+    var opSym=q.op==='add'?'<span class="op-plus">+</span>':'<span class="op-minus">−</span>';
+    document.getElementById('question-text').innerHTML=`${q.a} ${opSym} ${q.b} = <span class="q-mark">?</span>`;
     
-    var choices = generateChoices(q.ans, maxN);
-    var grid = document.getElementById('choices-grid'); grid.innerHTML = '';
-    choices.forEach(c => {
-        var btn = document.createElement('button'); btn.className = 'choice-btn'; btn.textContent = c;
-        btn.onclick = () => checkAnswer(c, btn); grid.appendChild(btn);
+    var choices=generateChoices(q.ans,maxN);
+    var grid=document.getElementById('choices-grid'); grid.innerHTML='';
+    choices.forEach(c=>{
+        var btn=document.createElement('button'); btn.className='choice-btn'; btn.textContent=c;
+        btn.onclick=()=>checkAnswer(c,btn); grid.appendChild(btn);
     });
-    document.getElementById('feedback').textContent = '';
-    startTimer(DIFF_CONFIG[selectedDiff][1]);
+    document.getElementById('feedback').textContent='';
+    if(isTimerOn) startTimer(DIFF_CONFIG[selectedDiff][1]);
 }
 
 function generateQuestion(){
-    var maxN=DIFF_CONFIG[selectedDiff][0];
-    var op=selectedOp==='mix'?(Math.random()<0.5?'add':'sub'):selectedOp;
-    var a,b,ans;
-    if(op==='add'){a=Math.floor(Math.random()*(maxN-1))+1;b=Math.floor(Math.random()*(maxN-a))+1;ans=a+b;}
-    else{a=Math.floor(Math.random()*(maxN-1))+2;b=Math.floor(Math.random()*(a-1))+1;ans=a-b;}
-    return{a:a,b:b,op:op,ans:ans};
+    var maxN=DIFF_CONFIG[selectedDiff][0], op=selectedOp==='mix'?(Math.random()<0.5?'add':'sub'):selectedOp;
+    var a,b;
+    if(op==='add'){a=Math.floor(Math.random()*(maxN-1))+1; b=Math.floor(Math.random()*(maxN-a))+1;}
+    else{a=Math.floor(Math.random()*(maxN-1))+2; b=Math.floor(Math.random()*(a-1))+1;}
+    return {a:a, b:b, op:op, ans:op==='add'?a+b:a-b};
 }
 
-function generateChoices(ans,maxN){
-    var choices=[ans];
-    while(choices.length<4){
-        var w=ans+Math.floor(Math.random()*11)-5;
-        if(w>=0 && !choices.includes(w))choices.push(w);
+function generateChoices(ans,max){
+    var c=[ans];
+    while(c.length<4){
+        var w=ans+Math.floor(Math.random()*7)-3;
+        if(w>=0 && !c.includes(w)) c.push(w);
     }
-    return choices.sort(()=>Math.random()-0.5);
+    return c.sort(()=>Math.random()-0.5);
 }
 
 function startTimer(total){
-    clearInterval(timerInterval);timeLeft=total;
+    clearInterval(timerInterval); timeLeft=total;
     var bar=document.getElementById('timer-bar');
     timerInterval=setInterval(()=>{
-        timeLeft-=0.1;var pct=(timeLeft/total)*100;
+        timeLeft-=0.1; var pct=(timeLeft/total)*100;
         bar.style.width=pct+'%';
         document.getElementById('timer-num').textContent=Math.ceil(timeLeft);
-        if(pct<20) bar.style.background='var(--red)';
-        else if(pct<40) bar.style.background='#ff9800';
-        else bar.style.background='var(--green)';
-        if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}
+        if(timeLeft<=0){clearInterval(timerInterval); handleWrong(true);}
     },100);
 }
 
 function checkAnswer(val,btn){
     clearInterval(timerInterval);
-    if(val===currentAns){btn.classList.add('correct');handleCorrect();}
-    else{btn.classList.add('wrong');handleWrong(false);}
+    if(val===currentAns){btn.classList.add('correct'); handleCorrect();}
+    else{btn.classList.add('wrong'); handleWrong(false);}
 }
 
 function handleCorrect(){
-    streak++;correct++;questionNum++;sessionScore+=10;
-    document.getElementById('feedback').textContent='✅ נכון!';
-    document.getElementById('feedback').className='feedback correct';
-    floatEmoji('✅');updateHUD();
-    setTimeout(nextQuestion,1000);
+    streak++; correct++; questionNum++; sessionScore+=10;
+    updateHUD(); floatEmoji('✅');
+    setTimeout(nextQuestion,800);
 }
 
-function handleWrong(isTimeout){
-    streak=0;wrong++;questionNum++;lives--;
-    document.getElementById('feedback').textContent=isTimeout?'⏰ נגמר הזמן!':'❌ טעות...';
-    document.getElementById('feedback').className='feedback wrong';
-    floatEmoji('❌');updateHUD();
-    if(lives<=0) setTimeout(endGame,1000);
-    else setTimeout(nextQuestion,1000);
+function handleWrong(timeout){
+    streak=0; wrong++; questionNum++; lives--;
+    updateHUD(); floatEmoji('❌');
+    if(lives<=0) setTimeout(endGame,800); else setTimeout(nextQuestion,1000);
 }
 
 function updateHUD(){
-    var ld=document.getElementById('lives-display');ld.innerHTML='';
+    var ld=document.getElementById('lives-display'); ld.innerHTML='';
     for(var i=0;i<3;i++) ld.innerHTML+=i<lives?'❤️':'🖤';
-    document.getElementById('streak-badge').textContent=streak>=3?'🔥 '+streak+' ברצף!':'🔥 '+streak+' ברצף';
-    document.getElementById('progress-bar').style.width=(questionNum/TOTAL_Q*100)+'%';
-    document.getElementById('progress-label').textContent=questionNum+' / '+TOTAL_Q;
+    document.getElementById('streak-badge').textContent=`🔥 ${streak} ברצף`;
+    document.getElementById('progress-bar').style.width=(questionNum/10*100)+'%';
+    document.getElementById('progress-label').textContent=`${questionNum} / 10`;
 }
 
 function endGame(){
     showScreen('screen-result');
-    document.getElementById('stat-correct').textContent=correct;
-    document.getElementById('stat-wrong').textContent=wrong;
-    document.getElementById('stat-score').textContent=sessionScore;
-    saveSession({score:sessionScore,correct:correct,wrong:wrong});
+    document.getElementById('stat-summary').textContent = `ענית נכון על ${correct} שאלות וצברת ${sessionScore} נקודות!`;
 }
 
-function buildNumberLine(max,highlight){
-    var nl=document.getElementById('number-line');nl.innerHTML='';
+function buildNumberLine(max,h){
+    var nl=document.getElementById('number-line'); nl.innerHTML='';
     for(var i=0;i<=max;i++){
-        if(i>0){var line=document.createElement('div');line.className='nl-line';nl.appendChild(line);}
-        var num=document.createElement('div');num.className='nl-num'+(i===highlight?' highlight':'');
-        num.textContent=i;nl.appendChild(num);
+        if(i>0){var l=document.createElement('div'); l.className='nl-line'; nl.appendChild(l);}
+        var n=document.createElement('div'); n.className='nl-num'+(i===h?' highlight':'');
+        n.textContent=i; nl.appendChild(n);
     }
 }
 
-function floatEmoji(emoji){
-    var el=document.createElement('div');el.className='float-emoji';el.textContent=emoji;
-    el.style.left='50%';el.style.top='50%';document.body.appendChild(el);
+function floatEmoji(e){
+    var el=document.createElement('div'); el.className='float-emoji'; el.textContent=e;
+    el.style.left='50%'; el.style.top='50%'; document.body.appendChild(el);
     setTimeout(()=>el.remove(),1000);
 }
 
-initGameHeader();
+document.getElementById('player-label').textContent = localStorage.getItem('mathapp_current') || 'nadav';
 </script>
 </body>
 </html>
