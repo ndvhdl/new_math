@@ -136,14 +136,14 @@ var p=gp(),names=Object.keys(p);
 var el=document.getElementById('chips');
 var or=document.getElementById('or-div');
 el.innerHTML='';
-if(!names.length){or.style.display=‘none’;return;}
-or.style.display=‘block’;
+if(!names.length){or.style.display='none';return;}
+or.style.display='block';
 names.forEach(function(name){
 var b=document.createElement('button');
-b.className=‘chip’;
+b.className='chip';
 b.textContent=(p[name].avatar||‘⭐’)+’ ’+name;
-b.addEventListener(‘touchend’,function(e){e.preventDefault();document.getElementById(‘inp’).value=name;enterApp();});
-b.addEventListener(‘click’,function(){document.getElementById(‘inp’).value=name;enterApp();});
+b.addEventListener('touchend',function(e){e.preventDefault();document.getElementById('inp').value=name;enterApp();});
+b.addEventListener('click',function(){document.getElementById('inp').value=name;enterApp();});
 el.appendChild(b);
 });
 }
