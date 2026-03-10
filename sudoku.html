@@ -8,14 +8,17 @@
     <style>
         :root { --d: #2c3e50; --p: #007aff; }
         body { font-family: sans-serif; text-align: center; background: #f4f7f9; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        .top-bar { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .home-link { color: rgba(44,62,80,0.5); text-decoration: none; font-size: 0.85rem; font-weight: bold; padding: 4px 10px; border-radius: 20px; background: rgba(0,0,0,0.05); }
+        .home-link:hover { background: rgba(0,0,0,0.1); }
         h3 { margin: 8px 0; color: var(--d); }
         .score { font-size: 1.2rem; font-weight: bold; margin: 6px; color: var(--d); }
-        .sudoku-board { 
-            display: grid; border: 3px solid var(--d); background-color: var(--d); 
+        .sudoku-board {
+            display: grid; border: 3px solid var(--d); background-color: var(--d);
             gap: 2px; width: 95vw; max-width: 400px; aspect-ratio: 1/1;
         }
         .sub-grid { display: grid; background: var(--d); gap: 1px; }
-        input { 
+        input {
             width: 100%; height: 100%; text-align: center; font-size: clamp(0.9rem, 3vw, 1.4rem);
             border: none; font-weight: bold; background: white; color: var(--p);
             box-sizing: border-box; outline: none; -moz-appearance: textfield;
@@ -36,8 +39,11 @@
     </style>
 </head>
 <body>
-    <h3>סודוקו לילדים 🧩</h3>
-    <div class="score">ניצחונות: <span id="win-count">0</span></div>
+    <div class="top-bar">
+        <a class="home-link" href="index.html">← בית</a>
+        <h3>סודוקו לילדים 🧩</h3>
+        <div class="score">ניצחונות: <span id="win-count">0</span></div>
+    </div>
     <div id="status"></div>
     <div id="board" class="sudoku-board"></div>
 
@@ -63,8 +69,6 @@ let currentSize = 4;
 let boxR = 2, boxC = 2;
 let activeBtn = null;
 
-// ── Sudoku Generator ────────────────────────────────────────────────────────
-
 function shuffle(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -73,7 +77,6 @@ function shuffle(arr) {
     return arr;
 }
 
-/** Check if placing `num` at (row,col) is valid on `board` */
 function isValid(board, size, bR, bC, row, col, num) {
     for (let i = 0; i < size; i++) {
         if (board[row][i] === num) return false;
@@ -87,7 +90,6 @@ function isValid(board, size, bR, bC, row, col, num) {
     return true;
 }
 
-/** Fill board with a complete valid solution (backtracking + shuffle) */
 function fillBoard(board, size, bR, bC) {
     for (let row = 0; row < size; row++) {
         for (let col = 0; col < size; col++) {
@@ -107,10 +109,6 @@ function fillBoard(board, size, bR, bC) {
     return true;
 }
 
-/**
- * Count solutions up to `limit`. Stops early once limit is exceeded.
- * Returns the count (0, 1, or 2+).
- */
 function countSolutions(board, size, bR, bC, limit = 2) {
     let count = 0;
     function solve() {
@@ -126,86 +124,63 @@ function countSolutions(board, size, bR, bC, limit = 2) {
                             if (count >= limit) return;
                         }
                     }
-                    return; // no valid num → dead end
+                    return;
                 }
             }
         }
-        count++; // reached the end with all cells filled
+        count++;
     }
     solve();
     return count;
 }
 
-/**
- * Remove cells one by one (in random order) while keeping a UNIQUE solution.
- * `targetClues` = number of given cells to KEEP.
- */
 function generatePuzzle(fullBoard, size, bR, bC, targetClues) {
-    // deep copy
     const puzzle = fullBoard.map(r => [...r]);
     const positions = shuffle([...Array(size * size)].map((_, i) => i));
-
     let removed = 0;
     const toRemove = size * size - targetClues;
-
     for (const pos of positions) {
         if (removed >= toRemove) break;
         const row = Math.floor(pos / size);
         const col = pos % size;
         const backup = puzzle[row][col];
         puzzle[row][col] = 0;
-
         const copy = puzzle.map(r => [...r]);
         if (countSolutions(copy, size, bR, bC, 2) === 1) {
             removed++;
         } else {
-            puzzle[row][col] = backup; // restore — would break uniqueness
+            puzzle[row][col] = backup;
         }
     }
     return puzzle;
 }
 
-// ── Clue counts ─────────────────────────────────────────────────────────────
-// Clues = cells that REMAIN visible (higher = easier)
 const CLUES = {
-    4: { easy: 10, hard: 7  },   // 16 total cells
-    6: { easy: 22, hard: 15 },   // 36 total cells
-    9: { easy: 35, hard: 26 },   // 81 total cells
+    4: { easy: 10, hard: 7  },
+    6: { easy: 22, hard: 15 },
+    9: { easy: 35, hard: 26 },
 };
-
-// ── Box dimensions ───────────────────────────────────────────────────────────
 const BOX = {
     4: { bR: 2, bC: 2 },
     6: { bR: 2, bC: 3 },
     9: { bR: 3, bC: 3 },
 };
 
-// ── Game Flow ────────────────────────────────────────────────────────────────
-
 function startGame(size, difficulty) {
     currentSize = size;
     boxR = BOX[size].bR;
     boxC = BOX[size].bC;
-
-    // highlight active button
     if (activeBtn) activeBtn.classList.remove('active-btn');
-    activeBtn = document.getElementById(`btn-${size}${difficulty[0]}`);
+    activeBtn = document.getElementById('btn-' + size + difficulty[0]);
     activeBtn.classList.add('active-btn');
-
     setStatus('יוצר לוח...', false);
     document.getElementById('board').classList.add('loading');
-
-    // yield to browser to show "יוצר לוח..." before heavy computation
     setTimeout(() => {
         const emptyBoard = Array.from({length: size}, () => Array(size).fill(0));
         fillBoard(emptyBoard, size, boxR, boxC);
-
-        // emptyBoard is now a full solution
         solution = emptyBoard.map(r => [...r]);
-
         const clues = CLUES[size][difficulty];
         const puzzle = generatePuzzle(emptyBoard, size, boxR, boxC, clues);
-
         renderBoard(puzzle, size, boxR, boxC);
         document.getElementById('board').classList.remove('loading');
         setStatus('');
@@ -215,33 +190,23 @@ function startGame(size, difficulty) {
 function renderBoard(puzzle, size, bR, bC) {
     const board = document.getElementById('board');
     board.innerHTML = '';
-
-    const numBoxes = (size / bC) * (size / bR); // = size*size / (bR*bC) boxes? no...
-    // Number of box-columns = size/bC, number of box-rows = size/bR
-    const boxCols = size / bC; // e.g. 4/2=2, 6/3=2, 9/3=3
+    const boxCols = size / bC;
     const boxRows = size / bR;
-
-    board.style.gridTemplateColumns = `repeat(${boxCols}, 1fr)`;
-    board.style.gridTemplateRows    = `repeat(${boxRows}, 1fr)`;
-
+    board.style.gridTemplateColumns = 'repeat(' + boxCols + ', 1fr)';
+    board.style.gridTemplateRows    = 'repeat(' + boxRows + ', 1fr)';
     for (let brow = 0; brow < boxRows; brow++) {
         for (let bcol = 0; bcol < boxCols; bcol++) {
             const sg = document.createElement('div');
             sg.className = 'sub-grid';
-            sg.style.gridTemplateColumns = `repeat(${bC}, 1fr)`;
-            sg.style.gridTemplateRows    = `repeat(${bR}, 1fr)`;
-
+            sg.style.gridTemplateColumns = 'repeat(' + bC + ', 1fr)';
+            sg.style.gridTemplateRows    = 'repeat(' + bR + ', 1fr)';
             for (let i = 0; i < bR; i++) {
                 for (let j = 0; j < bC; j++) {
                     const row = brow * bR + i;
                     const col = bcol * bC + j;
                     const inp = document.createElement('input');
-                    inp.type = 'number';
-                    inp.min = 1;
-                    inp.max = size;
-                    inp.dataset.row = row;
-                    inp.dataset.col = col;
-
+                    inp.type = 'number'; inp.min = 1; inp.max = size;
+                    inp.dataset.row = row; inp.dataset.col = col;
                     if (puzzle[row][col] !== 0) {
                         inp.value = puzzle[row][col];
                         inp.readOnly = true;
@@ -249,7 +214,6 @@ function renderBoard(puzzle, size, bR, bC) {
                     } else {
                         inp.addEventListener('input', () => {
                             inp.classList.remove('error', 'hint');
-                            // clamp to valid range
                             let v = parseInt(inp.value);
                             if (isNaN(v) || v < 1) inp.value = '';
                             else if (v > size) inp.value = size;
@@ -265,30 +229,17 @@ function renderBoard(puzzle, size, bR, bC) {
 
 function checkSolution() {
     const inputs = document.querySelectorAll('input');
-    let allFilled = true;
-    let hasError = false;
-
+    let allFilled = true, hasError = false;
     inputs.forEach(inp => {
         const v = parseInt(inp.value);
         const r = +inp.dataset.row, c = +inp.dataset.col;
         if (!v) { allFilled = false; return; }
-        if (v !== solution[r][c]) {
-            hasError = true;
-            if (!inp.classList.contains('fixed')) inp.classList.add('error');
-        } else {
-            inp.classList.remove('error');
-        }
+        if (v !== solution[r][c]) { hasError = true; if (!inp.classList.contains('fixed')) inp.classList.add('error'); }
+        else inp.classList.remove('error');
     });
-
-    if (!allFilled) {
-        setStatus('הלוח עדיין לא מלא — המשך! 💪', false);
-    } else if (hasError) {
-        setStatus('יש כמה טעויות — בדוק שוב! 🔍', false);
-    } else {
-        wins++;
-        document.getElementById('win-count').innerText = wins;
-        setStatus('כל הכבוד! פתרת בהצלחה! 🎉', true);
-    }
+    if (!allFilled) setStatus('הלוח עדיין לא מלא — המשך! 💪', false);
+    else if (hasError) setStatus('יש כמה טעויות — בדוק שוב! 🔍', false);
+    else { wins++; document.getElementById('win-count').innerText = wins; setStatus('כל הכבוד! פתרת בהצלחה! 🎉', true); }
 }
 
 function giveHint() {
@@ -296,8 +247,7 @@ function giveHint() {
     if (!empty.length) { setStatus('הלוח מלא!'); return; }
     const target = empty[Math.floor(Math.random() * empty.length)];
     target.value = solution[+target.dataset.row][+target.dataset.col];
-    target.classList.add('hint');
-    target.classList.remove('error');
+    target.classList.add('hint'); target.classList.remove('error');
 }
 
 function setStatus(msg, good = false) {
@@ -306,7 +256,6 @@ function setStatus(msg, good = false) {
     el.style.color = good ? '#27ae60' : 'var(--d)';
 }
 
-// Start with easy 4x4
 startGame(4, 'easy');
 </script>
 
