@@ -88,17 +88,17 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e
   <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
     <div class="section-title">📋 סוג תרגיל</div>
     <div class="type-grid">
-      <button class="type-btn" data-type="find_pct"><span class="ti">🔢</span>מה האחוז?<span class="te">כמה אחוז הוא X מתוך Y?</span></button>
-      <button class="type-btn" data-type="find_part"><span class="ti">🍕</span>מה החלק?<span class="te">כמה זה X% מתוך Y?</span></button>
-      <button class="type-btn" data-type="find_whole"><span class="ti">🔍</span>מה השלם?<span class="te">X הוא Y%, מה השלם?</span></button>
-      <button class="type-btn" data-type="sale"><span class="ti">🏷️</span>הנחה<span class="te">כמה משלמים אחרי הנחה?</span></button>
-      <button class="type-btn full selected" data-type="mix"><span class="ti">🎲</span> מעורב — כל סוגי השאלות</button>
+      <button class="type-btn" data-type="find_pct" onclick="selectType(this)"><span class="ti">🔢</span>מה האחוז?<span class="te">כמה אחוז הוא X מתוך Y?</span></button>
+      <button class="type-btn" data-type="find_part" onclick="selectType(this)"><span class="ti">🍕</span>מה החלק?<span class="te">כמה זה X% מתוך Y?</span></button>
+      <button class="type-btn" data-type="find_whole" onclick="selectType(this)"><span class="ti">🔍</span>מה השלם?<span class="te">X הוא Y%, מה השלם?</span></button>
+      <button class="type-btn" data-type="sale" onclick="selectType(this)"><span class="ti">🏷️</span>הנחה<span class="te">כמה משלמים אחרי הנחה?</span></button>
+      <button class="type-btn full selected" data-type="mix" onclick="selectType(this)"><span class="ti">🎲</span> מעורב — כל סוגי השאלות</button>
     </div>
-    <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
+    <button class="start-btn" id="start-btn" onclick="startGame()">🚀 יאללה נתחיל!</button>
   </div>
 
   <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
-    <button class="back-btn" id="back-btn">← חזרה</button>
+    <button class="back-btn" id="back-btn" onclick="goMenu()">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
       <div class="timer-wrap">
@@ -135,8 +135,8 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e
         <div class="stat-box"><div class="stat-num" id="stat-score">0</div><div class="stat-label">ניקוד</div></div>
       </div>
       <div class="btn-row">
-        <button class="btn-back" id="res-menu">🏠 תפריט</button>
-        <button class="btn-again" id="res-again">🔄 שוב!</button>
+        <button class="btn-back" id="res-menu" onclick="goMenu()">🏠 תפריט</button>
+        <button class="btn-again" id="res-again" onclick="startGame()">🔄 שוב!</button>
       </div>
     </div>
   </div>
@@ -158,13 +158,9 @@ var selectedType=‘mix’;
 var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
 var currentAns,currentQ,timerInterval,timeLeft,totalScore=0;
 
-document.querySelectorAll(’.type-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.type-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedType=btn.dataset.type;});});
+function selectType(btn){document.querySelectorAll(’.type-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedType=btn.dataset.type;}
 function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
 function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
-document.getElementById(‘back-btn’).addEventListener(‘click’,goMenu);
-document.getElementById(‘res-menu’).addEventListener(‘click’,goMenu);
-document.getElementById(‘res-again’).addEventListener(‘click’,startGame);
-document.getElementById(‘start-btn’).addEventListener(‘click’,startGame);
 
 function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;clearInterval(timerInterval);showScreen(‘screen-game’);nextQuestion();}
 
