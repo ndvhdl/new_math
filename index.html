@@ -105,7 +105,7 @@ function sc(n){localStorage.setItem('mathapp_current',n)}
 function mk(name){var p=gp();if(!p[name]){p[name]={avatar:AV[Object.keys(p).length%AV.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};sp(p);}return p[name];}
 
 function enterApp(){
-var name=(document.getElementById(‘inp’).value||’’).trim();
+var name=(document.getElementById('inp').value||’’).trim();
 if(!name)name=‘שחקן’;
 sc(name);mk(name);goMain(name);
 }
