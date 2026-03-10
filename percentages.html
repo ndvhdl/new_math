@@ -85,7 +85,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e
     <div class="score-box"><div class="score-label" id="player-label">ניקוד</div><div class="score-val" id="total-score">0</div></div>
   </div>
 
-  <div class="screen active" id="screen-menu">
+  <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
     <div class="section-title">📋 סוג תרגיל</div>
     <div class="type-grid">
       <button class="type-btn" data-type="find_pct"><span class="ti">🔢</span>מה האחוז?<span class="te">כמה אחוז הוא X מתוך Y?</span></button>
@@ -97,7 +97,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e
     <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
   </div>
 
-  <div class="screen" id="screen-game">
+  <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
     <button class="back-btn" id="back-btn">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
@@ -125,7 +125,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#bf360c,#e
     </div>
   </div>
 
-  <div class="screen" id="screen-result">
+  <div id="screen-result" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
     <div class="result-card">
       <div class="result-emoji" id="result-emoji">⭐</div>
       <div class="result-title" id="result-title">כל הכבוד!</div>
@@ -159,7 +159,7 @@ var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
 var currentAns,currentQ,timerInterval,timeLeft,totalScore=0;
 
 document.querySelectorAll(’.type-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.type-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedType=btn.dataset.type;});});
-function showScreen(id){document.querySelectorAll(’.screen’).forEach(function(s){s.classList.remove(‘active’);});document.getElementById(id).classList.add(‘active’);}
+function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
 function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
 document.getElementById(‘back-btn’).addEventListener(‘click’,goMenu);
 document.getElementById(‘res-menu’).addEventListener(‘click’,goMenu);
