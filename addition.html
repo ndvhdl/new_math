@@ -88,7 +88,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
     <div class="score-box"><div class="score-label" id="player-label">ניקוד</div><div class="score-val" id="total-score">0</div></div>
   </div>
 
-  <div class="screen active" id="screen-menu">
+  <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
     <div class="section-title">📐 בחר רמה</div>
     <div class="diff-grid">
       <button class="diff-btn selected" data-diff="1"><span class="di">🌱</span>עד 10<span class="ds">כיתה א׳ מתחילים</span></button>
@@ -105,7 +105,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
     <button class="start-btn" id="start-btn">🚀 יאללה נתחיל!</button>
   </div>
 
-  <div class="screen" id="screen-game">
+  <div id="screen-game" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
     <button class="back-btn" id="back-btn">← חזרה</button>
     <div class="hud">
       <div class="lives" id="lives-display"></div>
@@ -129,7 +129,7 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
     </div>
   </div>
 
-  <div class="screen" id="screen-result">
+  <div id="screen-result" style="width:100%;display:none;flex-direction:column;align-items:center;gap:10px;">
     <div class="result-card">
       <div class="result-emoji" id="result-emoji">⭐</div>
       <div class="result-title" id="result-title">כל הכבוד!</div>
@@ -162,7 +162,7 @@ var currentAns,currentQuestion,timerInterval,timeLeft,totalScore=0;
 
 document.querySelectorAll(’.diff-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.diff-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedDiff=parseInt(btn.dataset.diff);});});
 document.querySelectorAll(’.op-btn’).forEach(function(btn){btn.addEventListener(‘click’,function(){document.querySelectorAll(’.op-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedOp=btn.dataset.op;});});
-function showScreen(id){document.querySelectorAll(’.screen’).forEach(function(s){s.classList.remove(‘active’);});document.getElementById(id).classList.add(‘active’);}
+function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
 function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
 document.getElementById(‘back-btn’).addEventListener(‘click’,goMenu);
 document.getElementById(‘res-menu’).addEventListener(‘click’,goMenu);
