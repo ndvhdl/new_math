@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- v2.1 -->
 <title>➕ חיבור וחיסור</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
@@ -91,10 +89,10 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
   <div id="screen-menu" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
     <div class="section-title">📐 בחר רמה</div>
     <div class="diff-grid">
-      <button class="diff-btn selected" data-diff="1" onclick="selectDiff(this)"><span class="di">🌱</span>עד 10<span class="ds">כיתה א׳ מתחילים</span></button>
-      <button class="diff-btn" data-diff="2" onclick="selectDiff(this)"><span class="di">🌿</span>עד 20<span class="ds">כיתה א׳ מתקדמים</span></button>
-      <button class="diff-btn" data-diff="3" onclick="selectDiff(this)"><span class="di">🌳</span>עד 100<span class="ds">כיתה ב׳</span></button>
-      <button class="diff-btn" data-diff="4" onclick="selectDiff(this)"><span class="di">🏔️</span>עד 1000<span class="ds">כיתה ג׳</span></button>
+      <button class="diff-btn selected" data-diff="1" onclick="selectDiff(this)"><span class="di">🌱</span>עד 10<span class="ds">כיתה א' מתחילים</span></button>
+      <button class="diff-btn" data-diff="2" onclick="selectDiff(this)"><span class="di">🌿</span>עד 20<span class="ds">כיתה א' מתקדמים</span></button>
+      <button class="diff-btn" data-diff="3" onclick="selectDiff(this)"><span class="di">🌳</span>עד 100<span class="ds">כיתה ב'</span></button>
+      <button class="diff-btn" data-diff="4" onclick="selectDiff(this)"><span class="di">🏔️</span>עד 1000<span class="ds">כיתה ג'</span></button>
     </div>
     <div class="section-title" style="margin-top:6px">➕➖ סוג חישוב</div>
     <div class="op-row">
@@ -145,54 +143,133 @@ body{font-family:'Heebo',sans-serif;background:linear-gradient(160deg,#0d47a1,#1
     </div>
   </div>
 </div>
+
 <script>
 var AVATARS=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
-function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch{return{}}}
+function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch(e){return{}}}
 function savePlayers(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
-function getPlayerName(){return localStorage.getItem('mathapp_current')||''}
-function getPlayerData(name){var p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p);}if(!Array.isArray(p[name].sessions))p[name].sessions=[];if(!p[name].tableStats||typeof p[name].tableStats!=='object')p[name].tableStats={};if(!p[name].mistakeMap||typeof p[name].mistakeMap!=='object')p[name].mistakeMap={};return p[name];}
-function saveSession(data){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);if((data.bestStreak||0)>(d.bestStreak||0))d.bestStreak=data.bestStreak;var k=data.topic||'general';if(!d.tableStats[k])d.tableStats[k]={correct:0,wrong:0};d.tableStats[k].correct+=(data.correct||0);d.tableStats[k].wrong+=(data.wrong||0);d.sessions.push(Object.assign({ts:Date.now()},data));if(d.sessions.length>200)d.sessions=d.sessions.slice(-200);p[name]=d;savePlayers(p);}
-function recordMistake(q,topic){var name=getPlayerName();if(!name)return;var p=getPlayers();var d=getPlayerData(name);var k='['+(topic||'?')+'] '+q;d.mistakeMap[k]=(d.mistakeMap[k]||0)+1;p[name]=d;savePlayers(p);}
-function initGameHeader(){var name=getPlayerName();if(!name)return;var d=getPlayerData(name);var lbl=document.getElementById('player-label');var scr=document.getElementById('total-score');if(lbl)lbl.textContent=name;if(scr)scr.textContent=d.totalScore||0;}
+function getPlayerName(){return localStorage.getItem('mathapp_current')||'אורח'}
+function getPlayerData(name){var p=getPlayers();if(!p[name]){p[name]={avatar:AVATARS[Object.keys(p).length%AVATARS.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};savePlayers(p);}if(!Array.isArray(p[name].sessions))p[name].sessions=[];return p[name];}
+function saveSession(data){var name=getPlayerName();var p=getPlayers();var d=getPlayerData(name);d.totalScore=(d.totalScore||0)+(data.score||0);d.games=(d.games||0)+1;d.correct=(d.correct||0)+(data.correct||0);d.wrong=(d.wrong||0)+(data.wrong||0);d.sessions.push(Object.assign({ts:Date.now()},data));p[name]=d;savePlayers(p);}
+function recordMistake(q,topic){var name=getPlayerName();var p=getPlayers();var d=getPlayerData(name);d.mistakeMap[q]=(d.mistakeMap[q]||0)+1;p[name]=d;savePlayers(p);}
+function initGameHeader(){var name=getPlayerName();var d=getPlayerData(name);document.getElementById('player-label').textContent=name;document.getElementById('total-score').textContent=d.totalScore||0;}
 
-var TOTAL_Q=10,DIFF_CONFIG={1:[10,12],2:[20,10],3:[100,15],4:[1000,20]};
-var selectedDiff=1,selectedOp='add';
-var lives,streak,correct,wrong,sessionScore,sessionMaxStreak,questionNum;
-var currentAns,currentQuestion,timerInterval,timeLeft,totalScore=0;
+var TOTAL_Q=10, DIFF_CONFIG={1:[10,12],2:[20,10],3:[100,15],4:[1000,20]};
+var selectedDiff=1, selectedOp='add';
+var lives, streak, correct, wrong, sessionScore, sessionMaxStreak, questionNum;
+var currentAns, currentQuestion, timerInterval, timeLeft, totalScore=0;
 
-});btn.classList.add(‘selected’);selectedDiff=parseInt(btn.dataset.diff);});});
-});btn.classList.add(‘selected’);selectedOp=btn.dataset.op;});});
-function selectDiff(btn){document.querySelectorAll(’.diff-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedDiff=parseInt(btn.dataset.diff);}
-function selectOp(btn){document.querySelectorAll(’.op-btn’).forEach(function(b){b.classList.remove(‘selected’);});btn.classList.add(‘selected’);selectedOp=btn.dataset.op;}
-function showScreen(id){var ids=[“screen-menu”,“screen-game”,“screen-result”];ids.forEach(function(s){var el=document.getElementById(s);if(el)el.style.display=“none”;});var el=document.getElementById(id);if(el)el.style.display=“flex”;}
-function goMenu(){clearInterval(timerInterval);showScreen(‘screen-menu’);}
+function selectDiff(btn){document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedDiff=parseInt(btn.dataset.diff);}
+function selectOp(btn){document.querySelectorAll('.op-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedOp=btn.dataset.op;}
+function showScreen(id){["screen-menu","screen-game","screen-result"].forEach(s=>document.getElementById(s).style.display="none");document.getElementById(id).style.display="flex";}
+function goMenu(){clearInterval(timerInterval);showScreen('screen-menu');}
 
-function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;clearInterval(timerInterval);showScreen(‘screen-game’);updateHUD();nextQuestion();}
+function startGame(){lives=3;streak=0;correct=0;wrong=0;sessionScore=0;sessionMaxStreak=0;questionNum=0;showScreen('screen-game');updateHUD();nextQuestion();}
 
-function updateHUD(){var ld=document.getElementById(‘lives-display’);ld.innerHTML=’’;for(var i=0;i<3;i++)ld.innerHTML+=i<lives?‘❤️’:‘🖤’;document.getElementById(‘streak-badge’).textContent=streak>=3?‘🔥 ‘+streak+’ ברצף!’:‘🔥 ‘+streak+’ ברצף’;document.getElementById(‘progress-bar’).style.width=(questionNum/TOTAL_Q*100)+’%’;document.getElementById(‘progress-label’).textContent=questionNum+’ / ’+TOTAL_Q;}
+function updateHUD(){
+    var ld=document.getElementById('lives-display');ld.innerHTML='';
+    for(var i=0;i<3;i++) ld.innerHTML+=i<lives?'❤️':'🖤';
+    document.getElementById('streak-badge').textContent=streak>=3?'🔥 '+streak+' ברצף!':'🔥 '+streak+' ברצף';
+    document.getElementById('progress-bar').style.width=(questionNum/TOTAL_Q*100)+'%';
+    document.getElementById('progress-label').textContent=questionNum+' / '+TOTAL_Q;
+}
 
-function generateQuestion(){var maxN=DIFF_CONFIG[selectedDiff][0];var op=selectedOp===‘mix’?(Math.random()<0.5?‘add’:‘sub’):selectedOp;var a,b,ans;if(op===‘add’){a=Math.floor(Math.random()*(maxN-1))+1;b=Math.floor(Math.random()*(maxN-a))+1;ans=a+b;}else{a=Math.floor(Math.random()*(maxN-1))+2;b=Math.floor(Math.random()*(a-1))+1;ans=a-b;}return{a:a,b:b,op:op,ans:ans};}
+function generateQuestion(){
+    var maxN=DIFF_CONFIG[selectedDiff][0];
+    var op=selectedOp==='mix'?(Math.random()<0.5?'add':'sub'):selectedOp;
+    var a,b,ans;
+    if(op==='add'){a=Math.floor(Math.random()*(maxN-1))+1;b=Math.floor(Math.random()*(maxN-a))+1;ans=a+b;}
+    else{a=Math.floor(Math.random()*(maxN-1))+2;b=Math.floor(Math.random()*(a-1))+1;ans=a-b;}
+    return{a:a,b:b,op:op,ans:ans};
+}
 
-function generateChoices(ans,maxN){var choices=[ans];var attempts=0;while(choices.length<4&&attempts<50){attempts++;var delta=Math.floor(Math.random()*Math.min(10,maxN*0.3))+1;var w=Math.random()<0.5?ans+delta:Math.max(0,ans-delta);if(w!==ans&&w>=0&&choices.indexOf(w)===-1)choices.push(w);}while(choices.length<4)choices.push(ans+choices.length*2);return choices.sort(function(){return Math.random()-0.5;});}
+function nextQuestion(){
+    if(questionNum>=TOTAL_Q){endGame();return;}
+    var q=generateQuestion();currentQuestion=q;currentAns=q.ans;
+    var maxN=DIFF_CONFIG[selectedDiff][0];
+    if(selectedDiff<=2){document.getElementById('nl-wrap').style.display='block';buildNumberLine(maxN,q.a);}
+    else document.getElementById('nl-wrap').style.display='none';
+    var opSym=q.op==='add'?'<span class="op-plus">+</span>':'<span class="op-minus">−</span>';
+    document.getElementById('question-text').innerHTML=q.a+' '+opSym+' '+q.b+' = <span class="q-mark">?</span>';
+    var choices=generateChoices(q.ans,maxN);
+    var grid=document.getElementById('choices-grid');grid.innerHTML='';
+    choices.forEach(c=>{
+        var btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;
+        btn.onclick=()=>checkAnswer(c,btn);grid.appendChild(btn);
+    });
+    document.getElementById('feedback').textContent='';
+    startTimer(DIFF_CONFIG[selectedDiff][1]);
+}
 
-function nextQuestion(){if(questionNum>=TOTAL_Q){endGame();return;}var q=generateQuestion();currentQuestion=q;currentAns=q.ans;var maxN=DIFF_CONFIG[selectedDiff][0];var timeLim=DIFF_CONFIG[selectedDiff][1];var nlWrap=document.getElementById(‘nl-wrap’);if(selectedDiff<=2){nlWrap.style.display=‘block’;buildNumberLine(maxN+1,q.a);}else nlWrap.style.display=‘none’;var opSym=q.op===‘add’?’<span class="op-plus">+</span>’:’<span class="op-minus">−</span>’;document.getElementById(‘question-text’).innerHTML=q.a+’ ‘+opSym+’ ‘+q.b+’ = <span class="q-mark">?</span>’;var choices=generateChoices(q.ans,maxN);var grid=document.getElementById(‘choices-grid’);grid.innerHTML=’’;choices.forEach(function(c){var btn=document.createElement(‘button’);btn.className=‘choice-btn’;btn.textContent=c;btn.addEventListener(‘click’,function(){checkAnswer(c,btn);});grid.appendChild(btn);});document.getElementById(‘feedback’).textContent=’’;document.getElementById(‘feedback’).className=‘feedback’;clearInterval(timerInterval);timeLeft=timeLim;startTimer(timeLim);updateHUD();}
+function generateChoices(ans,maxN){
+    var choices=[ans];
+    while(choices.length<4){
+        var w=ans+Math.floor(Math.random()*11)-5;
+        if(w>=0 && !choices.includes(w))choices.push(w);
+    }
+    return choices.sort(()=>Math.random()-0.5);
+}
 
-function buildNumberLine(max,highlight){var nl=document.getElementById(‘number-line’);nl.innerHTML=’’;for(var i=0;i<=max;i++){if(i>0){var line=document.createElement(‘div’);line.className=‘nl-line’;nl.appendChild(line);}var num=document.createElement(‘div’);num.className=‘nl-num’+(i===highlight?’ highlight’:’’);num.textContent=i;nl.appendChild(num);}}
+function startTimer(total){
+    clearInterval(timerInterval);timeLeft=total;
+    var bar=document.getElementById('timer-bar');
+    timerInterval=setInterval(()=>{
+        timeLeft-=0.1;var pct=(timeLeft/total)*100;
+        bar.style.width=pct+'%';
+        document.getElementById('timer-num').textContent=Math.ceil(timeLeft);
+        if(pct<20) bar.style.background='var(--red)';
+        else if(pct<40) bar.style.background='#ff9800';
+        else bar.style.background='var(--green)';
+        if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}
+    },100);
+}
 
-function startTimer(total){var bar=document.getElementById(‘timer-bar’),num=document.getElementById(‘timer-num’);bar.style.width=‘100%’;bar.style.background=‘var(–green)’;timerInterval=setInterval(function(){timeLeft-=0.1;var pct=Math.max(0,timeLeft/total*100);bar.style.width=pct+’%’;num.textContent=Math.ceil(timeLeft);if(pct<40)bar.style.background=’#ff9800’;if(pct<20)bar.style.background=‘var(–red)’;if(timeLeft<=0){clearInterval(timerInterval);handleWrong(true);}},100);}
+function checkAnswer(val,btn){
+    clearInterval(timerInterval);
+    if(val===currentAns){btn.classList.add('correct');handleCorrect();}
+    else{btn.classList.add('wrong');handleWrong(false);}
+}
 
-function checkAnswer(val,btn){clearInterval(timerInterval);document.querySelectorAll(’.choice-btn’).forEach(function(b){b.onclick=null;b.style.pointerEvents=‘none’;});if(val===currentAns){btn.classList.add(‘correct’);handleCorrect();}else{btn.classList.add(‘wrong’);document.querySelectorAll(’.choice-btn’).forEach(function(b){if(parseInt(b.textContent)===currentAns)b.classList.add(‘correct’);});handleWrong(false);}}
+function handleCorrect(){
+    streak++;correct++;questionNum++;sessionScore+=10;
+    document.getElementById('feedback').textContent='✅ נכון!';
+    document.getElementById('feedback').className='feedback correct';
+    floatEmoji('✅');updateHUD();
+    setTimeout(nextQuestion,1000);
+}
 
-function handleCorrect(){streak++;correct++;questionNum++;if(streak>sessionMaxStreak)sessionMaxStreak=streak;var bonus=streak>=5?3:streak>=3?2:1;var pts=10*bonus;sessionScore+=pts;totalScore+=pts;document.getElementById(‘total-score’).textContent=totalScore;document.getElementById(‘feedback’).textContent=streak>=3?‘🔥 +’+pts+’ מדהים!’:‘✅ +’+pts+’ נכון!’;document.getElementById(‘feedback’).className=‘feedback correct’;document.getElementById(‘question-card’).classList.add(‘pop’);setTimeout(function(){document.getElementById(‘question-card’).classList.remove(‘pop’);},300);floatEmoji(streak>=5?‘🌟’:‘✅’);updateHUD();if(questionNum>=TOTAL_Q){setTimeout(endGame,700);return;}setTimeout(nextQuestion,900);}
+function handleWrong(isTimeout){
+    streak=0;wrong++;questionNum++;lives--;
+    document.getElementById('feedback').textContent=isTimeout?'⏰ נגמר הזמן!':'❌ טעות...';
+    document.getElementById('feedback').className='feedback wrong';
+    floatEmoji('❌');updateHUD();
+    if(lives<=0) setTimeout(endGame,1000);
+    else setTimeout(nextQuestion,1000);
+}
 
-function handleWrong(timeout){streak=0;wrong++;questionNum++;var q=currentQuestion;var opSym=q.op===‘add’?’+’:‘−’;recordMistake(q.a+’ ‘+opSym+’ ‘+q.b+’ = ’+q.ans,selectedDiff<=2?‘חיבור/חיסור עד 20’:‘חיבור/חיסור’);document.getElementById(‘feedback’).textContent=timeout?’⏰ ‘+q.a+’ ‘+opSym+’ ‘+q.b+’ = ’+q.ans:’❌ ‘+q.a+’ ‘+opSym+’ ‘+q.b+’ = ’+q.ans;document.getElementById(‘feedback’).className=‘feedback wrong’;document.getElementById(‘question-card’).classList.add(‘shake’);setTimeout(function(){document.getElementById(‘question-card’).classList.remove(‘shake’);},400);floatEmoji(‘❌’);lives–;if(lives<=0){updateHUD();setTimeout(endGame,900);return;}updateHUD();if(questionNum>=TOTAL_Q){setTimeout(endGame,900);return;}setTimeout(nextQuestion,1100);}
+function endGame(){
+    showScreen('screen-result');
+    document.getElementById('stat-correct').textContent=correct;
+    document.getElementById('stat-wrong').textContent=wrong;
+    document.getElementById('stat-score').textContent=sessionScore;
+    saveSession({score:sessionScore,correct:correct,wrong:wrong});
+}
 
-function endGame(){clearInterval(timerInterval);var topic=selectedOp===‘add’?‘חיבור’:selectedOp===‘sub’?‘חיסור’:‘חיבור-חיסור’;saveSession({game:‘addition’,mode:’רמה ’+selectedDiff,topic:topic,score:sessionScore,correct:correct,wrong:wrong,bestStreak:sessionMaxStreak});document.getElementById(‘result-emoji’).textContent=sessionScore>=80?‘🏆’:lives>0?‘⭐’:‘💪’;document.getElementById(‘result-title’).textContent=sessionScore>=80?‘מדהים! אלוף! 🎉’:lives>0?‘כל הכבוד! 🎉’:‘אל תוותר! 💪’;document.getElementById(‘stat-correct’).textContent=correct;document.getElementById(‘stat-wrong’).textContent=wrong;document.getElementById(‘stat-score’).textContent=sessionScore;showScreen(‘screen-result’);}
+function buildNumberLine(max,highlight){
+    var nl=document.getElementById('number-line');nl.innerHTML='';
+    for(var i=0;i<=max;i++){
+        var num=document.createElement('div');num.className='nl-num'+(i===highlight?' highlight':'');
+        num.textContent=i;nl.appendChild(num);
+    }
+}
 
-function floatEmoji(emoji){var el=document.createElement(‘div’);el.className=‘float-emoji’;el.textContent=emoji;var card=document.getElementById(‘question-card’).getBoundingClientRect();el.style.left=(card.left+card.width/2-16)+‘px’;el.style.top=(card.top+20)+‘px’;document.body.appendChild(el);setTimeout(function(){el.remove();},1000);}
+function floatEmoji(emoji){
+    var el=document.createElement('div');el.className='float-emoji';el.textContent=emoji;
+    el.style.left='50%';el.style.top='50%';document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1000);
+}
 
 initGameHeader();
 </script>
-
 </body>
 </html>
