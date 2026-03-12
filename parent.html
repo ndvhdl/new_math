@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
@@ -17,7 +16,7 @@ h2{font-family:'Fredoka One',cursive;color:white;font-size:1.2rem;margin-bottom:
 .pin-input:focus{border-color:#ffd600;}
 .go-btn{width:100%;padding:14px;border-radius:50px;border:none;background:linear-gradient(135deg,#ffd600,#ff9800);color:#1a1a1a;font-family:'Fredoka One',cursive;font-size:1.2rem;cursor:pointer;margin-top:10px;}
 .err{color:#ff1744;font-size:0.9rem;text-align:center;min-height:1.4em;margin-top:6px;}
-.back-link{color:rgba(255,255,255,0.4);font-size:0.8rem;text-decoration:none;display:block;margin-top:8px;}
+.back-link{color:rgba(255,255,255,0.4);font-size:0.8rem;text-decoration:none;display:block;margin-top:8px;text-align:center;}
 .player-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
 .tab{padding:8px 14px;border-radius:50px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.6);font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;}
 .tab.active{border-color:#ffd600;background:rgba(255,214,0,0.15);color:#ffd600;}
@@ -64,160 +63,196 @@ h2{font-family:'Fredoka One',cursive;color:white;font-size:1.2rem;margin-bottom:
   <div id="dash-screen" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
       <a href="index.html" style="color:rgba(255,255,255,0.4);font-size:0.8rem;text-decoration:none;">← בית</a>
-      <span style="font-family:'Fredoka One',cursive;color:#ffd600;font-size:1.3rem;">🔐 דף הורה</span>
+      <span style="font-family:'Fredoka One',cursive;color:#ffd600;font-size:1.3rem;">🔐 דשבורד</span>
       <span></span>
     </div>
 
-```
-<div class="card">
-  <h2>🏆 לוח תחרות</h2>
-  <div id="leaderboard"></div>
-</div>
+    <div class="card">
+      <h2>🏆 לוח תחרות</h2>
+      <div id="leaderboard"></div>
+    </div>
 
-<div class="card">
-  <h2>📋 סטטיסטיקה אישית</h2>
-  <div class="player-tabs" id="player-tabs"></div>
-  <div id="player-stats" style="display:none">
-    <div class="stat-grid">
-      <div class="stat-box"><div class="stat-num" id="s-games">0</div><div class="stat-lbl">משחקים</div></div>
-      <div class="stat-box"><div class="stat-num" id="s-correct">0</div><div class="stat-lbl">נכון</div></div>
-      <div class="stat-box"><div class="stat-num" id="s-streak">0</div><div class="stat-lbl">רצף שיא</div></div>
-      <div class="stat-box"><div class="stat-num" id="s-score">0</div><div class="stat-lbl">ניקוד</div></div>
+    <div class="card">
+      <h2>📋 סטטיסטיקה אישית</h2>
+      <div class="player-tabs" id="player-tabs"></div>
+      <div id="player-stats" style="display:none">
+        <div class="stat-grid">
+          <div class="stat-box"><div class="stat-num" id="s-games">0</div><div class="stat-lbl">משחקים</div></div>
+          <div class="stat-box"><div class="stat-num" id="s-correct">0</div><div class="stat-lbl">נכון</div></div>
+          <div class="stat-box"><div class="stat-num" id="s-streak">0</div><div class="stat-lbl">שיא</div></div>
+          <div class="stat-box"><div class="stat-num" id="s-score">0</div><div class="stat-lbl">ניקוד</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">
+          <span>דיוק כולל</span><span id="s-acc-pct">0%</span>
+        </div>
+        <div class="acc-bar-bg"><div class="acc-bar" id="s-acc-bar" style="width:0%"></div></div>
+      </div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:4px;">
-      <span>דיוק כולל</span><span id="s-acc-pct">0%</span>
+
+    <div class="card" id="table-section" style="display:none">
+      <h2>📊 דיוק לפי לוח כפל</h2>
+      <div class="tg-grid" id="table-grid"></div>
     </div>
-    <div class="acc-bar-bg"><div class="acc-bar" id="s-acc-bar" style="width:0%"></div></div>
+
+    <div class="card" id="mistakes-section" style="display:none">
+      <h2>🔴 טעויות נפוצות</h2>
+      <div id="mistakes-list"></div>
+    </div>
+
+    <div class="card" id="history-section" style="display:none">
+      <h2>📅 היסטוריית משחקים</h2>
+      <div id="history-list" style="max-height:320px;overflow-y:auto;"></div>
+    </div>
   </div>
 </div>
 
-<div class="card" id="table-section" style="display:none">
-  <h2>📊 דיוק לפי לוח כפל</h2>
-  <div class="tg-grid" id="table-grid"></div>
-</div>
-
-<div class="card" id="mistakes-section" style="display:none">
-  <h2>🔴 טעויות נפוצות</h2>
-  <div id="mistakes-list"></div>
-</div>
-
-<div class="card" id="history-section" style="display:none">
-  <h2>📅 20 משחקים אחרונים</h2>
-  <div id="history-list" style="max-height:320px;overflow-y:auto;"></div>
-</div>
-```
-
-  </div>
-
-</div>
 <script>
-var PWD='1234';
-function getPlayers(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch(e){return{}}}
+var PWD = '1234';
 
-function checkPin(){
-var raw=document.getElementById(‘pin-input’).value||’’;
-var val=raw.replace(/\D/g,’’);
-if(val===PWD){
-document.getElementById(‘pin-screen’).style.display=‘none’;
-document.getElementById(‘dash-screen’).style.display=‘block’;
-buildDash();
-}else{
-document.getElementById(‘pin-err’).textContent=‘❌ סיסמה שגויה. נסה שוב.’;
+function getPlayers() {
+    try {
+        return JSON.parse(localStorage.getItem('mathapp_players') || '{}');
+    } catch(e) {
+        return {};
+    }
 }
-}
-document.getElementById(‘pin-input’).addEventListener(‘keydown’,function(e){if(e.key===‘Enter’)checkPin();});
 
-function buildDash(){
-var players=getPlayers();
-var names=Object.keys(players);
-var lb=document.getElementById(‘leaderboard’);
-if(!names.length){lb.innerHTML=’<div class="empty">אין שחקנים עדיין</div>’;return;}
-var sorted=names.slice().sort(function(a,b){return(players[b].totalScore||0)-(players[a].totalScore||0);});
-lb.innerHTML=’’;
-sorted.forEach(function(name,i){
-var d=players[name];
-var row=document.createElement(‘div’);
-row.className=‘lb-row’+(i===0?’ gold’:’’);
-var medal=i===0?‘🥇’:i===1?‘🥈’:i===2?‘🥉’:(i+1)+’.’;
-row.innerHTML=’<span class="lb-rank">’+medal+’</span><span style="font-size:1.3rem">’+d.avatar+’</span><span class="lb-name">’+name+’</span><span class="lb-score">’+(d.totalScore||0)+’</span>’;
-lb.appendChild(row);
+function checkPin() {
+    var raw = document.getElementById('pin-input').value || '';
+    var val = raw.replace(/\D/g, '');
+    if (val === PWD) {
+        document.getElementById('pin-screen').style.display = 'none';
+        document.getElementById('dash-screen').style.display = 'block';
+        buildDash();
+    } else {
+        document.getElementById('pin-err').textContent = '❌ סיסמה שגויה. נסה שוב.';
+    }
+}
+
+document.getElementById('pin-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') checkPin();
 });
-var tabs=document.getElementById(‘player-tabs’);
-tabs.innerHTML=’’;
-names.forEach(function(name){
-var btn=document.createElement(‘button’);
-btn.className=‘tab’;
-btn.textContent=(players[name].avatar||‘⭐’)+’ ‘+name;
-btn.onclick=function(){
-document.querySelectorAll(’.tab’).forEach(function(t){t.classList.remove(‘active’);});
-btn.classList.add(‘active’);
-showPlayer(name);
-};
-tabs.appendChild(btn);
-});
-if(names.length>0){tabs.firstChild.classList.add(‘active’);showPlayer(names[0]);}
+
+function buildDash() {
+    var players = getPlayers();
+    var names = Object.keys(players);
+    var lb = document.getElementById('leaderboard');
+    
+    if (names.length === 0) {
+        lb.innerHTML = '<div class="empty">אין שחקנים עדיין</div>';
+        return;
+    }
+
+    var sorted = names.slice().sort(function(a, b) {
+        return (players[b].totalScore || 0) - (players[a].totalScore || 0);
+    });
+
+    lb.innerHTML = '';
+    sorted.forEach(function(name, i) {
+        var d = players[name];
+        var row = document.createElement('div');
+        row.className = 'lb-row' + (i === 0 ? ' gold' : '');
+        var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
+        row.innerHTML = '<span class="lb-rank">' + medal + '</span><span style="font-size:1.3rem">' + (d.avatar || '⭐') + '</span><span class="lb-name">' + name + '</span><span class="lb-score">' + (d.totalScore || 0) + '</span>';
+        lb.appendChild(row);
+    });
+
+    var tabs = document.getElementById('player-tabs');
+    tabs.innerHTML = '';
+    names.forEach(function(name) {
+        var btn = document.createElement('button');
+        btn.className = 'tab';
+        btn.textContent = (players[name].avatar || '⭐') + ' ' + name;
+        btn.onclick = function() {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            showPlayer(name);
+        };
+        tabs.appendChild(btn);
+    });
+
+    if (names.length > 0) {
+        tabs.firstChild.classList.add('active');
+        showPlayer(names[0]);
+    }
 }
 
-function showPlayer(name){
-var d=getPlayers()[name];
-if(!d)return;
-document.getElementById(‘player-stats’).style.display=‘block’;
-document.getElementById(‘s-games’).textContent=d.games||0;
-document.getElementById(‘s-correct’).textContent=d.correct||0;
-document.getElementById(‘s-streak’).textContent=d.bestStreak||0;
-document.getElementById(‘s-score’).textContent=d.totalScore||0;
-var tot=(d.correct||0)+(d.wrong||0);
-var acc=tot>0?Math.round((d.correct||0)/tot*100):0;
-document.getElementById(‘s-acc-pct’).textContent=acc+’%’;
-document.getElementById(‘s-acc-bar’).style.width=acc+’%’;
+function showPlayer(name) {
+    var d = getPlayers()[name];
+    if (!d) return;
 
-var ts=d.tableStats||{};
-var tkeys=Object.keys(ts).filter(function(k){return k.indexOf(’\xd7’)!==-1;});
-if(tkeys.length>0){
-document.getElementById(‘table-section’).style.display=‘block’;
-var grid=document.getElementById(‘table-grid’);grid.innerHTML=’’;
-for(var i=2;i<=10;i++){
-var key=’\xd7’+i;
-var cell=document.createElement(‘div’);cell.className=‘tg-cell’;
-var td=ts[key];
-if(td&&(td.correct+td.wrong)>0){
-var a=Math.round(td.correct/(td.correct+td.wrong)*100);
-var cls=a>=90?‘good’:a>=70?‘ok’:‘bad’;
-cell.innerHTML=’<div class="tg-label">\xd7’+i+’</div><div class="tg-acc '+cls+'">’+a+’%</div>’;
-}else{
-cell.innerHTML=’<div class="tg-label">\xd7’+i+’</div><div class="tg-acc none">\u2014</div>’;
-}
-grid.appendChild(cell);
-}
-}else{document.getElementById(‘table-section’).style.display=‘none’;}
+    document.getElementById('player-stats').style.display = 'block';
+    document.getElementById('s-games').textContent = d.games || 0;
+    document.getElementById('s-correct').textContent = d.correct || 0;
+    document.getElementById('s-streak').textContent = d.bestStreak || 0;
+    document.getElementById('s-score').textContent = d.totalScore || 0;
 
-var mm=d.mistakeMap||{};
-var mkeys=Object.keys(mm);
-if(mkeys.length>0){
-document.getElementById(‘mistakes-section’).style.display=‘block’;
-var ml=document.getElementById(‘mistakes-list’);ml.innerHTML=’’;
-mkeys.sort(function(a,b){return mm[b]-mm[a];}).slice(0,8).forEach(function(k){
-var row=document.createElement(‘div’);row.className=‘mistake-row’;
-row.innerHTML=’<span class="mistake-q">’+k+’</span><span class="mistake-cnt">’+mm[k]+’\xd7</span>’;
-ml.appendChild(row);
-});
-}else{document.getElementById(‘mistakes-section’).style.display=‘none’;}
+    var tot = (d.correct || 0) + (d.wrong || 0);
+    var acc = tot > 0 ? Math.round((d.correct || 0) / tot * 100) : 0;
+    document.getElementById('s-acc-pct').textContent = acc + '%';
+    document.getElementById('s-acc-bar').style.width = acc + '%';
 
-var sessions=d.sessions||[];
-if(sessions.length>0){
-document.getElementById(‘history-section’).style.display=‘block’;
-var hl=document.getElementById(‘history-list’);hl.innerHTML=’’;
-sessions.slice().reverse().slice(0,20).forEach(function(s){
-var icon=s.game===‘times-tables’?‘⚽’:s.game===‘division’?‘➗’:s.game===‘percentages’?’%’:s.game===‘sudoku’?‘🧩’:‘➕’;
-var dt=new Date(s.ts);
-var ds=dt.getDate()+’/’+(dt.getMonth()+1)+’ ‘+dt.getHours()+’:’+String(dt.getMinutes()).padStart(2,‘0’);
-var row=document.createElement(‘div’);row.className=‘hist-row’;
-row.innerHTML=’<span class="hist-game">’+icon+’ ‘+(s.topic||s.game)+’</span><span class="hist-score">’+s.score+’ נק\u05f3</span><span class="hist-date">’+ds+’</span>’;
-hl.appendChild(row);
-});
-}else{document.getElementById(‘history-section’).style.display=‘none’;}
+    // לוח כפל
+    var ts = d.tableStats || {};
+    var hasTableStats = Object.keys(ts).some(k => k.includes('×'));
+    if (hasTableStats) {
+        document.getElementById('table-section').style.display = 'block';
+        var grid = document.getElementById('table-grid');
+        grid.innerHTML = '';
+        for (var i = 2; i <= 10; i++) {
+            var key = '×' + i;
+            var cell = document.createElement('div');
+            cell.className = 'tg-cell';
+            var td = ts[key];
+            if (td && (td.correct + td.wrong) > 0) {
+                var a = Math.round(td.correct / (td.correct + td.wrong) * 100);
+                var cls = a >= 90 ? 'good' : a >= 70 ? 'ok' : 'bad';
+                cell.innerHTML = '<div class="tg-label">×' + i + '</div><div class="tg-acc ' + cls + '">' + a + '%</div>';
+            } else {
+                cell.innerHTML = '<div class="tg-label">×' + i + '</div><div class="tg-acc none">—</div>';
+            }
+            grid.appendChild(cell);
+        }
+    } else {
+        document.getElementById('table-section').style.display = 'none';
+    }
+
+    // טעויות
+    var mm = d.mistakeMap || {};
+    var mkeys = Object.keys(mm);
+    if (mkeys.length > 0) {
+        document.getElementById('mistakes-section').style.display = 'block';
+        var ml = document.getElementById('mistakes-list');
+        ml.innerHTML = '';
+        mkeys.sort((a, b) => mm[b] - mm[a]).slice(0, 8).forEach(k => {
+            var row = document.createElement('div');
+            row.className = 'mistake-row';
+            row.innerHTML = '<span class="mistake-q">' + k + '</span><span class="mistake-cnt">' + mm[k] + '×</span>';
+            ml.appendChild(row);
+        });
+    } else {
+        document.getElementById('mistakes-section').style.display = 'none';
+    }
+
+    // היסטוריה
+    var sessions = d.sessions || [];
+    if (sessions.length > 0) {
+        document.getElementById('history-section').style.display = 'block';
+        var hl = document.getElementById('history-list');
+        hl.innerHTML = '';
+        sessions.slice().reverse().slice(0, 20).forEach(s => {
+            var icon = s.game === 'times-tables' ? '⚽' : s.game === 'division' ? '➗' : s.game === 'percentages' ? '%' : s.game === 'sudoku' ? '🧩' : '➕';
+            var dt = new Date(s.ts);
+            var ds = dt.getDate() + '/' + (dt.getMonth() + 1) + ' ' + dt.getHours() + ':' + String(dt.getMinutes()).padStart(2, '0');
+            var row = document.createElement('div');
+            row.className = 'hist-row';
+            row.innerHTML = '<span class="hist-game">' + icon + ' ' + (s.topic || s.game) + '</span><span class="hist-score">' + s.score + ' נק\'</span><span class="hist-date">' + ds + '</span>';
+            hl.appendChild(row);
+        });
+    } else {
+        document.getElementById('history-section').style.display = 'none';
+    }
 }
 </script>
-
 </body>
 </html>
