@@ -1,71 +1,192 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>חשבון במשפחת הנדל</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Heebo',sans-serif;background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);min-height:100vh;display:flex;justify-content:center;padding:0 14px;}
+.wrap{width:100%;max-width:460px;}
+#pg-name{padding:30px 0 40px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+#pg-main{display:none;padding:20px 0 40px;flex-direction:column;align-items:center;gap:14px;}
+.logo{font-family:'Fredoka One',cursive;font-size:2.4rem;color:#ffd600;text-align:center;}
+.logo span{color:#fff;}
+.sub{color:rgba(255,255,255,.5);font-size:.9rem;text-align:center;}
+.card{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:22px;padding:24px 18px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.card h2{font-family:'Fredoka One',cursive;color:#fff;font-size:1.2rem;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;}
+.chip{background:rgba(255,214,0,.12);border:2px solid rgba(255,214,0,.3);border-radius:50px;padding:9px 18px;color:#ffd600;font-family:'Fredoka One',cursive;font-size:.95rem;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.or{color:rgba(255,255,255,.35);font-size:.8rem;}
+.inp{width:100%;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);border-radius:14px;padding:16px;color:#fff;font-family:'Fredoka One',cursive;font-size:1.3rem;text-align:center;outline:none;}
+.inp:focus{border-color:#ffd600;background:rgba(255,255,255,.15);}
+.gobtn{width:100%;padding:17px;border:none;border-radius:50px;background:linear-gradient(135deg,#ffd600,#ff9800);color:#111;font-family:'Fredoka One',cursive;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 20px rgba(255,152,0,.5);}
+.wbar{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
+.wname{font-family:'Fredoka One',cursive;color:#ffd600;font-size:1.1rem;}
+.wscore{color:rgba(255,255,255,.55);font-size:.8rem;}
+.wscore b{color:#fff;}
+.swbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:7px 15px;color:rgba(255,255,255,.6);font-size:.8rem;cursor:pointer;}
+.slabel{font-family:'Fredoka One',cursive;color:rgba(255,255,255,.45);font-size:.8rem;letter-spacing:2px;align-self:flex-start;}
+.egrid{width:100%;display:flex;flex-direction:column;gap:10px;}
+.ecard{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:15px 16px;display:flex;align-items:center;gap:14px;text-decoration:none;}
+.eico{font-size:2.2rem;flex-shrink:0;}
+.einfo{flex:1;text-align:right;}
+.etitle{font-family:'Fredoka One',cursive;color:#fff;font-size:1.05rem;}
+.edesc{color:rgba(255,255,255,.4);font-size:.72rem;}
+.ebadge{background:rgba(255,214,0,.15);border:1px solid rgba(255,214,0,.3);border-radius:20px;padding:4px 10px;color:#ffd600;font-size:.72rem;}
+.sbox{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;}
+.srow{display:flex;gap:8px;}
+.ss{flex:1;background:rgba(255,255,255,.05);border-radius:10px;padding:8px 4px;text-align:center;}
+.ss .n{font-family:'Fredoka One',cursive;color:#ffd600;font-size:1.1rem;}
+.ss .l{color:rgba(255,255,255,.35);font-size:.6rem;}
+.plink{color:rgba(255,255,255,.2);font-size:.7rem;text-decoration:none;padding-top:10px;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div id="pg-name">
+    <div class="logo">🧮 <span>משחקי</span> חשבון</div>
+    <div class="sub">לומדים כי אבא החליט!</div>
+    <div class="card">
+      <h2>👋 מי משחק?</h2>
+      <div class="chips" id="chips"></div>
+      <div class="or" id="or-div" style="display:none">או הכנס שם חדש:</div>
+      <input class="inp" id="inp" type="text" placeholder="כתוב את השם שלך..." maxlength="20">
+      <button class="gobtn" id="gobtn">🚀 בואו נתחיל!</button>
+    </div>
+  </div>
+
+  <div id="pg-main">
+    <div class="wbar">
+      <button class="swbtn" id="swbtn">החלף</button>
+      <div><div class="wname" id="wname"></div><div class="wscore">ניקוד: <b id="wscore">0</b></div></div>
+      <div style="font-size:2rem" id="wavatar">⭐</div>
+    </div>
+    <div class="slabel">📚 תרגילים</div>
+    <div class="egrid">
+      <a class="ecard" href="addition.html"><div class="eico">➕</div><div class="einfo"><div class="etitle">חיבור וחיסור</div><div class="edesc">כיתה א׳</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="times-tables.html"><div class="eico">⚽</div><div class="einfo"><div class="etitle">לוח הכפל</div><div class="edesc">כיתה ב׳-ג׳</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="division.html"><div class="eico">➗</div><div class="einfo"><div class="etitle">חילוק</div><div class="edesc">כיתה ג׳</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="percentages.html"><div class="eico">%</div><div class="einfo"><div class="etitle">אחוזים</div><div class="edesc">כיתה ה׳-ו׳</div></div><div class="ebadge">שחק!</div></a>
+      <a class="ecard" href="sudoku.html"><div class="eico">🧩</div><div class="einfo"><div class="etitle">סודוקו</div><div class="edesc">קל עד קשה</div></div><div class="ebadge">שחק!</div></a>
+    </div>
+    <div class="sbox">
+      <div class="srow">
+        <div class="ss"><div class="n" id="s1">0</div><div class="l">משחקים</div></div>
+        <div class="ss"><div class="n" id="s2">0</div><div class="l">נכון</div></div>
+        <div class="ss"><div class="n" id="s3">0</div><div class="l">שיא</div></div>
+        <div class="ss"><div class="n" id="s4">0</div><div class="l">ניקוד</div></div>
+      </div>
+    </div>
+    <a class="plink" href="parent.html">🔐 דף הורה</a>
+  </div>
+</div>
+
 <script>
-var AV=['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
-function gp(){try{return JSON.parse(localStorage.getItem('mathapp_players')||'{}')}catch(e){return{}}}
-function sp(p){localStorage.setItem('mathapp_players',JSON.stringify(p))}
-function gc(){return localStorage.getItem('mathapp_current')||''}
-function sc(n){localStorage.setItem('mathapp_current',n)}
-function mk(name){var p=gp();if(!p[name]){p[name]={avatar:AV[Object.keys(p).length%AV.length],totalScore:0,games:0,correct:0,wrong:0,bestStreak:0,sessions:[],tableStats:{},mistakeMap:{}};sp(p);}return p[name];}
+var AV = ['⭐','🦁','🐯','🦊','🐺','🦅','🐬','🦋','🌟','🔥'];
 
-function enterApp(){
-var name=(document.getElementById('inp').value||'').trim();
-if(!name)name='שחקן';
-sc(name);mk(name);goMain(name);
+function gp() {
+    try {
+        return JSON.parse(localStorage.getItem('mathapp_players') || '{}');
+    } catch(e) {
+        return {};
+    }
 }
 
-function goMain(name){
-var d=mk(name);
-// תיקון כאן: שימוש בגרשיים רגילים וחיבור מחרוזות תקין
-document.getElementById('wname').textContent = 'שלום, ' + name + '!';
-document.getElementById('wavatar').textContent = d.avatar;
-document.getElementById('wscore').textContent = d.totalScore || 0;
-document.getElementById('s1').textContent = d.games || 0;
-document.getElementById('s2').textContent = d.correct || 0;
-document.getElementById('s3').textContent = d.bestStreak || 0;
-document.getElementById('s4').textContent = d.totalScore || 0;
-document.getElementById('pg-name').style.display = 'none';
-document.getElementById('pg-main').style.display = 'flex';
+function sp(p) {
+    localStorage.setItem('mathapp_players', JSON.stringify(p));
 }
 
-function doSwitch(){
-document.getElementById('inp').value='';
-document.getElementById('pg-main').style.display='none';
-document.getElementById('pg-name').style.display='flex';
+function gc() {
+    return localStorage.getItem('mathapp_current') || '';
+}
+
+function sc(n) {
+    localStorage.setItem('mathapp_current', n);
+}
+
+function mk(name) {
+    var p = gp();
+    if (!p[name]) {
+        p[name] = {
+            avatar: AV[Object.keys(p).length % AV.length],
+            totalScore: 0,
+            games: 0,
+            correct: 0,
+            wrong: 0,
+            bestStreak: 0
+        };
+        sp(p);
+    }
+    return p[name];
+}
+
+function enterApp() {
+    var val = document.getElementById('inp').value;
+    var name = (val || '').trim();
+    if (!name) return;
+    sc(name);
+    mk(name);
+    goMain(name);
+}
+
+function goMain(name) {
+    var d = mk(name);
+    document.getElementById('wname').textContent = 'שלום, ' + name + '!';
+    document.getElementById('wavatar').textContent = d.avatar || '⭐';
+    document.getElementById('wscore').textContent = d.totalScore || 0;
+    document.getElementById('s1').textContent = d.games || 0;
+    document.getElementById('s2').textContent = d.correct || 0;
+    document.getElementById('s3').textContent = d.bestStreak || 0;
+    document.getElementById('s4').textContent = d.totalScore || 0;
+    document.getElementById('pg-name').style.display = 'none';
+    document.getElementById('pg-main').style.display = 'flex';
+}
+
+function buildChips() {
+    var p = gp();
+    var names = Object.keys(p);
+    var el = document.getElementById('chips');
+    var or = document.getElementById('or-div');
+    el.innerHTML = '';
+    if (names.length === 0) {
+        or.style.display = 'none';
+        return;
+    }
+    or.style.display = 'block';
+    names.forEach(function(n) {
+        var b = document.createElement('button');
+        b.className = 'chip';
+        b.textContent = (p[n].avatar || '⭐') + ' ' + n;
+        b.onclick = function() {
+            document.getElementById('inp').value = n;
+            enterApp();
+        };
+        el.appendChild(b);
+    });
+}
+
+document.getElementById('gobtn').onclick = enterApp;
+document.getElementById('swbtn').onclick = function() {
+    document.getElementById('inp').value = '';
+    document.getElementById('pg-main').style.display = 'none';
+    document.getElementById('pg-name').style.display = 'flex';
+    buildChips();
+};
+
+document.getElementById('inp').onkeydown = function(e) {
+    if (e.key === 'Enter') enterApp();
+};
+
+// אתחול
 buildChips();
+var cur = gc();
+if (cur && gp()[cur]) {
+    goMain(cur);
 }
-
-function buildChips(){
-var p=gp(),names=Object.keys(p);
-var el=document.getElementById('chips');
-var or=document.getElementById('or-div');
-el.innerHTML='';
-if(!names.length){or.style.display='none';return;}
-or.style.display='block';
-names.forEach(function(name){
-var b=document.createElement('button');
-b.className='chip';
-b.textContent=(p[name].avatar||'⭐')+' '+name;
-b.addEventListener('touchend',function(e){e.preventDefault();document.getElementById('inp').value=name;enterApp();});
-b.addEventListener('click',function(){document.getElementById('inp').value=name;enterApp();});
-el.appendChild(b);
-});
-}
-
-// כפתור ראשי
-var btn=document.getElementById('gobtn');
-btn.addEventListener('touchend',function(e){e.preventDefault();enterApp();});
-btn.addEventListener('click',function(){enterApp();});
-
-// כפתור החלף
-var sw=document.getElementById('swbtn');
-sw.addEventListener('touchend',function(e){e.preventDefault();doSwitch();});
-sw.addEventListener('click',function(){doSwitch();});
-
-// Enter מהמקלדת
-document.getElementById('inp').addEventListener('keydown',function(e){
-if(e.key==='Enter'){e.preventDefault();enterApp();}
-});
-
-buildChips();
-var cur=gc();
-if(cur&&gp()[cur]){goMain(cur);}
 </script>
+
+</body>
+</html>
